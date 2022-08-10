@@ -26,13 +26,13 @@ export default function Login(){
       return alert('Fill all the necessary fields')
     } 
 
-    const URL = "http://localhost:4000/signup"
-    const signUp = login;
-    const promise = axios.post(URL, signUp)
+    const URL = "http://localhost:4000/signin"
+    const signIn = login;
+    const promise = axios.post(URL, signIn)
     promise
     .then( res => {
       console.log(res.data)
-      navigate('/')
+      navigate('/timeline')
     })
     .catch(error => (
       console.log(error.response.data),
@@ -43,13 +43,9 @@ export default function Login(){
   }
 
   function HandleError(error){
-
-    if(error.status === 409){
-      return error.data
-    } else {
-      return 'something went wront'
+    if(error.status === 401){
+      return 'email or password are incorrect'
     }
-
   }
 
   function HandleClick(){
