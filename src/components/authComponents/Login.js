@@ -5,45 +5,59 @@ import React, {useState} from "react"
 import axios from "axios"
 
 
-export default function SignUp(){
+export default function Login(){
 
-  const [form, setForm] = useState({
-    username: '',
+  const [login, setLogIn] = useState({
     email: '',
     password: '',
-    picture: ''
   })
 
-  console.log(form)
+  console.log(login)
   const navigate = useNavigate();
 
-  console.log(form)
+  console.log(login)
 
-  function SignUp(e){
+  function SignIn(e){
     e.preventDefault();
+    e.currentTarget.disabled=true;
     console.log('clicked')
 
-    const URL = "localhost:4000/signup"
-    const signUp = form;
+    if(!login.email || !login.password){
+      return alert('Fill all the necessary fields')
+    } 
+
+    const URL = "http://localhost:4000/signup"
+    const signUp = login;
     const promise = axios.post(URL, signUp)
     promise
     .then( res => {
       console.log(res.data)
       navigate('/')
     })
-    .catch(error => 
-      (console.log(error),
-      alert("Revise as informações digitadas"),
-      window.location.reload(true)
-      ))
+    .catch(error => (
+      console.log(error.response.data),
+      alert(HandleError(error.response)),
+      window.location.reload(true),
+      e.currentTarget.disabled=false
+    ))
+  }
+
+  function HandleError(error){
+
+    if(error.status === 409){
+      return error.data
+    } else {
+      return 'something went wront'
+    }
+
   }
 
   function HandleClick(){
-    navigate('/')
+    navigate('/signup')
   }
 
   return(
-    <SignUpPage>
+    <LogInPage>
       <Logo>
         <h1>linkr</h1>
         <h2>save, share and discover <br/> the best links on the web</h2>
@@ -52,38 +66,25 @@ export default function SignUp(){
         <input 
         type="text" 
         placeholder="email" 
-        value={form.email} 
-        onChange={e => setForm({...form, email: e.target.value})} 
+        value={login.email} 
+        onChange={e => setLogIn({...login, email: e.target.value})} 
         required />
         <input 
         type="password" 
         placeholder="password" 
-        value={form.password} 
-        onChange={e => setForm({...form, password: e.target.value})} 
+        value={login.password} 
+        onChange={e => setLogIn({...login, password: e.target.value})} 
         required/>
-        <input 
-        type="text" 
-        placeholder="username" 
-        value={form.username} 
-        onChange={e => setForm({...form, username: e.target.value})} 
-        required/>
-        <input 
-        type="url" 
-        placeholder="picture url"  
-        value={form.picture} 
-        onChange={e => setForm({...form, picture: e.target.value})}/>
-        <button onClick={SignUp}>Sign-Up</button>
+        <button onClick={SignIn} disabled={false}>Log-In</button>
         <Button>
-         <button onClick={HandleClick}> Primeira vez? Cadastre-se</button>
+         <button onClick={HandleClick}>First time? Create an account</button>
         </Button>
       </Form>
-
-
-    </SignUpPage>
+    </LogInPage>
   )
 }
 
-const SignUpPage = styled.div`
+const LogInPage = styled.div`
   display: flex;
   min-width: 375px;
   width: 100%;
