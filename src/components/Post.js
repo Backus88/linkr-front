@@ -1,24 +1,61 @@
-import React from "react";
+import React, {useState} from "react"
 import GlobalStyle from "./globalStyles";
 import Header from './Header.js';
 import styled from "styled-components";
+import axios from "axios"
 
 export default function Post() {
+    const [enabled, setEnabled] = useState(true) 
+    const [url, setUrl] = useState('')
+    const [description, setDescription] = useState('')
+    function publish(){
+        setEnabled(false)
+        const promise  = axios.post('http://localhost:4000/post',{
+            url: url,
+            description: description
+        })
+        promise.catch(tratarError)
+        promise.then(tratarSucesso)
+
+        function tratarError(){
+            alert('Houve um erro ao publicar seu link')
+            setEnabled(true)
+        }
+        function tratarSucesso(){
+            setEnabled(true)
+            setUrl('')
+            setDescription('')
+        }
+    }
     return (
         <>
+        
             <GlobalStyle />
             <Header />
             <Container>
                 <Title>timeline</Title>
+                {
+                (enabled == true) ?
                 <Publish>
                     <ProfileImage></ProfileImage>
                     <ContainerPost>
                         <ShareHeader>What are you going to share today?</ShareHeader>
                         <input type='text' placeholder="http://..." />
                         <input className="input2" type='text' placeholder="Awesome article about #javascript" />
-                        <Button>Publish</Button>
+                        <Button onClick={publish}>Publish</Button>
                     </ContainerPost>
                 </Publish>
+                :
+                <Publish>
+                <ProfileImage></ProfileImage>
+                <ContainerPost>
+                    <ShareHeader>What are you going to share today?</ShareHeader>
+                    <input type='text' placeholder="http://..." disabled/>
+                    <input className="input2" type='text' placeholder="Awesome article about #javascript" disabled/>
+                    <Button>Publishing...</Button>
+                </ContainerPost>
+            </Publish>
+                }
                 <Publication className="post">
                     <ProfileImage></ProfileImage>
                     <ContainerPost>
