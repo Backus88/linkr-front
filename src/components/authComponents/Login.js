@@ -3,9 +3,16 @@ import "@fontsource/passion-one";
 import {useNavigate} from "react-router-dom"
 import React, {useState} from "react"
 import axios from "axios"
+import MediaQuery from 'react-responsive'
+import LoginMobile from "./LoginMobile";
+import { useContext } from "react";
+import UserContext from "../../contexts/UserContext";
 
 
 export default function Login(){
+
+  const { setInfo } = useContext(UserContext);
+  const {local, setLocal} = useContext(UserContext);
 
   const [login, setLogIn] = useState({
     email: '',
@@ -31,8 +38,19 @@ export default function Login(){
     const promise = axios.post(URL, signIn)
     promise
     .then( res => {
-      console.log(res.data)
-      navigate('/timeline')
+      const dados = res.data;
+
+      setInfo(dados)
+      console.log(dados)
+      localStorage.setItem("token", dados)
+      setLocal(localStorage.getItem("token"))
+
+        if(local.length === 0){
+          alert('bad request')
+          window.location.reload(true)
+        } else{
+          navigate('/timeline')
+        }
     })
     .catch(error => (
       console.log(error.response.data),
@@ -53,30 +71,37 @@ export default function Login(){
   }
 
   return(
-    <LogInPage>
-      <Logo>
-        <h1>linkr</h1>
-        <h2>save, share and discover <br/> the best links on the web</h2>
-      </Logo>
-      <Form>
-        <input 
-        type="text" 
-        placeholder="email" 
-        value={login.email} 
-        onChange={e => setLogIn({...login, email: e.target.value})} 
-        required />
-        <input 
-        type="password" 
-        placeholder="password" 
-        value={login.password} 
-        onChange={e => setLogIn({...login, password: e.target.value})} 
-        required/>
-        <button onClick={SignIn} disabled={false}>Log-In</button>
-        <Button>
-         <button onClick={HandleClick}>First time? Create an account</button>
-        </Button>
-      </Form>
-    </LogInPage>
+    <>
+    <MediaQuery minWidth={1024}>
+      <LogInPage>
+        <Logo>
+          <h1>linkr</h1>
+          <h2>save, share and discover <br/> the best links on the web</h2>
+        </Logo>
+        <Form>
+          <input 
+          type="text" 
+          placeholder="email" 
+          value={login.email} 
+          onChange={e => setLogIn({...login, email: e.target.value})} 
+          required />
+          <input 
+          type="password" 
+          placeholder="password" 
+          value={login.password} 
+          onChange={e => setLogIn({...login, password: e.target.value})} 
+          required/>
+          <button onClick={SignIn} disabled={false}>Log In</button>
+          <Button>
+          <button onClick={HandleClick}>First time? Create an account</button>
+          </Button>
+        </Form>
+      </LogInPage>
+    </MediaQuery>
+    <MediaQuery maxWidth={1023}>
+      <LoginMobile/>
+    </MediaQuery>
+    </>
   )
 }
 
@@ -134,7 +159,7 @@ const Form = styled.div`
   }
 
   button{
-    width: 68%;
+    width: 65%;
     height: 6.5%;
     background: #1877F2;
     border: none;
