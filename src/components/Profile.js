@@ -62,7 +62,7 @@ height: 70px;
 `
 
 const Menu = styled.div`
-  position: fixed;
+  position: absolute;
   align-items: center;
   justify-content:center;
   color: white;
