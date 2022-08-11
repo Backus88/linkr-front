@@ -3,11 +3,8 @@ import "@fontsource/passion-one";
 import {useNavigate} from "react-router-dom"
 import React, {useState} from "react"
 import axios from "axios"
-import MediaQuery from 'react-responsive'
-import SignUpMobile from "./SignUpMobile";
 
-
-export default function SignUp(){
+export default function signUpMobile(){
 
   const [form, setForm] = useState({
     username: '',
@@ -61,54 +58,49 @@ export default function SignUp(){
   }
 
   return(
-    <>
-      <MediaQuery minWidth={1024}>
-      <SignUpPage>
-        <Logo>
-          <h1>linkr</h1>
-          <h2>save, share and discover <br/> the best links on the web</h2>
-        </Logo>
-        <Form>
-          <input 
-          type="text" 
-          placeholder="email" 
-          value={form.email} 
-          onChange={e => setForm({...form, email: e.target.value})} 
-          required />
-          <input 
-          type="password" 
-          placeholder="password" 
-          value={form.password} 
-          onChange={e => setForm({...form, password: e.target.value})} 
-          required/>
-          <input 
-          type="text" 
-          placeholder="username" 
-          value={form.username} 
-          onChange={e => setForm({...form, username: e.target.value})} 
-          required/>
-          <input 
-          type="url" 
-          placeholder="picture url"  
-          value={form.picture} 
-          onChange={e => setForm({...form, picture: e.target.value})}/>
-          <button onClick={SignUp} disabled={false}>Sign-Up</button>
-          <Button>
-          <button onClick={HandleClick}>Switch back to login.</button>
-          </Button>
-        </Form>
-      </SignUpPage>
-      </MediaQuery>
-      <MediaQuery maxWidth={1023}>
-        <SignUpMobile />
-      </MediaQuery>
-    </>
+    <SignUpPage>
+      <Logo>
+        <h1>linkr</h1>
+        <h2>save, share and discover <br/> the best links on the web</h2>
+      </Logo>
+      <Form>
+        <input 
+        type="text" 
+        placeholder="email" 
+        value={form.email} 
+        onChange={e => setForm({...form, email: e.target.value})} 
+        required />
+        <input 
+        type="password" 
+        placeholder="password" 
+        value={form.password} 
+        onChange={e => setForm({...form, password: e.target.value})} 
+        required/>
+        <input 
+        type="text" 
+        placeholder="username" 
+        value={form.username} 
+        onChange={e => setForm({...form, username: e.target.value})} 
+        required/>
+        <input 
+        type="url" 
+        placeholder="picture url"  
+        value={form.picture} 
+        onChange={e => setForm({...form, picture: e.target.value})}/>
+        <button onClick={SignUp} disabled={false}>Sign-Up</button>
+        <Button>
+         <button onClick={HandleClick}>Switch back to login.</button>
+        </Button>
+      </Form>
+    </SignUpPage>
   )
 }
 
 const SignUpPage = styled.div`
   display: flex;
-  min-width: 375px;
+  flex-direction: column;
+  align-items: center;
+  min-width: 280px;
   width: 100%;
   min-height: 665px;
   height: 100vh;
@@ -118,33 +110,34 @@ const SignUpPage = styled.div`
 const Logo = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60%;
+  height: 30%;
+  width: 100%;
   color: white;
   font-family: "Passion One";
-
   justify-content: center;
 
   h1{
-    font-size: 6.625rem;
-    padding-left: 20%;
+    text-align: center;
+    font-size: 550%;
   }
   h2{
-    font-size: 2.75rem;
-    padding-left: 20%;
+    text-align: center;
+    font-size: 150%;
   }
 `
 
 const Form = styled.div`
-  width:40%;
+  height:70%;
+  width: 100%;
   background-color: #333333;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  padding-top: 10%;
 
   input{
-    width: 65%;
-    height: 6.5%;
+    width: 85%;
+    height: 10%;
     margin-bottom: 1rem;
     padding-left: 1rem;
     border-radius: 0.375rem;
@@ -160,8 +153,8 @@ const Form = styled.div`
   }
 
   button{
-    width: 68%;
-    height: 6.5%;
+    width: 85%;
+    height: 10%;
     background: #1877F2;
     border: none;
     border-radius: 0.375rem;
@@ -183,7 +176,7 @@ const Button = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
+    font-size: 95%;
     font-weight: 700;
     font-family: 'Josefin Sans', sans-serif;
     margin-top: 40px;
