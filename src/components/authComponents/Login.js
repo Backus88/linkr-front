@@ -27,10 +27,17 @@ export default function Login(){
   function SignIn(e){
     e.preventDefault();
     e.currentTarget.disabled=true;
+
+    if(e.currentTarget.disabled === true){
+      e.target.style.background = "grey";
+    }
+
     console.log('clicked')
 
     if(!login.email || !login.password){
-      return alert('Fill all the necessary fields')
+      return alert('Fill all the necessary fields'), 
+      e.currentTarget.disabled=false,
+      e.target.style.background = '#1877F2';
     } 
 
     const URL = "http://localhost:4000/signin"
@@ -56,13 +63,23 @@ export default function Login(){
       console.log(error.response.data),
       alert(HandleError(error.response)),
       window.location.reload(true),
-      e.currentTarget.disabled=false
+      e.currentTarget.disabled=false,
+      e.target.style.background = '#1877F2'
     ))
+  }
+
+  function handleKeyDown(e){
+    var key = e.key;
+    if(key === 'Enter'){
+      SignIn(e)
+    }
   }
 
   function HandleError(error){
     if(error.status === 401){
       return 'email or password are incorrect'
+    } else{
+      return 'enter a valid email or password'
     }
   }
 
@@ -86,12 +103,13 @@ export default function Login(){
           onChange={e => setLogIn({...login, email: e.target.value})} 
           required />
           <input 
+          onKeyPress={(e) => handleKeyDown(e)}
           type="password" 
           placeholder="password" 
           value={login.password} 
           onChange={e => setLogIn({...login, password: e.target.value})} 
           required/>
-          <button onClick={SignIn} disabled={false}>Log In</button>
+          <button id={login} onClick={(e) => SignIn(e)} disabled={false}>Log In</button>
           <Button>
           <button onClick={HandleClick}>First time? Create an account</button>
           </Button>
@@ -167,7 +185,7 @@ const Form = styled.div`
     font-family: 'Oswald', sans-serif;    
     font-size: 140%;
     font-weight: 700;   
-    color: white; 
+    color: white;
   }
 `
 
