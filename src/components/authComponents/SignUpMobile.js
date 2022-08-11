@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom"
 import React, {useState} from "react"
 import axios from "axios"
 
-export default function signUpMobile(){
+export default function SignUpMobile(){
 
   const [form, setForm] = useState({
     username: '',
