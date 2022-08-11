@@ -50,7 +50,9 @@ export default function Login(){
       setInfo(dados)
       console.log(dados)
       localStorage.setItem("token", dados)
-      setLocal(localStorage.getItem("token"))
+      console.log(localStorage)
+      const token = localStorage.getItem('token')
+      setLocal(token)
 
         if(local.length === 0){
           alert('bad request')
