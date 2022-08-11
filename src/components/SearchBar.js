@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 import { AiOutlineSearch } from "react-icons/ai";
 import {DebounceInput} from 'react-debounce-input';
