@@ -1,3 +1,4 @@
+import React from "react";
 import GlobalStyle from "./globalStyles";
 import Header from './Header.js';
 import styled from "styled-components";
