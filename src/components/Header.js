@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { VscChevronDown } from "react-icons/vsc";
+import SearchBar from "./SearchBar";
 export default function Header() {
     return (
         <>
             <HeaderStyled>
                 <Title>linkr</Title>
+                <SearchBar/>
                 <Profile>
                 <Icon />
                 <ProfileImage></ProfileImage>
@@ -16,8 +18,9 @@ export default function Header() {
 const HeaderStyled = styled.header`
 background-color: #151515;
 width: 100%;
-height: 60px;
+height: 72px;
 display: flex;
+align-items: center;
 justify-content: space-between
 
 `
