@@ -87,7 +87,7 @@ export default function SignUpMobile(){
         placeholder="picture url"  
         value={form.picture} 
         onChange={e => setForm({...form, picture: e.target.value})}/>
-        <button onClick={SignUp} disabled={false}>Sign-Up</button>
+        <button onClick={SignUp} disabled={false}>Sign Up</button>
         <Button>
          <button onClick={HandleClick}>Switch back to login.</button>
         </Button>

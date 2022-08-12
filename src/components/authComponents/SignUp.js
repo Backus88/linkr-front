@@ -92,7 +92,7 @@ export default function SignUp(){
           placeholder="picture url"  
           value={form.picture} 
           onChange={e => setForm({...form, picture: e.target.value})}/>
-          <button onClick={SignUp} disabled={false}>Sign-Up</button>
+          <button onClick={SignUp} disabled={false}>Sign Up</button>
           <Button>
           <button onClick={HandleClick}>Switch back to login.</button>
           </Button>
@@ -160,7 +160,7 @@ const Form = styled.div`
   }
 
   button{
-    width: 68%;
+    width: 65%;
     height: 6.5%;
     background: #1877F2;
     border: none;

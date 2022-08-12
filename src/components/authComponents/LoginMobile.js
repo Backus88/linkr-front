@@ -3,13 +3,11 @@ import "@fontsource/passion-one";
 import {useNavigate} from "react-router-dom"
 import React, {useState} from "react"
 import axios from "axios"
-import MediaQuery from 'react-responsive'
-import LoginMobile from "./LoginMobile";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
 
 
-export default function Login(){
+export default function LoginMobile(){
 
   const { setInfo } = useContext(UserContext);
   const {local, setLocal} = useContext(UserContext);
@@ -18,16 +16,13 @@ export default function Login(){
     email: '',
     password: '',
   })
-
-  console.log(login)
+  
   const navigate = useNavigate();
-
-  console.log(login)
 
   function SignIn(e){
     e.preventDefault();
     e.currentTarget.disabled=true;
-
+  
     if(e.currentTarget.disabled === true){
       e.target.style.background = "grey";
     }
@@ -50,9 +45,7 @@ export default function Login(){
       setInfo(dados)
       console.log(dados)
       localStorage.setItem("token", dados)
-      console.log(localStorage)
-      const token = localStorage.getItem('token')
-      setLocal(token)
+      setLocal(localStorage.getItem("token"))
 
         if(local.length === 0){
           alert('bad request')
@@ -69,7 +62,6 @@ export default function Login(){
       e.target.style.background = '#1877F2'
     ))
   }
-
   function handleKeyDown(e){
     var key = e.key;
     if(key === 'Enter'){
@@ -89,22 +81,20 @@ export default function Login(){
     navigate('/signup')
   }
 
-  return(
-    <>
-    <MediaQuery minWidth={1024}>
-      <LogInPage>
-        <Logo>
-          <h1>linkr</h1>
-          <h2>save, share and discover <br/> the best links on the web</h2>
-        </Logo>
-        <Form>
-          <input 
-          type="text" 
-          placeholder="email" 
-          value={login.email} 
-          onChange={e => setLogIn({...login, email: e.target.value})} 
-          required />
-          <input 
+  return (
+    <LogInPageMobile>
+      <Logo>
+        <h1>linkr</h1>
+        <h2>save, share and discover <br/> the best links on the web</h2>
+      </Logo>
+      <Form>
+        <input 
+        type="text" 
+        placeholder="email" 
+        value={login.email} 
+        onChange={e => setLogIn({...login, email: e.target.value})} 
+        required />
+        <input 
           onKeyPress={(e) => handleKeyDown(e)}
           type="password" 
           placeholder="password" 
@@ -112,22 +102,20 @@ export default function Login(){
           onChange={e => setLogIn({...login, password: e.target.value})} 
           required/>
           <button id={login} onClick={(e) => SignIn(e)} disabled={false}>Log In</button>
-          <Button>
-          <button onClick={HandleClick}>First time? Create an account</button>
-          </Button>
-        </Form>
-      </LogInPage>
-    </MediaQuery>
-    <MediaQuery maxWidth={1023}>
-      <LoginMobile/>
-    </MediaQuery>
-    </>
+        <Button>
+         <button onClick={HandleClick}>First time? Create an account</button>
+        </Button>
+      </Form>
+    </LogInPageMobile>
   )
+
 }
 
-const LogInPage = styled.div`
+const LogInPageMobile = styled.div`
   display: flex;
-  min-width: 375px;
+  flex-direction: column;
+  align-items: center;
+  min-width: 280px;
   width: 100%;
   min-height: 665px;
   height: 100vh;
@@ -137,33 +125,34 @@ const LogInPage = styled.div`
 const Logo = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60%;
+  height: 30%;
+  width: 100%;
   color: white;
   font-family: "Passion One";
-
   justify-content: center;
 
   h1{
-    font-size: 6.625rem;
-    padding-left: 20%;
+    text-align: center;
+    font-size: 550%;
   }
   h2{
-    font-size: 2.75rem;
-    padding-left: 20%;
+    text-align: center;
+    font-size: 150%;
   }
 `
 
 const Form = styled.div`
-  width:40%;
+  height:70%;
+  width: 100%;
   background-color: #333333;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  padding-top: 10%;
 
   input{
-    width: 65%;
-    height: 6.5%;
+    width: 85%;
+    height: 10%;
     margin-bottom: 1rem;
     padding-left: 1rem;
     border-radius: 0.375rem;
@@ -179,15 +168,15 @@ const Form = styled.div`
   }
 
   button{
-    width: 65%;
-    height: 6.5%;
+    width: 85%;
+    height: 10%;
     background: #1877F2;
     border: none;
     border-radius: 0.375rem;
     font-family: 'Oswald', sans-serif;    
     font-size: 140%;
     font-weight: 700;   
-    color: white;
+    color: white; 
   }
 `
 
@@ -195,14 +184,14 @@ const Button = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 68%;
+  width: 78%;
   height: 6.5%;
 
   button{
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
+    font-size: 95%;
     font-weight: 700;
     font-family: 'Josefin Sans', sans-serif;
     margin-top: 40px;
