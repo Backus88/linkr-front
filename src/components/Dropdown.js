@@ -4,13 +4,11 @@ import axios from 'axios';
 
 export default function Dropdown ({usernameString,querieController}){
     const [querie, setQuerie]= useState([]);
-    const teste = {username:usernameString};
-    const body = JSON.stringify(teste);
+    const route =`http://localhost:4000/user/${usernameString}`;
     useEffect(()=>{
         const querieUsernames =async ()=>{
             try{
-                console.log(body);
-                const arrayUsernames = await axios.get("http://localhost:4000/user",teste);
+                const arrayUsernames = await axios.get(route);
                 setQuerie([...arrayUsernames]);
             }catch(error){
                 alert(error)
@@ -37,8 +35,8 @@ export default function Dropdown ({usernameString,querieController}){
 
 const DropdownContainer = styled.div`
     box-sizing: border-box;
-    z-index: 1;
     position: absolute;
+    z-index: 1;
     min-width: 500px;
     max-width: 100%;
     max-height: 300px;
