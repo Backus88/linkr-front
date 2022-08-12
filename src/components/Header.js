@@ -16,6 +16,7 @@ export default function Header() {
     )
 }
 const HeaderStyled = styled.header`
+z-index: 2;
 background-color: #151515;
 width: 100%;
 height: 72px;
