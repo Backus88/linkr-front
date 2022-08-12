@@ -9,15 +9,15 @@ import UserContext from "../contexts/UserContext";
 
 
 function Posts(props) {
-
+    let {username,description} = props
     return (
 
         <>
             <Publication className="post">
                 <ProfileImage></ProfileImage>
                 <ContainerPost>
-                    <UserName>Juvenal Juvênico</UserName>
-                    <DescriptionPost>Muito maneiro esse tutorial de Material UI com React, deem uma olhada!</DescriptionPost>
+                    <UserName>{username}</UserName>
+                    <DescriptionPost>{description}</DescriptionPost>
                 </ContainerPost>
             </Publication>
         </>
@@ -26,20 +26,21 @@ function Posts(props) {
 export default function Post() {
     const [post, setPost] = useState([])
     const [user, setUser] = useState([])
-    const { info } = useContext(UserContext);
+    const { local } = useContext(UserContext);
+    console.log(local)
     const config = {
         headers: {
-            "Authorization": info.token
+            "Authorization": 'Bearer ' + local
         }
     }
 
     function getPost() {
-        const promise = axios.get('http://localhost:4000/post', null, config)
+        const promise = axios.get('http://localhost:4000/post', config)
         promise.then(response => setPost(response.data))
     }
     useEffect(getPost, [])
     function getUser(){
-        const promise = axios.get('http://localhost:4000/post', null, config)
+        const promise = axios.get('http://localhost:4000/post', config)
         promise.then(response => setUser(response.data))
     }
     return (
@@ -49,22 +50,33 @@ export default function Post() {
             <Header />
             <Container>
                 <Title>timeline</Title>
-                <PublishPost />
-              {post.map(()=><Posts/>)}
+                <PublishPost getPost={getPost}/>
+              {post.map((item, index)=>
+              <Posts username={item.username} 
+              description={item.description}
+              key={index} />)
+              }
             </Container>
         </>
     )
 }
-function PublishPost() {
+function PublishPost(props) {
     const [enabled, setEnabled] = useState(true)
     const [url, setUrl] = useState('')
+    const { local } = useContext(UserContext);
     const [description, setDescription] = useState('')
+    const {getPost} = props
+    const config = {
+        headers: {
+            "Authorization": 'Bearer ' + local
+        }
+    }
     function publish() {
         setEnabled(false)
-        const promise = axios.post('http://localhost:4000/post', {
+        const promise = axios.post('http://localhost:4000/post',{
             url: url,
             description: description
-        })
+        }, config)
         promise.catch(tratarError)
         promise.then(tratarSucesso)
 
@@ -76,6 +88,8 @@ function PublishPost() {
             setEnabled(true)
             setUrl('')
             setDescription('')
+            getPost()
+
         }
     }
     return (
@@ -86,8 +100,8 @@ function PublishPost() {
                         <ProfileImage></ProfileImage>
                         <ContainerPost>
                             <ShareHeader>What are you going to share today?</ShareHeader>
-                            <input type='text' placeholder="http://..." />
-                            <input className="input2" type='text' placeholder="Awesome article about #javascript" />
+                            <input type='text' placeholder="http://..." onChange={e => setUrl(e.target.value)} />
+                            <input className="input2" type='text' placeholder="Awesome article about #javascript" onChange={e =>setDescription(e.target.value)}/>
                             <Button onClick={publish}>Publish</Button>
                         </ContainerPost>
                     </Publish>
@@ -96,7 +110,7 @@ function PublishPost() {
                         <ProfileImage></ProfileImage>
                         <ContainerPost>
                             <ShareHeader>What are you going to share today?</ShareHeader>
-                            <input type='text' placeholder="http://..." disabled />
+                            <input type='text' placeholder="http://..." disabled/>
                             <input className="input2" type='text' placeholder="Awesome article about #javascript" disabled />
                             <Button>Publishing...</Button>
                         </ContainerPost>
