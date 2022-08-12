@@ -1,6 +1,7 @@
 import React from "react";
 import GlobalStyle from "./globalStyles";
 import Header from './Header.js';
+import Like from "./Like";
 import styled from "styled-components";
 
 export default function Post() {
@@ -21,6 +22,7 @@ export default function Post() {
                 </Publish>
                 <Publication className="post">
                     <ProfileImage></ProfileImage>
+                    <Like/>
                     <ContainerPost>
                         <UserName>Juvenal Juvênico</UserName>
                         <DescriptionPost>Muito maneiro esse tutorial de Material UI com React, deem uma olhada!</DescriptionPost>
