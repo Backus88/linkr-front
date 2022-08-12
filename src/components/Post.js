@@ -1,32 +1,121 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react"
 import GlobalStyle from "./globalStyles";
 import Header from './Header.js';
 import styled from "styled-components";
+import axios from "axios"
+import UserContext from "../contexts/UserContext";
 
+
+
+
+function Posts(props) {
+    let {username,description} = props
+    return (
+
+        <>
+            <Publication className="post">
+                <ProfileImage></ProfileImage>
+                <ContainerPost>
+                    <UserName>{username}</UserName>
+                    <DescriptionPost>{description}</DescriptionPost>
+                </ContainerPost>
+            </Publication>
+        </>
+    )
+}
 export default function Post() {
+    const [post, setPost] = useState([])
+    const [user, setUser] = useState([])
+    const { local } = useContext(UserContext);
+    console.log(local)
+    const config = {
+        headers: {
+            "Authorization": 'Bearer ' + local
+        }
+    }
+
+    function getPost() {
+        const promise = axios.get('http://localhost:4000/post', config)
+        promise.then(response => setPost(response.data))
+    }
+    useEffect(getPost, [])
+    function getUser(){
+        const promise = axios.get('http://localhost:4000/post', config)
+        promise.then(response => setUser(response.data))
+    }
     return (
         <>
+
             <GlobalStyle />
             <Header />
             <Container>
                 <Title>timeline</Title>
-                <Publish>
-                    <ProfileImage></ProfileImage>
-                    <ContainerPost>
-                        <ShareHeader>What are you going to share today?</ShareHeader>
-                        <input type='text' placeholder="http://..." />
-                        <input className="input2" type='text' placeholder="Awesome article about #javascript" />
-                        <Button>Publish</Button>
-                    </ContainerPost>
-                </Publish>
-                <Publication className="post">
-                    <ProfileImage></ProfileImage>
-                    <ContainerPost>
-                        <UserName>Juvenal Juvênico</UserName>
-                        <DescriptionPost>Muito maneiro esse tutorial de Material UI com React, deem uma olhada!</DescriptionPost>
-                    </ContainerPost>
-                </Publication>
+                <PublishPost getPost={getPost}/>
+              {post.map((item, index)=>
+              <Posts username={item.username} 
+              description={item.description}
+              key={index} />)
+              }
             </Container>
+        </>
+    )
+}
+function PublishPost(props) {
+    const [enabled, setEnabled] = useState(true)
+    const [url, setUrl] = useState('')
+    const { local } = useContext(UserContext);
+    const [description, setDescription] = useState('')
+    const {getPost} = props
+    const config = {
+        headers: {
+            "Authorization": 'Bearer ' + local
+        }
+    }
+    function publish() {
+        setEnabled(false)
+        const promise = axios.post('http://localhost:4000/post',{
+            url: url,
+            description: description
+        }, config)
+        promise.catch(tratarError)
+        promise.then(tratarSucesso)
+
+        function tratarError() {
+            alert('Houve um erro ao publicar seu link')
+            setEnabled(true)
+        }
+        function tratarSucesso() {
+            setEnabled(true)
+            setUrl('')
+            setDescription('')
+            getPost()
+
+        }
+    }
+    return (
+        <>
+            {
+                (enabled == true) ?
+                    <Publish>
+                        <ProfileImage></ProfileImage>
+                        <ContainerPost>
+                            <ShareHeader>What are you going to share today?</ShareHeader>
+                            <input type='text' placeholder="http://..." onChange={e => setUrl(e.target.value)} />
+                            <input className="input2" type='text' placeholder="Awesome article about #javascript" onChange={e =>setDescription(e.target.value)}/>
+                            <Button onClick={publish}>Publish</Button>
+                        </ContainerPost>
+                    </Publish>
+                    :
+                    <Publish>
+                        <ProfileImage></ProfileImage>
+                        <ContainerPost>
+                            <ShareHeader>What are you going to share today?</ShareHeader>
+                            <input type='text' placeholder="http://..." disabled/>
+                            <input className="input2" type='text' placeholder="Awesome article about #javascript" disabled />
+                            <Button>Publishing...</Button>
+                        </ContainerPost>
+                    </Publish>
+            }
         </>
     )
 }
@@ -34,6 +123,7 @@ const Container = styled.div`
 display: flex;
 flex-direction: column;
 align-items: center;
+
 
 `
 const Title = styled.div`
@@ -78,11 +168,14 @@ border: 0 none;
 margin-left: 80px;
 }
 .input2{
-padding-bottom: 30px;
+padding-bottom: 50px;
+height: auto;
 
 }
 input::placeholder{
 color: #949494;
+margin-top: 5px;
+
 
 }
 
