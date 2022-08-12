@@ -136,7 +136,7 @@ height: 50px;
 border-radius: 50%;
 margin-top: 10px;
 margin-left: 5px;
-position: fixed;
+position: absolute;
 `
 const ContainerPost = styled.div`
 display: flex;

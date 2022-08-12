@@ -13,7 +13,7 @@ export default function SignUp(){
     username: '',
     email: '',
     password: '',
-    picture: ''
+    profileImg: ''
   })
 
   console.log(form)
@@ -26,7 +26,7 @@ export default function SignUp(){
     e.currentTarget.disabled=true;
     console.log('clicked')
 
-    if(!form.username || !form.email || !form.password || !form.picture){
+    if(!form.username || !form.email || !form.password || !form.profileImg){
       return alert('Fill all the necessary fields')
     } 
 
@@ -48,7 +48,7 @@ export default function SignUp(){
 
   function HandleError(error){
 
-    if(error.status === 409){
+    if(error.status === 422){
       return error.data
     } else {
       return 'something went wront'
@@ -90,8 +90,8 @@ export default function SignUp(){
           <input 
           type="url" 
           placeholder="picture url"  
-          value={form.picture} 
-          onChange={e => setForm({...form, picture: e.target.value})}/>
+          value={form.profileImg} 
+          onChange={e => setForm({...form, profileImg: e.target.value})}/>
           <button onClick={SignUp} disabled={false}>Sign Up</button>
           <Button>
           <button onClick={HandleClick}>Switch back to login.</button>

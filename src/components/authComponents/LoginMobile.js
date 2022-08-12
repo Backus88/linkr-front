@@ -16,11 +16,8 @@ export default function LoginMobile(){
     email: '',
     password: '',
   })
-
-  console.log(login)
+  
   const navigate = useNavigate();
-
-  console.log(login)
 
   function SignIn(e){
     e.preventDefault();
