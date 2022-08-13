@@ -30,13 +30,15 @@ export default function SearchBar(){
                         }else{
                             setSearching(false)
                         }
-                        console.log(querieController);
                         return
                     }}
                 />
             <SearchIcon onClick={searchOnChange}/>
             {
-                (searching?<Dropdown usernameString = {searchUser} querieController ={querieController}/>:null)   
+                (searching?<Dropdown usernameString = {searchUser}
+                                     querieController ={querieController}
+                                     searching = {searching} 
+                                     setSearching={setSearching}/>:null)   
             }
         </SearchContainer>
     );
