@@ -25,7 +25,6 @@ function Posts(props) {
         imageProfile,
         idPost
     } = props
-    console.log(imageProfile)
     function getMetadata() {
         const promise = axios.get(
             `http://localhost:4000/url-metadata?url=${url}`)
@@ -66,8 +65,6 @@ export default function Post() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true)
     const [crash, setCrash] = useState(false)
-    // const { local } = useContext(UserContext);
-    // const { postController, setPostController } = useContext(UserContext);
     const { id: newId } = useParams();
     const local = localStorage.getItem("token");
     let location = useLocation();
@@ -79,7 +76,6 @@ export default function Post() {
 
 
     function renderById(id) {
-        // setPostController(!postController)
         navigate(`/user/${id}`);
     }
 
@@ -94,7 +90,6 @@ export default function Post() {
                 setLoading(false)
             })
             setCanPublish(true)
-            console.log(post)
             promise.catch(()=> {
                 setLoading(false)
                 setCrash(true)
@@ -160,7 +155,6 @@ function PublishPost(props) {
     const [enabled, setEnabled] = useState(true)
     const [url, setUrl] = useState('')
     const local = localStorage.getItem("token");
-    // const { local } = useContext(UserContext);
     const [description, setDescription] = useState('')
     const { getPost } = props
     const config = {
