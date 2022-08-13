@@ -5,6 +5,7 @@ import SignUp from "./authComponents/SignUp";
 import Login from "./authComponents/Login";
 import UserContext from "../contexts/UserContext"
 import PostById from "./PostById";
+import HashtagPage from "./HashtagPage";
 
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
           <Route path='/' element={<Login />} />
           <Route path="/timeline" element={ <Post />} />
           <Route path='/user/:id' element ={ <Post /> } />
-          <Route path='/hashtag/:hashtag' element={<Post />}/>
+          <Route path='/hashtag/:hashtag' element={<HashtagPage />}/>
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>
