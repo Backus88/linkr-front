@@ -2,21 +2,21 @@ import React from "react";
 import styled from "styled-components";
 import { VscChevronDown } from "react-icons/vsc";
 import SearchBar from "./SearchBar";
+import Profile from "./Profile";
+
 export default function Header() {
     return (
         <>
-            <HeaderStyled>
-                <Title>linkr</Title>
-                <SearchBar/>
-                <Profile>
-                <Icon />
-                <ProfileImage></ProfileImage>
-                </Profile>
-            </HeaderStyled>
+        <HeaderStyled>
+            <Title>linkr</Title>
+            <SearchBar/>
+            <Profile/>
+        </HeaderStyled>
         </>
     )
 }
 const HeaderStyled = styled.header`
+z-index: 2;
 background-color: #151515;
 width: 100%;
 height: 72px;
@@ -41,10 +41,10 @@ margin-top: 15px;
 margin-right: 10px;
 
 `
-const Profile = styled.div`
+/* const Profile = styled.div`
 display: flex;
 
-`
+` */
 const ProfileImage = styled.div`
 background-color : #FFFFFF;
 width: 50px;
