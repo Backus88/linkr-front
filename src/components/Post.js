@@ -3,20 +3,22 @@ import GlobalStyle from "./globalStyles";
 import Header from './Header.js';
 import styled from "styled-components";
 import axios from "axios"
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 
 
 
 
 function Posts(props) {
-    let {username,description} = props
+    let {username,description, renderById, userId} = props
+    
     return (
 
         <>
             <Publication className="post">
                 <ProfileImage></ProfileImage>
                 <ContainerPost>
-                    <UserName>{username}</UserName>
+                    <UserName onClick={()=> renderById(userId)} >{username}</UserName>
                     <DescriptionPost>{description}</DescriptionPost>
                 </ContainerPost>
             </Publication>
@@ -24,21 +26,44 @@ function Posts(props) {
     )
 }
 export default function Post() {
-    const [post, setPost] = useState([])
-    const [user, setUser] = useState([])
-    const { local } = useContext(UserContext);
-    console.log(local)
+    const [post, setPost] = useState([]);
+    const [user, setUser] = useState([]);
+    const [id, setId] = useState('');
+    const [canPublish, setCanPublish] = useState(true);
+    const navigate = useNavigate();
+    // const { local } = useContext(UserContext);
+    // const { postController, setPostController } = useContext(UserContext);
+    const {id:newId} = useParams();
+    const local= localStorage.getItem("token");
+    let location = useLocation();
     const config = {
         headers: {
             "Authorization": 'Bearer ' + local
         }
     }
 
-    function getPost() {
-        const promise = axios.get('http://localhost:4000/post', config)
-        promise.then(response => setPost(response.data))
+    
+    function renderById(id){
+        // setPostController(!postController)
+        navigate(`/user/${id}`);
     }
-    useEffect(getPost, [])
+
+    function getPost() {
+        setId(parseInt(newId))
+        if(!id){
+            const promise = axios.get('http://localhost:4000/post', config)
+            promise.then(response => setPost(response.data))
+            setCanPublish(true)
+            console.log(post)
+        }else{
+            const promise = axios.get(`http://localhost:4000/user/${id}`, config)
+            promise.then(response => setPost(response.data))
+            setCanPublish(false);
+        }
+        
+    }
+
+    useEffect(getPost, [id,location])
     function getUser(){
         const promise = axios.get('http://localhost:4000/post', config)
         promise.then(response => setUser(response.data))
@@ -49,13 +74,16 @@ export default function Post() {
             <GlobalStyle />
             <Header />
             <Container>
-                <Title>timeline</Title>
-                <PublishPost getPost={getPost}/>
-              {post.map((item, index)=>
-              <Posts username={item.username} 
-              description={item.description}
-              key={index} />)
-              }
+                {canPublish?<Title>timeline</Title>: null }
+                {canPublish?<PublishPost getPost={getPost} />:null}
+                {post? post.map((item, index)=>
+                <Posts username={item.username} 
+                       description={item.description}
+                       renderById = {renderById}
+                       userId = {item.userId}
+                       key={index} />)
+                : null}
+             
             </Container>
         </>
     )
@@ -63,7 +91,8 @@ export default function Post() {
 function PublishPost(props) {
     const [enabled, setEnabled] = useState(true)
     const [url, setUrl] = useState('')
-    const { local } = useContext(UserContext);
+    const local= localStorage.getItem("token");
+    // const { local } = useContext(UserContext);
     const [description, setDescription] = useState('')
     const {getPost} = props
     const config = {
@@ -95,7 +124,7 @@ function PublishPost(props) {
     return (
         <>
             {
-                (enabled == true) ?
+                (enabled === true) ?
                     <Publish>
                         <ProfileImage></ProfileImage>
                         <ContainerPost>
@@ -221,6 +250,7 @@ font-size: 19px;
 color: #FFFFFF;
 margin-top: 15px;
 margin-left: 80px;
+cursor: pointer;
 `
 const DescriptionPost = styled.div`
 font-family: 'Lato';
