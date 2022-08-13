@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react"
 import GlobalStyle from "./globalStyles";
 import Header from './Header.js';
+import Like from "./Like.js";
 import styled from "styled-components";
 import axios from "axios"
 import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
@@ -10,7 +11,13 @@ import ReactHashtag from "@mdnm/react-hashtag";
 
 
 function Posts(props) {
+<<<<<<< HEAD
     let {username,description, renderById, userId} = props
+=======
+
+    let {username,description, renderById, userId,idPost} = props
+    
+>>>>>>> 44f4972581046418c89effdae475b69955c83220
 
     return (
 
@@ -32,6 +39,7 @@ function Posts(props) {
                         </ReactHashtag>
                     </DescriptionPost>
                 </ContainerPost>
+            <Like idPost ={idPost}/>
             </Publication>
         </>
     )
@@ -85,6 +93,7 @@ export default function Post() {
             <GlobalStyle />
             <Header />
             <Container>
+
                 {canPublish?<Title>timeline</Title>: null }
                 {canPublish?<PublishPost getPost={getPost} />:null}
                 {post? post.map((item, index)=>
@@ -92,9 +101,11 @@ export default function Post() {
                        description={item.description}
                        renderById = {renderById}
                        userId = {item.userId}
+                       idPost={item.id}
                        key={index} />)
                 : null}
              
+
             </Container>
         </>
     )
@@ -252,6 +263,7 @@ margin-top: 40px;
 background: #171717;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;
+position:relative;
 `
 const UserName = styled.div`
 font-family: 'Lato';
