@@ -7,10 +7,9 @@ import axios from "axios";
 import UserContext from "../contexts/UserContext";
 
 
-export default function Like(){
+export default function Like({idPost}){
 
-    const idPost = 1;
-
+    console.log(idPost);
     const URL = `http://localhost:4000/posts/${idPost}/likes`;
     const {info} = useContext(UserContext);
     console.log(info)
@@ -24,7 +23,6 @@ export default function Like(){
     const [likesUsers, setLikesUsers] = useState([]);
     const [likesQuantity, setLikesQuantity] = useState(0);
     const [userHasLiked, setUserHasLiked] = useState(false);
-    const [usersnamesThatLiked, setUsersnamesThatLiked] = useState('');
     
     async function fetchLikes(){
         try {
@@ -32,7 +30,7 @@ export default function Like(){
             handleSucess(response);
 
         } catch (error) {
-            console.log(error.data.details);
+            console.log(error.response.data.message);
         }
     };
     
@@ -91,7 +89,7 @@ export default function Like(){
         return <> <p data-tip= {`Você, ${likesUsers[0]} e outras ${likesUsers.length - 1} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
         else if(likesQuantity == 1) return <> <p data-tip= {`${likesUsers[0]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
         else if(likesQuantity == 2) return <> <p data-tip= {`${likesUsers[0]} e ${likesUsers[1]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
-        else if(likesQuantity > 2) return <> <p data-tip= {`${likesUsers[0]}, ${likesUsers[1]} e outras ${likesUsers.length - 1} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+        else if(likesQuantity > 2) return <> <p data-tip= {`${likesUsers[0]}, ${likesUsers[1]} e outras ${likesUsers.length - 2} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
         
     }
 
@@ -108,11 +106,10 @@ export default function Like(){
 };
 
 const LikeBox = styled.div`
-position:relative;
+position:absolute;
 top: 86px;
 
 width: 87px;
-
 display: flex;
 flex-direction: column;
 align-items: center;

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react"
 import GlobalStyle from "./globalStyles";
 import Header from './Header.js';
-import Like from "./Like";
+import Like from "./Like.js";
 import styled from "styled-components";
 import axios from "axios"
 import UserContext from "../contexts/UserContext";
@@ -10,7 +10,8 @@ import UserContext from "../contexts/UserContext";
 
 
 function Posts(props) {
-    let {username,description} = props
+    let {username,description,idPost} = props;
+
     return (
 
         <>
@@ -20,6 +21,7 @@ function Posts(props) {
                     <UserName>{username}</UserName>
                     <DescriptionPost>{description}</DescriptionPost>
                 </ContainerPost>
+            <Like idPost ={idPost}/>
             </Publication>
         </>
     )
@@ -37,7 +39,10 @@ export default function Post() {
 
     function getPost() {
         const promise = axios.get('http://localhost:4000/post', config)
-        promise.then(response => setPost(response.data))
+        promise.then(response => {
+            setPost(response.data)
+            console.log(response.data)
+        })
     }
     useEffect(getPost, [])
     function getUser(){
@@ -55,7 +60,7 @@ export default function Post() {
               {post.map((item, index)=>
               <Posts username={item.username} 
               description={item.description}
-              key={index} />)
+              key={index} idPost={item.id} />)
               }
             </Container>
         </>
@@ -213,6 +218,7 @@ margin-top: 40px;
 background: #171717;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;
+position:relative;
 `
 const UserName = styled.div`
 font-family: 'Lato';
