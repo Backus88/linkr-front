@@ -1,21 +1,23 @@
 import react from 'react';
 import styled from 'styled-components';
-import { useEffect,useState } from 'react';
+import { useEffect,useState, useContext } from 'react';
 import axios from 'axios';
-import UserContext from './App'
+import { useNavigate } from 'react-router-dom';
+import UserContext from "../contexts/UserContext";
 
-export default function Dropdown ({usernameString,querieController}){
+
+export default function Dropdown ({usernameString,querieController, setSearching, searching}){
+    const navigate = useNavigate();
     const token = localStorage.getItem("token");
+    // const { postController, setPostController } = useContext(UserContext);
     const [querie, setQuerie]= useState([]);
     const config ={
         headers:{
             "Authorization": `Bearer ${token}`
         }
     }
-    console.log(config);
-    const route =`http://localhost:4000/user/${usernameString}`;
+    const route =`http://localhost:4000/user?username=${usernameString}`;
     useEffect(()=>{
-        console.log(token);
         const querieUsernames =async ()=>{
             try{
                 const {data:arrayUsernames} = await axios.get(route, config);
@@ -27,13 +29,20 @@ export default function Dropdown ({usernameString,querieController}){
         if(usernameString.length>= 3){
             querieUsernames();
         }
-        
-    },[querieController])
+    
+    },[querieController]);
+
+    function renderById(id){
+        setSearching(!searching)
+        // setPostController(!postController)
+        navigate(`/user/${id}`);
+    }
+
     return(
         <DropdownContainer>
             {querie?.map((item, index)=> {
                 return(
-                    <ItemDiv key ={index}>
+                    <ItemDiv onClick={()=>renderById(item.id)} key ={index}>
                         <img src={item.profileImgUrl} alt="" />
                         <h1>{item.username}</h1>
                     </ItemDiv>

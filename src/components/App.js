@@ -4,6 +4,7 @@ import Post from "./Post";
 import SignUp from "./authComponents/SignUp";
 import Login from "./authComponents/Login";
 import UserContext from "../contexts/UserContext"
+import PostById from "./PostById";
 
 
 function App() {
@@ -11,9 +12,9 @@ function App() {
   const [info, setInfo] = useState({}); // SALVA O NOME DE USUARIO E TOKEN QUE VEM DO BACK
   const [local, setLocal] = useState({}); // SALVA O TOKEN QUE VEM DO LOCAL STORAGE
   const [modal, setModal] = useState(false)
-  const contextValue = {info, setInfo, local, setLocal, modal, setModal }
+  const [postController, setPostController] = useState(false);
+  const contextValue = {info, setInfo, local, setLocal, modal, setModal, postController, setPostController }
 
-  console.log(local)
 
   return (
     <UserContext.Provider value={contextValue}>
@@ -22,6 +23,7 @@ function App() {
           <Route path='/signup' element={<SignUp />} />
           <Route path='/' element={<Login />} />
           <Route path="/timeline" element={ <Post />} />
+          <Route path='/user/:id' element ={ <Post /> } />
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>
