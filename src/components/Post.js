@@ -157,8 +157,8 @@ function PublishPost(props) {
                         <ProfileImage></ProfileImage>
                         <ContainerPost>
                             <ShareHeader>What are you going to share today?</ShareHeader>
-                            <input type='text' placeholder="http://..." onChange={e => setUrl(e.target.value)} />
-                            <input className="input2" type='text' placeholder="Awesome article about #javascript" onChange={e =>setDescription(e.target.value)}/>
+                            <input type='text'value = {url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
+                            <input className="input2" value = {description} type='text' placeholder="Awesome article about #javascript" onChange={e =>setDescription(e.target.value)}/>
                             <Button onClick={publish}>Publish</Button>
                         </ContainerPost>
                     </Publish>
