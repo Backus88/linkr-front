@@ -10,16 +10,43 @@ import UserContext from "../contexts/UserContext";
 
 
 function Posts(props) {
-    let {username,description, renderById, userId} = props
-    
+    const [title, setTitle] = useState('');
+    const [descrip, setDescrip] = useState('');
+    const [image, setImage] = useState('');
+    const [uri, setUri] = useState('');
+    let {
+        username,
+        description,
+        renderById,
+        userId,
+        url,
+    } = props
+    function getMetadata() {
+        const promise = axios.get(
+            `http://localhost:4000/url-metadata?url=${url}`)
+        promise.then(response => {
+            setTitle(response.data.title)
+            setDescrip(response.data.description)
+            setImage(response.data.image)
+            setUri(response.data.uri)
+        })
+    }
+    useEffect(getMetadata, [])
     return (
-
         <>
             <Publication className="post">
                 <ProfileImage></ProfileImage>
                 <ContainerPost>
-                    <UserName onClick={()=> renderById(userId)} >{username}</UserName>
+                    <UserName onClick={() => renderById(userId)} >{username}</UserName>
                     <DescriptionPost>{description}</DescriptionPost>
+                    <ContainerUrl onClick={()=> window.open(uri)}>
+                        <ContainerDatas>
+                            <TitleUrl>{title}</TitleUrl>
+                            <DescriptionUrl>{descrip}</DescriptionUrl>
+                            <UrlPost>{uri}</UrlPost>
+                        </ContainerDatas>
+                        <Photo src={image}></Photo>
+                    </ContainerUrl>
                 </ContainerPost>
             </Publication>
         </>
@@ -80,7 +107,8 @@ export default function Post() {
                 <Posts username={item.username} 
                        description={item.description}
                        renderById = {renderById}
-                       userId = {item.userId}
+                       userId = {item.userId} 
+                       url = {item.url}
                        key={index} />)
                 : null}
              
@@ -260,4 +288,57 @@ font-size: 20px;
 color: #B7B7B7;
 margin-left: 80px;
 margin-top: 10px;
+`
+const ContainerUrl = styled.div`
+width: 85%;
+height: 160px;
+margin-top: 15px;
+background: #171717;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+border: 1px solid #4D4D4D;
+border-radius: 11px;
+color: #FFFFFF;
+margin-left: 80px;
+display: flex;
+`
+const TitleUrl = styled.div`
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 27px;
+color: #CECECE;
+margin-top: 20px;
+margin-left: 15px;
+`
+const DescriptionUrl = styled.div`
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 15px;
+color: #9B9595;
+margin-left: 15px;
+margin-top: 10px;
+`
+const Photo = styled.img`
+width: 30%;
+height: 100%;
+background: url(image.png);
+border-radius: 0px 12px 13px 0px;
+align-self: flex-end;
+`
+const UrlPost = styled.div`
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 17px;
+color: #CECECE;
+margin-left: 15px;
+margin-top: 5px;
+bottom: 0;
+position: relative;
+`
+const ContainerDatas = styled.div`
+display: flex;
+flex-direction: column;
+margin-right: 10px;
 `

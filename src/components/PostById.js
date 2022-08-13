@@ -1,6 +1,7 @@
 import Post from "./Post"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
+import React from "react";
 
 export default function PostById(){
     const [id, setId] = useState(parseInt(useParams()));
