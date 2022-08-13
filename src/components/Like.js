@@ -9,7 +9,9 @@ import UserContext from "../contexts/UserContext";
 
 export default function Like(){
 
-    const URL = `http://localhost:4000/posts/2/likes`;
+    const idPost = 1;
+
+    const URL = `http://localhost:4000/posts/${idPost}/likes`;
     const {info} = useContext(UserContext);
     console.log(info)
 
@@ -23,17 +25,18 @@ export default function Like(){
     const [likesQuantity, setLikesQuantity] = useState(0);
     const [userHasLiked, setUserHasLiked] = useState(false);
     const [usersnamesThatLiked, setUsersnamesThatLiked] = useState('');
+    
+    async function fetchLikes(){
+        try {
+            const response = await axios.get(URL, config);
+            handleSucess(response);
+
+        } catch (error) {
+            console.log(error.data.details);
+        }
+    };
+    
     useEffect(()=>{
-        async function fetchLikes(){
-            try {
-                const response = await axios.get(URL, config);
-                handleSucess(response);
-
-            } catch (error) {
-                console.log(error.data.details);
-            }
-        };
-
         fetchLikes();
     }, []);
 
@@ -41,47 +44,64 @@ export default function Like(){
         setLikesUsers(res.data.users);
         setLikesQuantity(res.data.quantity);
         setUserHasLiked(res.data.hasUserLiked);
-        const{quantity, users} = res.data;
         console.log(res.data);
+    }
+
+
+    async function dislikePost(){
+        try {
+            
+            const response = await axios.delete(`${URL}`, config);
+            console.log(response)
+            fetchLikes();
+
+        } catch (error) {
+            console.log(error.response.data.message);
+        }
+
+    };
+
+    async function likePost(){
+        try {
+            
+            const response = await axios.post(`${URL}`, "", config);
+            console.log(response);
+            fetchLikes();
+
+        } catch (error) {
+            console.log(error.response.data.message);
+        }
+
     }
 
     function renderLikeIcon(){
 
-        if(userHasLiked) return <LikedIcon/>
-        else return <UnlikedIcon/>
+        if(userHasLiked) return <LikedIcon onClick={dislikePost}/>
+        else return <UnlikedIcon onClick={likePost}/>
     }
 
     const likeIcon = renderLikeIcon();
 
-
-    function renderLikesTootip(){
+    function renderLikesTooltip(){
 
         if(userHasLiked && likesQuantity == 1) return <> <p data-tip= 'Você' > {`${likesQuantity} likes`}</p>        
             <ReactTooltip place="bottom" type="light"/> </>        
         else if(userHasLiked && likesQuantity ==2) return <> <p data-tip= {`Você e ${likesUsers[0]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
         else if(userHasLiked && likesQuantity >2) 
-        return <> <p data-tip= {`Você, ${likesUsers[0]} e ${likesUsers.length - 1} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+        return <> <p data-tip= {`Você, ${likesUsers[0]} e outras ${likesUsers.length - 1} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
         else if(likesQuantity == 1) return <> <p data-tip= {`${likesUsers[0]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
         else if(likesQuantity == 2) return <> <p data-tip= {`${likesUsers[0]} e ${likesUsers[1]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
-        else if(likesQuantity > 2) return <> <p data-tip= {`${likesUsers[0]}, ${likesUsers[1]} e ${likesUsers.length - 1} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+        else if(likesQuantity > 2) return <> <p data-tip= {`${likesUsers[0]}, ${likesUsers[1]} e outras ${likesUsers.length - 1} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
         
     }
 
-
-    function renderLikesQuantity(){
-        return(
-            <>
-                {renderLikesTootip()}
-            </>
-        )
-    }
-    const toRenderLikesQuantity = renderLikesQuantity();
+    const toRenderLikesTooltip = renderLikesTooltip();
 
     return(
         <LikeBox> 
             {likeIcon}
             <NumberLikes>
-                {toRenderLikesQuantity} 
+                {toRenderLikesTooltip} 
             </NumberLikes>
         </LikeBox>
     )
