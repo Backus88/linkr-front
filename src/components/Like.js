@@ -9,10 +9,8 @@ import UserContext from "../contexts/UserContext";
 
 export default function Like({idPost}){
 
-    console.log(idPost);
     const URL = `http://localhost:4000/posts/${idPost}/likes`;
     const {info} = useContext(UserContext);
-    console.log(info)
 
     const config = {
         headers:{
@@ -42,15 +40,13 @@ export default function Like({idPost}){
         setLikesUsers(res.data.users);
         setLikesQuantity(res.data.quantity);
         setUserHasLiked(res.data.hasUserLiked);
-        console.log(res.data);
     }
 
 
     async function dislikePost(){
         try {
             
-            const response = await axios.delete(`${URL}`, config);
-            console.log(response)
+            await axios.delete(`${URL}`, config);
             fetchLikes();
 
         } catch (error) {
@@ -62,8 +58,7 @@ export default function Like({idPost}){
     async function likePost(){
         try {
             
-            const response = await axios.post(`${URL}`, "", config);
-            console.log(response);
+            await axios.post(`${URL}`, "", config);
             fetchLikes();
 
         } catch (error) {

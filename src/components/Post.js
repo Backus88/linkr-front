@@ -39,10 +39,7 @@ export default function Post() {
 
     function getPost() {
         const promise = axios.get('http://localhost:4000/post', config)
-        promise.then(response => {
-            setPost(response.data)
-            console.log(response.data)
-        })
+        promise.then(response => setPost(response.data))
     }
     useEffect(getPost, [])
     function getUser(){
