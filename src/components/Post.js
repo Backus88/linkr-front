@@ -3,15 +3,15 @@ import GlobalStyle from "./globalStyles";
 import Header from './Header.js';
 import styled from "styled-components";
 import axios from "axios"
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
-
+import ReactHashtag from "@mdnm/react-hashtag";
 
 
 
 function Posts(props) {
     let {username,description, renderById, userId} = props
-    
+
     return (
 
         <>
@@ -19,7 +19,18 @@ function Posts(props) {
                 <ProfileImage></ProfileImage>
                 <ContainerPost>
                     <UserName onClick={()=> renderById(userId)} >{username}</UserName>
-                    <DescriptionPost>{description}</DescriptionPost>
+                    <DescriptionPost>
+                        <ReactHashtag 
+                            renderHashtag={(hashtagValue) => {
+                                return (
+                                    <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
+                                    <Hashtag>{hashtagValue}</Hashtag>
+                                    </HashtagLink>
+                                )
+                            }}>  
+                            {description}
+                        </ReactHashtag>
+                    </DescriptionPost>
                 </ContainerPost>
             </Publication>
         </>
@@ -260,4 +271,19 @@ font-size: 20px;
 color: #B7B7B7;
 margin-left: 80px;
 margin-top: 10px;
+
 `
+
+const HashtagLink = styled(Link)`
+text-decoration: none;
+`
+
+const Hashtag = styled.span`
+color: #FFFFFF;
+font-weight: 700;
+
+:hover{
+    cursor: pointer;
+}
+`;
+

@@ -24,6 +24,7 @@ function App() {
           <Route path='/' element={<Login />} />
           <Route path="/timeline" element={ <Post />} />
           <Route path='/user/:id' element ={ <Post /> } />
+          <Route path='/hashtag/:hashtag' element={<Post />}/>
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>
