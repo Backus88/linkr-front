@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react"
 import GlobalStyle from "./globalStyles";
 import Header from './Header.js';
+import Like from "./Like.js";
 import styled from "styled-components";
 import axios from "axios"
 import { useParams, useNavigate, useLocation } from "react-router-dom";
@@ -21,7 +22,8 @@ function Posts(props) {
         renderById,
         userId,
         url,
-        imageProfile
+        imageProfile,
+        idPost
     } = props
     console.log(imageProfile)
     function getMetadata() {
@@ -51,6 +53,7 @@ function Posts(props) {
                         <Photo src={image}></Photo>
                     </ContainerUrl>
                 </ContainerPost>
+            <Like idPost ={idPost}/>
             </Publication>
         </>
     )
@@ -142,7 +145,9 @@ export default function Post() {
                                 userId={item.userId}
                                 url={item.url}
                                 imageProfile = {item.profileImgUrl}
-                                key={item.url + index} />
+                                key={item.url + index}
+                                idPost={item.id}
+                                 />
                         )
                             :
                              <MsgError>There are no posts yet</MsgError>}
@@ -305,6 +310,7 @@ margin-top: 40px;
 background: #171717;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;
+position:relative;
 `
 const UserName = styled.div`
 font-family: 'Lato';
