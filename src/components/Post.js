@@ -6,23 +6,51 @@ import styled from "styled-components";
 import axios from "axios"
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 
 
 
 function Posts(props) {
-
-    let {username,description, renderById, userId,idPost} = props
-    
-
+    const [title, setTitle] = useState('');
+    const [descrip, setDescrip] = useState('');
+    const [image, setImage] = useState('');
+    const [uri, setUri] = useState('');
+    let {
+        username,
+        description,
+        renderById,
+        userId,
+        url,
+        imageProfile,
+        idPost
+    } = props
+    function getMetadata() {
+        const promise = axios.get(
+            `http://localhost:4000/url-metadata?url=${url}`)
+        promise.then(response => {
+            setTitle(response.data.title)
+            setDescrip(response.data.description)
+            setImage(response.data.image)
+            setUri(response.data.uri)
+        })
+    }
+    useEffect(getMetadata, [])
     return (
-
         <>
             <Publication className="post">
-                <ProfileImage></ProfileImage>
+                <ProfileImage src={imageProfile}></ProfileImage>
                 <ContainerPost>
-                    <UserName onClick={()=> renderById(userId)} >{username}</UserName>
+                    <UserName onClick={() => renderById(userId)} >{username}</UserName>
                     <DescriptionPost>{description}</DescriptionPost>
+                    <ContainerUrl onClick={() => window.open(uri)}>
+                        <ContainerDatas>
+                            <TitleUrl>{title}</TitleUrl>
+                            <DescriptionUrl>{descrip}</DescriptionUrl>
+                            <UrlPost>{uri}</UrlPost>
+                        </ContainerDatas>
+                        <Photo src={image}></Photo>
+                    </ContainerUrl>
                 </ContainerPost>
             <Like idPost ={idPost}/>
             </Publication>
@@ -35,10 +63,10 @@ export default function Post() {
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
     const navigate = useNavigate();
-    // const { local } = useContext(UserContext);
-    // const { postController, setPostController } = useContext(UserContext);
-    const {id:newId} = useParams();
-    const local= localStorage.getItem("token");
+    const [loading, setLoading] = useState(true)
+    const [crash, setCrash] = useState(false)
+    const { id: newId } = useParams();
+    const local = localStorage.getItem("token");
     let location = useLocation();
     const config = {
         headers: {
@@ -46,29 +74,40 @@ export default function Post() {
         }
     }
 
-    
-    function renderById(id){
-        // setPostController(!postController)
+
+    function renderById(id) {
         navigate(`/user/${id}`);
     }
 
     function getPost() {
+        setLoading(true)
         setId(parseInt(newId))
-        if(!id){
+        if (!id) {
             const promise = axios.get('http://localhost:4000/post', config)
-            promise.then(response => setPost(response.data))
+            promise.then(response => {
+                let data = [...response.data]
+                setPost(data)
+                setLoading(false)
+            })
             setCanPublish(true)
-            console.log(post)
-        }else{
+            promise.catch(()=> {
+                setLoading(false)
+                setCrash(true)
+            })
+        } else {
             const promise = axios.get(`http://localhost:4000/user/${id}`, config)
-            promise.then(response => setPost(response.data))
+            promise.then(response => {
+                let data = [...response.data]
+                setPost(data)
+                setLoading(false)
+            })
             setCanPublish(false);
         }
-        
+
     }
 
-    useEffect(getPost, [id,location])
-    function getUser(){
+    useEffect(getPost, [id, location])
+    function getUser() {
         const promise = axios.get('http://localhost:4000/post', config)
         promise.then(response => setUser(response.data))
     }
@@ -78,18 +117,35 @@ export default function Post() {
             <GlobalStyle />
             <Header />
             <Container>
-
-                {canPublish?<Title>timeline</Title>: null }
-                {canPublish?<PublishPost getPost={getPost} />:null}
-                {post? post.map((item, index)=>
-                <Posts username={item.username} 
-                       description={item.description}
-                       renderById = {renderById}
-                       userId = {item.userId}
-                       idPost={item.id}
-                       key={index} />)
-                : null}
-             
+                {canPublish ? <Title>timeline</Title> : null}
+                {canPublish ? <PublishPost getPost={getPost} /> : null}
+                {loading ?
+                    <>
+                        <IconLoading />
+                        <MsgLoading>loading...</MsgLoading>
+                    </>
+                    :
+                    crash ?
+                        <>
+                            <MsgError>
+                                An error occured while trying to fetch the posts,
+                                please refresh the page
+                            </MsgError>
+                        </>
+                        :
+                        post.length > 0 ? post.map((item, index) =>
+                            <Posts username={item.username}
+                                description={item.description}
+                                renderById={renderById}
+                                userId={item.userId}
+                                url={item.url}
+                                imageProfile = {item.profileImgUrl}
+                                key={item.url + index}
+                                idPost={item.id}
+                                 />
+                        )
+                            :
+                             <MsgError>There are no posts yet</MsgError>}
 
             </Container>
         </>
@@ -98,10 +154,9 @@ export default function Post() {
 function PublishPost(props) {
     const [enabled, setEnabled] = useState(true)
     const [url, setUrl] = useState('')
-    const local= localStorage.getItem("token");
-    // const { local } = useContext(UserContext);
+    const local = localStorage.getItem("token");
     const [description, setDescription] = useState('')
-    const {getPost} = props
+    const { getPost } = props
     const config = {
         headers: {
             "Authorization": 'Bearer ' + local
@@ -109,7 +164,7 @@ function PublishPost(props) {
     }
     function publish() {
         setEnabled(false)
-        const promise = axios.post('http://localhost:4000/post',{
+        const promise = axios.post('http://localhost:4000/post', {
             url: url,
             description: description
         }, config)
@@ -136,8 +191,8 @@ function PublishPost(props) {
                         <ProfileImage></ProfileImage>
                         <ContainerPost>
                             <ShareHeader>What are you going to share today?</ShareHeader>
-                            <input type='text' placeholder="http://..." onChange={e => setUrl(e.target.value)} />
-                            <input className="input2" type='text' placeholder="Awesome article about #javascript" onChange={e =>setDescription(e.target.value)}/>
+                            <input type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
+                            <input className="input2" value={description} type='text' placeholder="Awesome article about #javascript" onChange={e => setDescription(e.target.value)} />
                             <Button onClick={publish}>Publish</Button>
                         </ContainerPost>
                     </Publish>
@@ -146,7 +201,7 @@ function PublishPost(props) {
                         <ProfileImage></ProfileImage>
                         <ContainerPost>
                             <ShareHeader>What are you going to share today?</ShareHeader>
-                            <input type='text' placeholder="http://..." disabled/>
+                            <input type='text' placeholder="http://..." disabled />
                             <input className="input2" type='text' placeholder="Awesome article about #javascript" disabled />
                             <Button>Publishing...</Button>
                         </ContainerPost>
@@ -159,6 +214,7 @@ const Container = styled.div`
 display: flex;
 flex-direction: column;
 align-items: center;
+margin-bottom: 10px;
 
 
 `
@@ -179,7 +235,7 @@ background: #FFFFFF;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;
 `
-const ProfileImage = styled.div`
+const ProfileImage = styled.img`
 background-color : black;
 width: 50px;
 height: 50px;
@@ -268,4 +324,80 @@ font-size: 20px;
 color: #B7B7B7;
 margin-left: 80px;
 margin-top: 10px;
+`
+const ContainerUrl = styled.div`
+width: 85%;
+height: 160px;
+margin-top: 15px;
+background: #171717;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+border: 1px solid #4D4D4D;
+border-radius: 11px;
+color: #FFFFFF;
+margin-left: 80px;
+display: flex;
+`
+const TitleUrl = styled.div`
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 22px;
+color: #CECECE;
+margin-top: 20px;
+margin-left: 15px;
+`
+const DescriptionUrl = styled.div`
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 15px;
+color: #9B9595;
+margin-left: 15px;
+margin-top: 10px;
+`
+const Photo = styled.img`
+width: 30%;
+height: 100%;
+background: url(image.png);
+border-radius: 0px 12px 13px 0px;
+align-self: flex-end;
+`
+const UrlPost = styled.div`
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 13px;
+color: #CECECE;
+margin-left: 15px;
+margin-top: 5px;
+bottom: 0;
+position: relative;
+`
+const ContainerDatas = styled.div`
+display: flex;
+flex-direction: column;
+margin-right: 10px;
+width: 70%;
+`
+const IconLoading = styled(AiOutlineLoading3Quarters)`
+color: #FFFFFF;
+margin-top: 60px;
+width: 60%;
+height: 50px;
+`
+const MsgLoading = styled.div`
+color: white;
+margin-top: 10px;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+`
+const MsgError = styled.div`
+color: white;
+margin-top: 50px;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
 `
