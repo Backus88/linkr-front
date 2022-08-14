@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Post from "./Post";
+import Post from "./timeline/Post.js";
 import SignUp from "./authComponents/SignUp";
 import Login from "./authComponents/Login";
-import UserContext from "../contexts/UserContext"
-import PostById from "./PostById";
+import UserContext from "../contexts/UserContext";
+import PostById from "./timeline/PostById";
 
 
 function App() {

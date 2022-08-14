@@ -4,7 +4,7 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import ReactTooltip from "react-tooltip";
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import UserContext from "../contexts/UserContext";
+import UserContext from "../../contexts/UserContext";
 
 
 export default function Like({idPost}){

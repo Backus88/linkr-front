@@ -1,14 +1,13 @@
 import React, { useState, useContext, useEffect } from "react"
-import GlobalStyle from "./globalStyles";
-import Header from './Header.js';
+import GlobalStyle from "../../styles/globalStyles";
+import Header from '../header/Header.js';
 import Like from "./Like.js";
 import styled from "styled-components";
 import axios from "axios"
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import UserContext from "../contexts/UserContext";
+import UserContext from "../../contexts/UserContext";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-
-
+import PublishPost from "./PublishPost";
 
 
 function Posts(props) {
@@ -36,6 +35,7 @@ function Posts(props) {
         })
     }
     useEffect(getMetadata, [])
+
     return (
         <>
             <Publication className="post">
@@ -151,65 +151,8 @@ export default function Post() {
         </>
     )
 }
-function PublishPost(props) {
-    const [enabled, setEnabled] = useState(true)
-    const [url, setUrl] = useState('')
-    const local = localStorage.getItem("token");
-    const [description, setDescription] = useState('')
-    const { getPost } = props
-    const config = {
-        headers: {
-            "Authorization": 'Bearer ' + local
-        }
-    }
-    function publish() {
-        setEnabled(false)
-        const promise = axios.post('http://localhost:4000/post', {
-            url: url,
-            description: description
-        }, config)
-        promise.catch(tratarError)
-        promise.then(tratarSucesso)
 
-        function tratarError() {
-            alert('Houve um erro ao publicar seu link')
-            setEnabled(true)
-        }
-        function tratarSucesso() {
-            setEnabled(true)
-            setUrl('')
-            setDescription('')
-            getPost()
 
-        }
-    }
-    return (
-        <>
-            {
-                (enabled === true) ?
-                    <Publish>
-                        <ProfileImage></ProfileImage>
-                        <ContainerPost>
-                            <ShareHeader>What are you going to share today?</ShareHeader>
-                            <input type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
-                            <input className="input2" value={description} type='text' placeholder="Awesome article about #javascript" onChange={e => setDescription(e.target.value)} />
-                            <Button onClick={publish}>Publish</Button>
-                        </ContainerPost>
-                    </Publish>
-                    :
-                    <Publish>
-                        <ProfileImage></ProfileImage>
-                        <ContainerPost>
-                            <ShareHeader>What are you going to share today?</ShareHeader>
-                            <input type='text' placeholder="http://..." disabled />
-                            <input className="input2" type='text' placeholder="Awesome article about #javascript" disabled />
-                            <Button>Publishing...</Button>
-                        </ContainerPost>
-                    </Publish>
-            }
-        </>
-    )
-}
 const Container = styled.div`
 display: flex;
 flex-direction: column;
@@ -247,7 +190,7 @@ position: absolute;
 const ContainerPost = styled.div`
 display: flex;
 flex-direction:column;
-
+padding-right: 10px;
 
 input{
 width: 78%;
@@ -267,12 +210,9 @@ height: auto;
 input::placeholder{
 color: #949494;
 margin-top: 5px;
-
-
 }
-
-
 `
+
 const ShareHeader = styled.div`
 font-family: 'Lato';
 font-style: normal;
@@ -281,6 +221,13 @@ font-size: 20px;
 color: #707070;
 text-align: center;
 margin-top: 5px;
+
+    input{
+        font-family: 'Lato';
+        font-style: normal;
+        color: #E5E5E5;
+    }
+    
 `
 const Button = styled.div`
 background: #1877F2;
@@ -294,8 +241,8 @@ color: #FFFFFF;
 width:17%;
 padding: 5px;
 align-self: flex-end;
+margin-right: 10%;
 margin-top: 10px;
-margin-right: 80px;
 `
 const Publication = styled.div`
 width: 40%;

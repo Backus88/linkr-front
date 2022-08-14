@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { VscChevronDown, VscChevronUp } from "react-icons/vsc";
 import {useNavigate} from "react-router-dom"
 import { useContext } from "react";
-import UserContext from "../contexts/UserContext";
-import useOutsideAlerter from "../Hooks/ClickHook";
+import UserContext from "../../contexts/UserContext";
+import useOutsideAlerter from "../../Hooks/ClickHook";
 
 
 export default function Profile(){
