@@ -60,6 +60,7 @@ function Posts(props) {
 export default function Post() {
     const [post, setPost] = useState([]);
     const [user, setUser] = useState([]);
+    const [username, setUsername]= useState('');
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
     const navigate = useNavigate();
@@ -89,24 +90,45 @@ export default function Post() {
                 setPost(data)
                 setLoading(false)
             })
-            setCanPublish(true)
+
             promise.catch(()=> {
                 setLoading(false)
                 setCrash(true)
             })
-        } else {
+            setCanPublish(true)
+
+        }else{
             const promise = axios.get(`http://localhost:4000/user/${id}`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
+
+            const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
+            userById.then(response => {
+                let data = {...response.data}
+                setUsername(data)
+                setLoading(false)
+            });
+          
+
+            promise.catch(()=> {
+                setLoading(false)
+                setCrash(true)
+            })
+            userById.catch(()=> {
+                setLoading(false)
+                setCrash(true)
+            })
             setCanPublish(false);
         }
 
     }
 
-    useEffect(getPost, [id, location])
+
+    useEffect(getPost, [id,location,newId, canPublish])
+
     function getUser() {
         const promise = axios.get('http://localhost:4000/post', config)
         promise.then(response => setUser(response.data))
@@ -117,7 +139,7 @@ export default function Post() {
             <GlobalStyle />
             <Header />
             <Container>
-                {canPublish ? <Title>timeline</Title> : null}
+                {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
                 {canPublish ? <PublishPost getPost={getPost} /> : null}
                 {loading ?
                     <>
@@ -146,7 +168,6 @@ export default function Post() {
                         )
                             :
                              <MsgError>There are no posts yet</MsgError>}
-
             </Container>
         </>
     )
