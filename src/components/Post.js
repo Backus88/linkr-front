@@ -32,6 +32,7 @@ function Posts(props) {
 export default function Post() {
     const [post, setPost] = useState([]);
     const [user, setUser] = useState([]);
+    const [username, setUsername]= useState('');
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
     const navigate = useNavigate();
@@ -58,16 +59,18 @@ export default function Post() {
             const promise = axios.get('http://localhost:4000/post', config)
             promise.then(response => setPost(response.data))
             setCanPublish(true)
-            console.log(post)
         }else{
-            const promise = axios.get(`http://localhost:4000/user/${id}`, config)
+            const promise = axios.get(`http://localhost:4000/user/${id}`, config);
             promise.then(response => setPost(response.data))
+            const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
+            userById.then(response => setUsername(response.data));
+            console.log(username)
             setCanPublish(false);
         }
         
     }
 
-    useEffect(getPost, [id,location])
+    useEffect(getPost, [id,location,newId, canPublish])
     function getUser(){
         const promise = axios.get('http://localhost:4000/post', config)
         promise.then(response => setUser(response.data))
@@ -79,7 +82,7 @@ export default function Post() {
             <Header />
             <Container>
 
-                {canPublish?<Title>timeline</Title>: null }
+                {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
                 {canPublish?<PublishPost getPost={getPost} />:null}
                 {post? post.map((item, index)=>
                 <Posts username={item.username} 
