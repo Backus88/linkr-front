@@ -1,8 +1,10 @@
 import React, { useState, useContext, useEffect } from "react"
+import { Link } from "react-router-dom";
 import GlobalStyle from "../../styles/globalStyles";
 import Like from "./Like.js";
 import styled from "styled-components";
 import axios from "axios"
+import ReactHashtag from "@mdnm/react-hashtag";
 
 export default function Post(props) {
   const [title, setTitle] = useState('');
@@ -40,7 +42,18 @@ export default function Post(props) {
 
             <ContainerPost>
                 <h1 onClick={() => renderById(userId)} >{username}</h1>
-                <h2>{description}</h2>
+                <h2>
+                    <ReactHashtag 
+                            renderHashtag={(hashtagValue) => {
+                                return (
+                                    <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
+                                    <Hashtag>{hashtagValue}</Hashtag>
+                                    </HashtagLink>
+                                )
+                            }}>  
+                        {description}
+                    </ReactHashtag>
+                </h2>
                 <ContainerUrl onClick={() => window.open(uri)}>
                     <URLInfo>
                         <h1>{title}</h1>
@@ -151,3 +164,15 @@ img{
     border-radius: 0 10px 10px 0;
 }
 `
+
+const HashtagLink = styled(Link)`
+text-decoration: none;
+`
+
+const Hashtag = styled.span`
+color: #FFFFFF;
+font-weight: 700;
+:hover{
+    cursor: pointer;
+}
+`;
