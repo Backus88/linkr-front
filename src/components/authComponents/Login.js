@@ -133,6 +133,7 @@ const LogInPage = styled.div`
   min-height: 665px;
   height: 100vh;
   background-color: #151515;
+
 `
 
 const Logo = styled.div`
