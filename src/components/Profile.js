@@ -1,4 +1,4 @@
-import React, { useRef, useState} from "react";
+import React, { useRef, useState, useEffect} from "react";
 import styled from "styled-components";
 import { VscChevronDown, VscChevronUp } from "react-icons/vsc";
 import {useNavigate} from "react-router-dom"
@@ -10,13 +10,17 @@ import useOutsideAlerter from "../Hooks/ClickHook";
 export default function Profile(){
 
   const wrapperRef = useRef(null);
- 
+  const [imgLocal, setImgLocal]= useState('');
   const {modal, setModal} = useContext(UserContext);
   const {local, setLocal} = useContext(UserContext);
 
   useOutsideAlerter(wrapperRef, setModal);
 
   const navigate = useNavigate();
+  useEffect(()=>{
+    const img =localStorage.getItem("img");
+    setImgLocal(img);
+  },[])
 
   function HandleClick(){
     let el = document.getElementById('menu').hidden;
@@ -46,7 +50,7 @@ export default function Profile(){
       :
       <IconDown onClick={HandleClick}/> }
 
-      <ProfileImage onClick={HandleClick}></ProfileImage>
+      <ProfileImage onClick={HandleClick}><img src ={imgLocal} alt =''></img></ProfileImage>
       
       <Menu id={'menu'} hidden={true}>
         <p onClick={HandleLogout}>Logout</p>
@@ -106,5 +110,12 @@ width: 50px;
 height: 50px;
 border-radius: 50%;
 margin-top: 5px;
-
+display: flex;
+justify-content: center;
+align-items: center;
+img{
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
 `

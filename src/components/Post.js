@@ -175,6 +175,7 @@ export default function Post() {
 function PublishPost(props) {
     const [enabled, setEnabled] = useState(true)
     const [url, setUrl] = useState('')
+    const [imgLocal, setImgLocal]= useState('');
     const local = localStorage.getItem("token");
     const [description, setDescription] = useState('')
     const { getPost } = props
@@ -183,6 +184,10 @@ function PublishPost(props) {
             "Authorization": 'Bearer ' + local
         }
     }
+    useEffect(()=>{
+        const img =localStorage.getItem("img");
+        setImgLocal(img);
+    },[])
     function publish() {
         setEnabled(false)
         const promise = axios.post('http://localhost:4000/post', {
@@ -209,7 +214,7 @@ function PublishPost(props) {
             {
                 (enabled === true) ?
                     <Publish>
-                        <ProfileImage></ProfileImage>
+                        <ProfileImage src = {imgLocal} alt =''></ProfileImage>
                         <ContainerPost>
                             <ShareHeader>What are you going to share today?</ShareHeader>
                             <input type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
@@ -219,7 +224,7 @@ function PublishPost(props) {
                     </Publish>
                     :
                     <Publish>
-                        <ProfileImage></ProfileImage>
+                        <ProfileImage src = {imgLocal} alt =''></ProfileImage>
                         <ContainerPost>
                             <ShareHeader>What are you going to share today?</ShareHeader>
                             <input type='text' placeholder="http://..." disabled />
