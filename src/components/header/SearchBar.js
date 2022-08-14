@@ -12,7 +12,7 @@ export default function SearchBar(){
 
     function searchOnChange(event){
         event.preventDefault();
-        alert('aqui');
+        console.log('nao faz nada ainda');
     }
     return(
         <SearchContainer>
