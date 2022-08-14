@@ -70,6 +70,10 @@ const SearchContainer = styled.div`
         &:focus{
             outline: none;
         }
+        ::placeholder{
+            color: #C6C6C6;
+            font-size: 1.2rem;
+        }
     }
 `;
 
