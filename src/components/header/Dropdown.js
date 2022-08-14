@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { useEffect,useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import UserContext from "../contexts/UserContext";
+import UserContext from "../../contexts/UserContext";
+import React from "react";
 
 
 export default function Dropdown ({usernameString,querieController, setSearching, searching}){

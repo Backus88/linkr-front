@@ -49,7 +49,8 @@ export default function Login(){
 
       setInfo(dados)
       console.log(dados)
-      localStorage.setItem("token", dados)
+      localStorage.setItem("token", dados.token);
+      localStorage.setItem("img", dados.profileImgUrl);
       console.log(localStorage)
       const token = localStorage.getItem('token')
       setLocal(token)
@@ -132,6 +133,7 @@ const LogInPage = styled.div`
   min-height: 665px;
   height: 100vh;
   background-color: #151515;
+
 `
 
 const Logo = styled.div`
