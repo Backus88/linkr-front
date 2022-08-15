@@ -74,7 +74,7 @@ export default function PublishPost(props) {
 const Publish = styled.div`
 display: flex;
 justify-content: space-between;
-width: 40%;
+width: 100%;
 height: 210px;
 /* margin-top: 40px; */
 margin: 40px auto;

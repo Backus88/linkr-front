@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom";
 import GlobalStyle from "../../styles/globalStyles";
 import Like from "./Like.js";
@@ -73,7 +73,7 @@ export default function Post(props) {
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
-width: 40%;
+width: 100%;
 height: 257px;
 margin: 40px auto;
 background: #171717;

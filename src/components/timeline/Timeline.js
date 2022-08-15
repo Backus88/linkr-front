@@ -7,6 +7,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import PublishPost from "./PublishPost";
 import Post from "./Post";
+import TrendingBox from "./TrendingBox";
 
 
 export default function Timeline() {
@@ -92,6 +93,8 @@ export default function Timeline() {
         <GlobalStyle />
         <Header />
         <Container>
+            <Main>
+
         {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
         {canPublish ? <PublishPost getPost={getPost} /> : null}
         {loading ?
@@ -121,6 +124,8 @@ export default function Timeline() {
                 )
                     :
                         <MsgError>There are no posts yet</MsgError>}
+            </Main>
+        <TrendingBox/>
         </Container>
         </>
     )
@@ -130,9 +135,15 @@ export default function Timeline() {
 const Container = styled.div`
 width: 100%;
 display: flex;
-flex-direction: column;
+flex-direction: row;
+justify-content:center;
 margin: auto;
 `
+
+const Main = styled.div`
+width: 43%;
+` 
+
 const Title = styled.div`
 width: 40%;
 font-family: 'Oswald';
@@ -140,7 +151,7 @@ font-style: normal;
 font-weight: 700;
 font-size: 43px;
 color: #FFFFFF;
-margin: 100px auto 0px auto;
+margin: 100px 0 0px 0;
 text-align: start;
 `
 
