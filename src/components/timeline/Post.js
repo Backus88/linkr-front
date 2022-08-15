@@ -18,6 +18,8 @@ export default function Post(props) {
   const [image, setImage] = useState('');
   const [uri, setUri] = useState('');
   const [editing, setEditing]= useState(false);
+  const [visible, setVisible] = useState(false);
+
   let {
       username,
       description,
@@ -38,11 +40,12 @@ export default function Post(props) {
           setUri(response.data.uri)
       })
   }
+  
   useEffect(getMetadata, [])
   return (
       <>
       {editing? <PublishPost getPost={getPost} 
-        postDescription ={description} 
+        postDescription = {description} 
         postUrl={uri} 
         editing ={editing} 
         setEditing= {setEditing} 
@@ -54,10 +57,14 @@ export default function Post(props) {
                 <img src={imageProfile}/>
                 <Like idPost ={idPost} />
             </ProfileImage>
-
+            <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} />
             <ContainerPost>
-                <EditPost userId ={userId} setEditing={setEditing} editing={false} top={'-10px'} />
+               <DivDispl>
+                <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
                 <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
+                
+                <IconTrash onClick={() => setVisible(true)} />
+                </DivDispl>
                 <h2>
                     <ReactHashtag 
                             renderHashtag={(hashtagValue) => {
@@ -88,17 +95,17 @@ export default function Post(props) {
   )
 
 }
+
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
 width: 100%;
-height: 257px;
+height: auto;
 margin: 40px auto;
 background: #171717;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;
 position:relative;
-
 `
 
 const ProfileImage = styled.div`
@@ -108,7 +115,7 @@ background-color : black;
 width: 50px;
 height: 50px;
 border-radius: 50%;
-margin: 1rem;
+margin: 1rem 1rem 0 1rem;
 object-fit: cover;
 }
 `
@@ -133,10 +140,13 @@ h1{
     font-weight: 400;
 }
 h2{
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 1.05rem;
     color: #B7B7B7;
     margin-bottom: 20px;
+    text-align: justify;
+    width: 95%;
+    line-height: 22px;
 }
 `
 
@@ -166,6 +176,7 @@ h2{
     overflow: hidden;
     text-overflow: ellipsis; 
     color: #9B9595;
+    line-height: 10px;
 }
 
 p{
