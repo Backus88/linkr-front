@@ -19,7 +19,6 @@ export default function Timeline() {
     const [hashtagController, setHashtagController] = useState(false)
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
-    const [hashtagController, setHashtagController] = useState(false);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
     const [crash, setCrash] = useState(false)
@@ -174,6 +173,7 @@ margin: auto;
 
 const Main = styled.div`
 width: 43%;
+max-width: 560px;
 ` 
 
 const Title = styled.div`
