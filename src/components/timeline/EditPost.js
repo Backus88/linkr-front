@@ -36,5 +36,7 @@ const Icon = styled(TiPencil)`
     width: 20px;
     height: 20px;
     cursor: pointer;
-    color: ${props => props.editing ? "#000000":"#FFFFFF"}
+    color: ${props => props.editing ? "#000000":"#FFFFFF"};
+    margin-right: 30px;
+    margin-top: 7px;
 `;

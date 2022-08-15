@@ -5,10 +5,14 @@ import Like from "./Like.js";
 import EditPost from "./EditPost";
 import styled from "styled-components";
 import axios from "axios"
+import { BsTrash } from "react-icons/bs";
+import ModalDelete from "./modalDelete";
 import ReactHashtag from "@mdnm/react-hashtag";
 import PublishPost from "./PublishPost";
 
+
 export default function Post(props) {
+
   const [title, setTitle] = useState('');
   const [descrip, setDescrip] = useState('');
   const [image, setImage] = useState('');
@@ -82,8 +86,8 @@ export default function Post(props) {
        }
       </>
   )
-}
 
+}
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
@@ -129,7 +133,7 @@ h1{
     font-weight: 400;
 }
 h2{
-    margin-top: 5px;
+    margin-top: 10px;
     font-size: 1.05rem;
     color: #B7B7B7;
     margin-bottom: 20px;
@@ -182,6 +186,14 @@ img{
     border-radius: 0 10px 10px 0;
 }
 `
+const IconTrash = styled(BsTrash)`
+color: white;
+margin-right: 20px;
+`
+const DivDispl = styled.div`
+display: flex;
+justify-content: space-between;
+`
 const HashtagLink = styled(Link)`
 text-decoration: none;
 `
@@ -193,4 +205,3 @@ font-weight: 700;
     cursor: pointer;
 }
 `;
-
