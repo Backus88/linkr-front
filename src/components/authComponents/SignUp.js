@@ -27,8 +27,8 @@ export default function SignUp(){
     console.log('clicked')
 
     if(!form.username || !form.email || !form.password || !form.profileImgUrl){
-      return alert('Fill all the necessary fields'),
       e.currentTarget.disabled=false;
+      return alert('Fill all the necessary fields');
     } 
 
     const URL = "http://localhost:4000/signup"

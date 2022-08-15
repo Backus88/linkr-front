@@ -1,10 +1,14 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useEffect } from "react"
+import { Link } from "react-router-dom";
 import GlobalStyle from "../../styles/globalStyles";
 import Like from "./Like.js";
+import EditPost from "./EditPost";
 import styled from "styled-components";
 import axios from "axios"
 import { BsTrash } from "react-icons/bs";
 import ModalDelete from "./modalDelete";
+import ReactHashtag from "@mdnm/react-hashtag";
+import PublishPost from "./PublishPost";
 
 
 export default function Post(props) {
@@ -12,7 +16,8 @@ export default function Post(props) {
     const [descrip, setDescrip] = useState('');
     const [image, setImage] = useState('');
     const [uri, setUri] = useState('');
-    const [visible, setVisible] = useState(false)
+    const [editing, setEditing]= useState(false);
+    const [visible, setVisible] = useState(false);
     let {
         username,
         description,
@@ -37,6 +42,13 @@ export default function Post(props) {
 
     return (
         <>
+        {editing? <PublishPost getPost={getPost} 
+        postDescription ={descrip} 
+        postUrl={uri} editing ={editing} 
+        setEditing= {setEditing} 
+        postId = {idPost} 
+        userId= {userId}/>
+      :
             <Publication className="post">
                 <ProfileImage>
                     <img src={imageProfile} />
@@ -45,7 +57,20 @@ export default function Post(props) {
         <ModalDelete visible = {visible} setVisible = {setVisible} postId = {idPost} getPost = {getPost}/>
                 <ContainerPost>
                     <DivDispl>
-                    <h1 onClick={() => renderById(userId)} >{username}</h1>
+                    <EditPost userId ={userId} setEditing={setEditing} editing={false} top={'-10px'} />
+                <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
+                <h2>
+                    <ReactHashtag 
+                            renderHashtag={(hashtagValue) => {
+                                return (
+                                    <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
+                                    <Hashtag>{hashtagValue}</Hashtag>
+                                    </HashtagLink>
+                                )
+                            }}>  
+                        {description}
+                    </ReactHashtag>
+                </h2>
                     <IconTrash onClick={()=> setVisible(true)}/>
                     </DivDispl>
                     <h2>{description}</h2>
@@ -61,13 +86,14 @@ export default function Post(props) {
                     </ContainerUrl>
                 </ContainerPost>
             </Publication>
+}
         </>
     )
 }
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
-width: 40%;
+width: 100%;
 height: 257px;
 margin: 40px auto;
 background: #171717;
@@ -90,6 +116,7 @@ object-fit: cover;
 `
 
 const ContainerPost = styled.div`
+position: relative;
 font-family: 'Lato';
 display: flex;
 flex-direction: column;
@@ -98,6 +125,9 @@ height: 100%;
 border-radius: 16px;
 margin-top: 20px;
 margin-bottom: 20px;
+h1:nth-child(2){
+    cursor: pointer;
+}
 
 h1{
     font-size: 1.2rem;
@@ -166,3 +196,14 @@ const DivDispl = styled.div`
 display: flex;
 justify-content: space-between;
 `
+const HashtagLink = styled(Link)`
+text-decoration: none;
+`
+
+const Hashtag = styled.span`
+color: #FFFFFF;
+font-weight: 700;
+:hover{
+    cursor: pointer;
+}
+`;

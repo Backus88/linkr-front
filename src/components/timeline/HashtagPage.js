@@ -5,7 +5,6 @@ import styled from "styled-components";
 import axios from "axios"
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import PublishPost from "./PublishPost";
 import Post from "./Post";
 import TrendingBox from "./TrendingBox";
 
@@ -20,8 +19,8 @@ export default function Timeline() {
     const [loading, setLoading] = useState(true)
     const [crash, setCrash] = useState(false)
     const { id: newId } = useParams();
+    const { hashtag: newHashtag} = useParams();
     const local = localStorage.getItem("token");
-    const localId = localStorage.getItem("id");
     console.log(localStorage)
     console.log(local)
     let location = useLocation();
@@ -33,21 +32,18 @@ export default function Timeline() {
 
 
     function renderById(id) {
-        if(parseInt(id) !== parseInt(localId)){
-            navigate(`/user/${id}`);
-        }else{
-            navigate('/timeline');
-        }
-        
+        navigate(`/user/${id}`);
     }
 
     function getPost() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get('http://localhost:4000/post', config)
+            const promise = axios.get(`http://localhost:4000/hashtag/${newHashtag}`, config)
             promise.then(response => {
-                let data = [...response.data]
+                console.log(response.data);
+                let data = [...new Set(response.data)]
+                console.log(data)
                 setPost(data)
                 setLoading(false)
             })
@@ -99,10 +95,9 @@ export default function Timeline() {
         <GlobalStyle />
         <Header />
         <Container>
-            <Main>
+        <Main>
 
-        {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
-        {canPublish ? <PublishPost getPost={getPost} /> : null}
+        {canPublish?<Title>{'# ' + newHashtag}</Title>:<Title>{username.username}'s posts</Title> }
         {loading ?
             <>
                 <IconLoading />
@@ -126,12 +121,11 @@ export default function Timeline() {
                         imageProfile = {item.profileImgUrl}
                         key={item.url + index}
                         idPost={item.id}
-                        getPost = {getPost}
                             />
                 )
                     :
                         <MsgError>There are no posts yet</MsgError>}
-            </Main>
+        </Main>
         <TrendingBox/>
         </Container>
         </>
@@ -143,13 +137,9 @@ const Container = styled.div`
 width: 100%;
 display: flex;
 flex-direction: row;
-justify-content:center;
+justify-content: center;
 margin: auto;
 `
-
-const Main = styled.div`
-width: 43%;
-` 
 
 const Title = styled.div`
 width: 40%;
@@ -158,7 +148,7 @@ font-style: normal;
 font-weight: 700;
 font-size: 43px;
 color: #FFFFFF;
-margin: 100px 0 0px 0;
+margin: 100px 0 0 0;
 text-align: start;
 `
 
@@ -200,3 +190,7 @@ font-style: normal;
 font-weight: 400;
 font-size: 30px;
 `
+
+const Main = styled.div`
+width: 43%;
+` 
