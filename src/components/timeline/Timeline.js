@@ -126,8 +126,8 @@ export default function Timeline() {
                         imageProfile = {item.profileImgUrl}
                         key={item.url + index}
                         idPost={item.id}
-                        getPost ={getPost}
-                    />
+                        getPost = {getPost}
+                            />
                 )
                     :
                         <MsgError>There are no posts yet</MsgError>}
