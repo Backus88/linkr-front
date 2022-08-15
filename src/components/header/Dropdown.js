@@ -1,9 +1,8 @@
-import react from 'react';
 import styled from 'styled-components';
 import { useEffect,useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import UserContext from "../contexts/UserContext";
+import UserContext from "../../contexts/UserContext";
 import React from "react";
 
 
@@ -58,9 +57,10 @@ const DropdownContainer = styled.div`
     position: absolute;
     z-index: 1;
     min-height: 0px;
-    min-width: 500px;
-    max-width: 100%;
+    min-width: inherit;
+    max-width: 100px;
     max-height: 131px;
+    width: 100%;
     top: 46px;
     left: 0;
     background-color: #E7E7E7;
@@ -78,6 +78,7 @@ const ItemDiv = styled.div`
     box-sizing: border-box;
     min-width: 500px;
     max-width: 100%;
+    width: auto;
     background-color: transparent;
     display: flex;
     justify-content: flex-start;

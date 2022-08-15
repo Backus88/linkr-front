@@ -206,7 +206,6 @@ function PublishPost(props) {
             setUrl('')
             setDescription('')
             getPost()
-
         }
     }
     return (

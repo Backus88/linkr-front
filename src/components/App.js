@@ -1,10 +1,9 @@
 import React, {useState} from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Post from "./Post";
+import Timeline from "./timeline/Timeline";
 import SignUp from "./authComponents/SignUp";
 import Login from "./authComponents/Login";
-import UserContext from "../contexts/UserContext"
-import PostById from "./PostById";
+import UserContext from "../contexts/UserContext";
 
 
 function App() {
@@ -22,8 +21,8 @@ function App() {
         <Routes>
           <Route path='/signup' element={<SignUp />} />
           <Route path='/' element={<Login />} />
-          <Route path="/timeline" element={ <Post />} />
-          <Route path='/user/:id' element ={ <Post /> } />
+          <Route path="/timeline" element={ <Timeline />} />
+          <Route path='/user/:id' element ={ <Timeline /> } />
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>

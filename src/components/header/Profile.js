@@ -3,20 +3,25 @@ import styled from "styled-components";
 import { VscChevronDown, VscChevronUp } from "react-icons/vsc";
 import {useNavigate} from "react-router-dom"
 import { useContext } from "react";
-import UserContext from "../contexts/UserContext";
-import useOutsideAlerter from "../Hooks/ClickHook";
+import UserContext from "../../contexts/UserContext";
+import useOutsideAlerter from "../../Hooks/ClickHook";
 
 
 export default function Profile(){
 
   const wrapperRef = useRef(null);
-  const [imgLocal, setImgLocal]= useState('');
   const {modal, setModal} = useContext(UserContext);
   const {local, setLocal} = useContext(UserContext);
+  const [imgLocal, setImgLocal] = useState('')
 
   useOutsideAlerter(wrapperRef, setModal);
 
   const navigate = useNavigate();
+  useEffect(()=>{
+    const img =localStorage.getItem("img");
+    setImgLocal(img);
+  },[])
+
   useEffect(()=>{
     const img =localStorage.getItem("img");
     setImgLocal(img);
@@ -50,7 +55,9 @@ export default function Profile(){
       :
       <IconDown onClick={HandleClick}/> }
 
-      <ProfileImage onClick={HandleClick}><img src ={imgLocal} alt =''></img></ProfileImage>
+      <ProfileImage onClick={HandleClick}>
+        <img src ={imgLocal} alt =''></img>
+      </ProfileImage>
       
       <Menu id={'menu'} hidden={true}>
         <p onClick={HandleLogout}>Logout</p>
@@ -92,7 +99,6 @@ width: 25%;
 height: 40px;
 margin-top: 15px;
 margin-right: 10px;
-
 `
 
 const IconUp = styled(VscChevronUp)`
@@ -117,5 +123,6 @@ img{
   width: 100%;
   height: 100%;
   border-radius: 50%;
+  object-fit: cover;
 }
 `

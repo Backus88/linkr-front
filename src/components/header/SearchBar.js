@@ -48,7 +48,8 @@ const SearchContainer = styled.div`
     z-index: 2;
     position: relative;
     box-sizing: border-box;
-    min-width: 500px;
+    width: 40%;
+    min-width: 200px;
     height: 50px;
     background-color: white;
     border-radius: 8px;
@@ -57,6 +58,7 @@ const SearchContainer = styled.div`
     justify-content: space-between;
     font-family: 'Lato';
     padding: 5px;
+    margin-right: 14px;
     &:hover {
         box-shadow: 1px 1px 1px thistle;
     }
@@ -69,6 +71,10 @@ const SearchContainer = styled.div`
         font-size: inherit;
         &:focus{
             outline: none;
+        }
+        ::placeholder{
+            color: #C6C6C6;
+            font-size: 1.2rem;
         }
     }
 `;
