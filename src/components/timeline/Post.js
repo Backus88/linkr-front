@@ -1,9 +1,11 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useEffect } from "react"
+import { Link } from "react-router-dom";
 import GlobalStyle from "../../styles/globalStyles";
 import Like from "./Like.js";
 import EditPost from "./EditPost";
 import styled from "styled-components";
 import axios from "axios"
+import ReactHashtag from "@mdnm/react-hashtag";
 import PublishPost from "./PublishPost";
 
 export default function Post(props) {
@@ -52,7 +54,19 @@ export default function Post(props) {
             <ContainerPost>
                 <EditPost userId ={userId} setEditing={setEditing} editing={false} top={'-10px'} />
                 <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
-                <h2>{description}</h2>
+                <h2>
+                    <ReactHashtag 
+                            renderHashtag={(hashtagValue) => {
+                                return (
+                                    <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
+                                    <Hashtag>{hashtagValue}</Hashtag>
+                                    </HashtagLink>
+                                )
+                            }}>  
+                        {description}
+                    </ReactHashtag>
+                </h2>
+
                 <ContainerUrl onClick={() => window.open(uri)}>
                     <URLInfo>
                         <h1>{title}</h1>
@@ -73,7 +87,7 @@ export default function Post(props) {
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
-width: 40%;
+width: 100%;
 height: 257px;
 margin: 40px auto;
 background: #171717;
@@ -168,3 +182,15 @@ img{
     border-radius: 0 10px 10px 0;
 }
 `
+const HashtagLink = styled(Link)`
+text-decoration: none;
+`
+
+const Hashtag = styled.span`
+color: #FFFFFF;
+font-weight: 700;
+:hover{
+    cursor: pointer;
+}
+`;
+

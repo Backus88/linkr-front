@@ -1,0 +1,145 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+
+
+
+export default function TrendingBox(){
+
+    const [hashtag, setHashtag] = useState([]);
+    const [loading, setLoading] = useState(true)
+    const [crash, setCrash] = useState(false)
+    
+    function getTrending(){
+        setLoading(true)
+        const promise = axios.get('http://localhost:4000/trending')
+        promise.then(response => {
+            let data = [...response.data]
+            setHashtag(data)
+            setLoading(false)
+        })
+        promise.catch(()=> {
+            setLoading(false)
+            setCrash(true)
+        })
+    
+
+    }
+
+ useEffect(()=>{
+        getTrending()
+}, [])
+
+
+return (
+    <Box> 
+        <Title>
+            <h1>trending</h1>
+            <div></div>
+        </Title>
+        <Main>
+
+        {loading ?
+            <>
+                <IconLoading />
+                <MsgLoading>loading...</MsgLoading>
+            </>
+            :
+            crash ?
+                <>
+                    <MsgError>
+                        An error occured while trying to fetch the hashtags,
+                        please refresh the page
+                    </MsgError>
+                </>
+                :
+                hashtag.length > 0 ? hashtag.map((item, index) =>{
+                    return(
+                        <HashtagDiv>
+                            <HashtagLink to={`/hashtag/${item.hashtag.slice(1)}`}> {item.hashtag} </HashtagLink>
+                        </HashtagDiv>
+                    )
+                }        )
+                    :
+                        <MsgError>There are no hashtags yet</MsgError>}
+        </Main>
+    </Box>
+)
+}
+
+const Box = styled.div`
+width: 301px;
+height: 406px;
+margin: 183px 0 0 25px; 
+background: #171717;    
+border-radius: 16px;
+
+`
+
+const Title = styled.div`
+    height: 61px;
+    display:flex;
+    align-items:center;
+    padding-left: 16px;
+    border-bottom: 1px solid #484848;
+
+h1{
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 27px;
+    line-height: 40px;
+    color: #FFFFFF;
+}
+`
+
+const IconLoading = styled(AiOutlineLoading3Quarters)`
+color: #FFFFFF;
+margin-top: 60px;
+width: 60%;
+height: 50px;
+`
+const MsgLoading = styled.div`
+color: white;
+margin-top: 10px;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+`
+const MsgError = styled.div`
+color: white;
+margin-top: 50px;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 30px;
+`
+
+const Main = styled.div`
+margin: 22px auto 5px 16px;
+`
+
+const HashtagDiv = styled.div`
+margin-top: 10px;
+`
+
+
+const HashtagLink = styled(Link)`
+text-decoration: none;
+font-family: 'Lato';
+font-style: normal;
+font-weight: 700;
+font-size: 19px;
+line-height: 23px;
+letter-spacing: 0.05em;
+
+color: #FFFFFF;
+
+:hover{
+    cursor: pointer;
+}
+`
+
