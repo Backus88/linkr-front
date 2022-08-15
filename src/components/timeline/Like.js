@@ -78,15 +78,20 @@ export default function Like({idPost}){
 
     function renderLikesTooltip(){
 
-        if(userHasLiked && likesQuantity == 1) return <> <p data-tip= 'Você' > {`${likesQuantity} likes`}</p>        
-            <ReactTooltip place="bottom" type="light"/> </>        
-        else if(userHasLiked && likesQuantity ==2) return <> <p data-tip= {`Você e ${likesUsers[0]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
-        else if(userHasLiked && likesQuantity >2) 
-        return <> <p data-tip= {`Você, ${likesUsers[0]} e outras ${likesUsers.length - 1} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
-        else if(likesQuantity == 1) return <> <p data-tip= {`${likesUsers[0]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
-        else if(likesQuantity == 2) return <> <p data-tip= {`${likesUsers[0]} e ${likesUsers[1]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
-        else if(likesQuantity > 2) return <> <p data-tip= {`${likesUsers[0]}, ${likesUsers[1]} e outras ${likesUsers.length - 2} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
-        
+        if(userHasLiked && likesQuantity == 1){
+            return <> <p data-tip= 'Você' > {`${likesQuantity} likes`}</p>        
+            <ReactTooltip place="bottom" type="light"/> </>
+        } else if(userHasLiked && likesQuantity == 2) {
+            return <> <p data-tip= {`Você e ${likesUsers[0]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+        } else if(userHasLiked && likesQuantity >2) {
+            return <> <p data-tip= {`Você, ${likesUsers[0]} e outras ${likesUsers.length - 1} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+        } else if(likesQuantity == 1){
+            return <> <p data-tip= {`${likesUsers[0]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+        } else if(likesQuantity == 2) {
+            return <> <p data-tip= {`${likesUsers[0]} e ${likesUsers[1]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+        } else if(likesQuantity > 2) {
+            return <> <p data-tip= {`${likesUsers[0]}, ${likesUsers[1]} e outras ${likesUsers.length - 2} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+        }         
     }
 
     const toRenderLikesTooltip = renderLikesTooltip();
@@ -103,23 +108,23 @@ export default function Like({idPost}){
 
 const LikeBox = styled.div`
 position:absolute;
-top: 86px;
-
-width: 87px;
+top: 78px;
+width: 50px;
 display: flex;
 flex-direction: column;
 align-items: center;
+margin-left: 15px;
 `
 
 const UnlikedIcon = styled(AiOutlineHeart)`
-width: 20px;
-height: 18px;
+width: 30px;
+height: 36px;
 color: #FFFFFF;
 `
 
 const LikedIcon = styled(AiFillHeart)`
-width: 20px;
-height: 18px;
+width: 30px;
+height: 36px;
 color: #AC0000;
 `
 

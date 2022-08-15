@@ -100,5 +100,6 @@ const ItemDiv = styled.div`
         height: 39px;
         border-radius: 50%;
         margin-right: 12px;
+        object-fit: cover;
     }
 `;

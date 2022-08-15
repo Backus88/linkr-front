@@ -28,6 +28,7 @@ export default function Post(props) {
           setUri(response.data.uri)
       })
   }
+  
   useEffect(getMetadata, [])
 
   return (
@@ -61,7 +62,7 @@ const Publication = styled.div`
 display: flex;
 justify-content: space-between;
 width: 40%;
-height: 257px;
+height: auto;
 margin: 40px auto;
 background: #171717;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -77,7 +78,7 @@ background-color : black;
 width: 50px;
 height: 50px;
 border-radius: 50%;
-margin: 1rem;
+margin: 1rem 1rem 0 1rem;
 object-fit: cover;
 }
 `
@@ -98,10 +99,13 @@ h1{
     font-weight: 400;
 }
 h2{
-    margin-top: 5px;
+    margin-top: 15px;
     font-size: 1.05rem;
     color: #B7B7B7;
     margin-bottom: 20px;
+    text-align: justify;
+    width: 95%;
+    line-height: 22px;
 }
 `
 
@@ -131,6 +135,7 @@ h2{
     overflow: hidden;
     text-overflow: ellipsis; 
     color: #9B9595;
+    line-height: 10px;
 }
 
 p{
