@@ -10,13 +10,14 @@ export default function PublishPost(props) {
   const local = localStorage.getItem("token");
   const [description, setDescription] = useState('')
   const inputPublish = useRef();
-  const { getPost, postDescription, postUrl, editing, postId, setEditing, userId } = props
+  const { getPost, postDescription, postUrl, editing, postId, setEditing, userId, hashtagController, setHashtagController } = props
   const config = {
       headers: {
           "Authorization": 'Bearer ' + local
       }
   }
 
+  console.log(description)
   console.log(description)
 
   useEffect(()=>{
@@ -44,8 +45,10 @@ export default function PublishPost(props) {
   }, [escFunction]);
 
 
-  function publish() {
+  function publish(e) {
+      e.preventDefault()
       setEnabled(false)
+      console.log(editing)
       if(editing){
         const body ={
             url: url,
@@ -69,6 +72,7 @@ export default function PublishPost(props) {
           setEnabled(true)
       }
       function tratarSucesso() {
+          setHashtagController(!hashtagController)        
           setEnabled(true)
           setUrl('')
           setDescription('')
@@ -96,7 +100,7 @@ export default function PublishPost(props) {
                   <Publish>
                       <ProfileImage src={imgLocal} alt =''/>
                       <EditPost userId ={userId} setEditing={setEditing} editing={true} top={'10px'}/>
-                      <ContainerPost onSubmit={publish}>
+                      <ContainerPost onSubmit={e =>publish(e)}>
                           <ShareHeader>What are you going to share today?</ShareHeader>
                           <input onKeyDown={e => handleKeyDown(e)} ref={inputPublish} type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
                           <textarea onKeyDown={e => handleKeyDown(e)} value={description} type='text' placeholder="Awesome article about #javascript" onChange={e => setDescription(e.target.value)}></textarea>

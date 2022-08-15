@@ -1,18 +1,29 @@
 import Modal from 'react-modal';
 import styled from "styled-components";
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function ModalDelete(props) {
-    const { visible, setVisible, postId, getPost } = props
+    const { visible, setVisible, postId, getPost ,hashtagController, setHashtagController,userId } = props
     const [loading, setLoading]= useState(false)
+    const [deletIcon, setDeletIcon]= useState(false);
     const local = localStorage.getItem("token");
     const config = {
         headers: {
             "Authorization": 'Bearer ' + local
         }
     }
+
+    const localId = localStorage.getItem("id");
+    useEffect(()=>{
+        if(parseInt(localId)===parseInt(userId)&& userId){
+            setDeletIcon(true);
+        }
+        console.log(userId);
+    },[userId])
+
+
     function yesDelete() {
         setLoading(true)
         const promise = axios.delete(`http://localhost:4000/delete/${postId}`, config)
@@ -27,6 +38,7 @@ export default function ModalDelete(props) {
         setLoading(false)
         setVisible(false)
         getPost()
+        setHashtagController(hashtagController)
         
     }
 
@@ -38,43 +50,37 @@ export default function ModalDelete(props) {
     }
    
     return (
-        <Modal
-            isOpen={visible}
-            style={customStyles}
-        >
-            {loading ? <>
-            <IconLoading />
-            <MsgLoading>loading...</MsgLoading>
+        <>
+            {deletIcon?
+            <Modal
+                isOpen={visible}
+                style={customStyles}
+            >
+                {loading ? <>
+                <IconLoading />
+                <MsgLoading>loading...</MsgLoading>
+                </>
+                    :
+                    <>
+            <ModalInfo>
+                <ModalF>
+                    Are you sure you want
+                    to delete this post?
+                </ModalF>
+                <Buttons>
+                    <Buttom1 onClick={notDelet}><One>No, go back</One></Buttom1>
+                    <Buttom2 onClick={yesDelete}><Two>Yes, delete it</Two></Buttom2>
+                </Buttons>
+            </ModalInfo>
             </>
-                :
-                <>
-        <ModalInfo>
-            <ModalF>
-                Are you sure you want
-                to delete this post?
-            </ModalF>
-            <Buttons>
-                <Buttom1 onClick={notDelet}><One>No, go back</One></Buttom1>
-                <Buttom2 onClick={yesDelete}><Two>Yes, delete it</Two></Buttom2>
-            </Buttons>
-        </ModalInfo>
-        </>
-            }
-        </Modal>
+                }
+            </Modal>
+            :null}
+       </>
     )
 }
 
 const ModalInfo = styled.div`
-/* width: 25%;
-height: 30%;
-margin-right: -50%;
-transform: translate(-50%, -50%);
-background: blue;
-border-radius: 25px;
-border: none;
-display: flex;
-flex-direction: column;
-opacity: 1; */
 `
 
 const customStyles = {

@@ -6,7 +6,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 
 
-export default function TrendingBox(){
+export default function TrendingBox({hashtagController}){
 
     const [hashtag, setHashtag] = useState([]);
     const [loading, setLoading] = useState(true)
@@ -30,7 +30,7 @@ export default function TrendingBox(){
 
  useEffect(()=>{
         getTrending()
-}, [])
+}, [hashtagController])
 
 
 return (

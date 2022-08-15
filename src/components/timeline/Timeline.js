@@ -16,6 +16,7 @@ export default function Timeline() {
     const [username, setUsername]= useState('');
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
+    const [hashtagController, setHashtagController] = useState(false);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true)
     const [crash, setCrash] = useState(false)
@@ -102,7 +103,9 @@ export default function Timeline() {
             <Main>
 
         {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
-        {canPublish ? <PublishPost getPost={getPost} /> : null}
+        {canPublish ? <PublishPost getPost={getPost}
+                                   hashtagController={hashtagController}
+                                   setHashtagController ={setHashtagController}   /> : null}
         {loading ?
             <>
                 <IconLoading />
@@ -127,12 +130,14 @@ export default function Timeline() {
                         key={item.url + index}
                         idPost={item.id}
                         getPost = {getPost}
+                        setHashtagController ={setHashtagController}
+                        hashtagController={hashtagController}
                             />
                 )
                     :
                         <MsgError>There are no posts yet</MsgError>}
             </Main>
-        <TrendingBox/>
+        <TrendingBox hashtagController={hashtagController}/>
         </Container>
         </>
     )
@@ -180,23 +185,29 @@ margin-top: 10px;
 
 const IconLoading = styled(AiOutlineLoading3Quarters)`
 color: #FFFFFF;
-margin-top: 60px;
+margin: 60px auto 0px auto;
 width: 60%;
 height: 50px;
 `
 const MsgLoading = styled.div`
+width: 40%;
 color: white;
 margin-top: 10px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 30px;
+margin: 10px auto 0px auto;
+text-align: center;
 `
 const MsgError = styled.div`
+width: 40%;
 color: white;
 margin-top: 50px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 30px;
+margin: 100px auto 0px auto;
+text-align: start;
 `
