@@ -12,83 +12,81 @@ import PublishPost from "./PublishPost";
 
 
 export default function Post(props) {
-    const [title, setTitle] = useState('');
-    const [descrip, setDescrip] = useState('');
-    const [image, setImage] = useState('');
-    const [uri, setUri] = useState('');
-    const [editing, setEditing] = useState(false);
-    const [visible, setVisible] = useState(false);
-    let {
-        username,
-        description,
-        renderById,
-        userId,
-        url,
-        imageProfile,
-        idPost,
-        getPost
-    } = props
-    function getMetadata() {
-        const promise = axios.get(
-            `http://localhost:4000/url-metadata?url=${url}`)
-        promise.then(response => {
-            setTitle(response.data.title)
-            setDescrip(response.data.description)
-            setImage(response.data.image)
-            setUri(response.data.uri)
-        })
-    }
-    useEffect(getMetadata, [])
 
-    return (
-        <>
-            {editing ? <PublishPost getPost={getPost}
-                postDescription={descrip}
-                postUrl={uri} editing={editing}
-                setEditing={setEditing}
-                postId={idPost}
-                userId={userId} />
-                :
-                <Publication className="post">
-                    <ProfileImage>
-                        <img src={imageProfile} />
-                        <Like idPost={idPost} />
-                    </ProfileImage>
-                    <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} />
-                    <ContainerPost>
-                        <DivDispl>
-                            <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
-                            <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
-                            
-                            <IconTrash onClick={() => setVisible(true)} />
-                        </DivDispl>
-                        <h2>
-                                <ReactHashtag
-                                    renderHashtag={(hashtagValue) => {
-                                        return (
-                                            <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
-                                                <Hashtag>{hashtagValue}</Hashtag>
-                                            </HashtagLink>
-                                        )
-                                    }}>
-                                    {description}
-                                </ReactHashtag>
-                            </h2>
-                        <ContainerUrl onClick={() => window.open(uri)}>
-                            <URLInfo>
-                                <h1>{title}</h1>
-                                <h2>{descrip}</h2>
-                                <p>{uri}</p>
-                            </URLInfo>
-                            <URLImage>
-                                <img src={image} alt='' />
-                            </URLImage>
-                        </ContainerUrl>
-                    </ContainerPost>
-                </Publication>
-            }
-        </>
-    )
+  const [title, setTitle] = useState('');
+  const [descrip, setDescrip] = useState('');
+  const [image, setImage] = useState('');
+  const [uri, setUri] = useState('');
+  const [editing, setEditing]= useState(false);
+  let {
+      username,
+      description,
+      renderById,
+      userId,
+      url,
+      imageProfile,
+      idPost,
+      getPost
+  } = props
+  function getMetadata() {
+      const promise = axios.get(
+          `http://localhost:4000/url-metadata?url=${url}`)
+      promise.then(response => {
+          setTitle(response.data.title)
+          setDescrip(response.data.description)
+          setImage(response.data.image)
+          setUri(response.data.uri)
+      })
+  }
+  useEffect(getMetadata, [])
+  return (
+      <>
+      {editing? <PublishPost getPost={getPost} 
+        postDescription ={description} 
+        postUrl={uri} 
+        editing ={editing} 
+        setEditing= {setEditing} 
+        postId = {idPost} 
+        userId= {userId}/>
+      :
+        <Publication className="post">
+            <ProfileImage>            
+                <img src={imageProfile}/>
+                <Like idPost ={idPost} />
+            </ProfileImage>
+
+            <ContainerPost>
+                <EditPost userId ={userId} setEditing={setEditing} editing={false} top={'-10px'} />
+                <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
+                <h2>
+                    <ReactHashtag 
+                            renderHashtag={(hashtagValue) => {
+                                return (
+                                    <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
+                                    <Hashtag>{hashtagValue}</Hashtag>
+                                    </HashtagLink>
+                                )
+                            }}>  
+                        {description}
+                    </ReactHashtag>
+                </h2>
+
+                <ContainerUrl onClick={() => window.open(uri)}>
+                    <URLInfo>
+                        <h1>{title}</h1>
+                        <h2>{descrip}</h2>
+                        <p>{uri}</p>
+                    </URLInfo>
+                    <URLImage>
+                        <img src={image} alt=''/>
+                    </URLImage>
+                </ContainerUrl>
+            </ContainerPost>
+        </Publication>
+       }
+      </>
+  )
+
 }
 const Publication = styled.div`
 display: flex;
