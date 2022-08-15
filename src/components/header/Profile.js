@@ -10,7 +10,6 @@ import useOutsideAlerter from "../../Hooks/ClickHook";
 export default function Profile(){
 
   const wrapperRef = useRef(null);
- 
   const {modal, setModal} = useContext(UserContext);
   const {local, setLocal} = useContext(UserContext);
   const [imgLocal, setImgLocal] = useState('')
@@ -18,6 +17,10 @@ export default function Profile(){
   useOutsideAlerter(wrapperRef, setModal);
 
   const navigate = useNavigate();
+  useEffect(()=>{
+    const img =localStorage.getItem("img");
+    setImgLocal(img);
+  },[])
 
   useEffect(()=>{
     const img =localStorage.getItem("img");
@@ -116,12 +119,10 @@ margin-top: 5px;
 display: flex;
 justify-content: center;
 align-items: center;
-
 img{
   width: 100%;
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
 }
-
 `

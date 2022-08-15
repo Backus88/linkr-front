@@ -51,6 +51,7 @@ export default function Login(){
       console.log(dados)
       localStorage.setItem("token", dados.token);
       localStorage.setItem("img", dados.profileImgUrl);
+      localStorage.setItem("id", dados.id);
       console.log(localStorage)
       const token = localStorage.getItem('token')
       setLocal(token)
