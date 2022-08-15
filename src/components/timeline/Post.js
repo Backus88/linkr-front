@@ -36,7 +36,7 @@ export default function Post(props) {
   } = props
   function getMetadata() {
       const promise = axios.get(
-          `https://linkr-db.herokuapp.com/url-metadata?url=${url}`)
+          `http://localhost:4000/url-metadata?url=${url}`)
       promise.then(response => {
           setTitle(response.data.title)
           setDescrip(response.data.description)

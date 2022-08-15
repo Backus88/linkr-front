@@ -16,7 +16,6 @@ export default function Timeline() {
     const [post, setPost] = useState([]);
     const [user, setUser] = useState([]);
     const [username, setUsername]= useState('');
-    const [hashtagController, setHashtagController] = useState(false)
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
     const [hashtagController, setHashtagController] = useState(false);
@@ -61,7 +60,7 @@ export default function Timeline() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
+            const promise = axios.get('http://localhost:4000/post', config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
@@ -75,14 +74,14 @@ export default function Timeline() {
             setCanPublish(true)
 
         }else{
-            const promise = axios.get(`https://linkr-db.herokuapp.com/user/${id}`, config)
+            const promise = axios.get(`http://localhost:4000/user/${id}`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
 
-            const userById = axios.get(`https://linkr-db.herokuapp.com/user?id=${id}`, config);
+            const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
             userById.then(response => {
                 let data = {...response.data}
                 setUsername(data)
@@ -107,29 +106,11 @@ export default function Timeline() {
     useEffect(getPost, [id,location,newId, canPublish])
 
     function getUser() {
-        const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
+        const promise = axios.get('http://localhost:4000/post', config)
         promise.then(response => setUser(response.data))
     }
     return (
         <>
-<<<<<<< HEAD
-        <GlobalStyle />
-        <Header />
-        <Container>
-            <Main>
-
-        {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
-        {canPublish ? <PublishPost getPost={getPost}
-                                   hashtagController={hashtagController}
-                                   setHashtagController ={setHashtagController}   /> : null}
-        {loading ?
-            <>
-                <IconLoading />
-                <MsgLoading>loading...</MsgLoading>
-            </>
-            :
-            crash ?
-=======
         <MediaQuery minWidth={1280}>
             <GlobalStyle />
             <Header />
@@ -141,33 +122,11 @@ export default function Timeline() {
             hashtagController={hashtagController} 
             setHashtagController={setHashtagController} /> : null}
             {loading ?
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
                 <>
                     <IconLoading />
                     <MsgLoading>loading...</MsgLoading>
                 </>
                 :
-<<<<<<< HEAD
-                post.length > 0 ? post.map((item, index) =>
-                    <Post username={item.username}
-                        description={item.description}
-                        renderById={renderById}
-                        userId={item.userId}
-                        url={item.url}
-                        imageProfile = {item.profileImgUrl}
-                        key={item.url + index}
-                        idPost={item.id}
-                        getPost = {getPost}
-                        setHashtagController ={setHashtagController}
-                        hashtagController={hashtagController}
-                            />
-                )
-                    :
-                        <MsgError>There are no posts yet</MsgError>}
-            </Main>
-        <TrendingBox hashtagController={hashtagController}/>
-        </Container>
-=======
                 crash ?
                     <>
                         <MsgError>
@@ -199,7 +158,6 @@ export default function Timeline() {
         <MediaQuery maxWidth={1279}>
             <TimelineMobile />
         </MediaQuery>
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
         </>
     )
 }
@@ -247,50 +205,29 @@ margin-top: 10px;
 const IconLoading = styled(AiOutlineLoading3Quarters)`
 color: #FFFFFF;
 margin: 60px auto 0px auto;
-<<<<<<< HEAD
-width: 60%;
-=======
 width: 100%;
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
 height: 50px;
 align-self: center;
 `
 const MsgLoading = styled.div`
-<<<<<<< HEAD
-width: 40%;
-=======
 width: 100%;
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
 color: white;
 margin-top: 10px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 30px;
-<<<<<<< HEAD
-margin: 10px auto 0px auto;
-text-align: center;
-`
-const MsgError = styled.div`
-width: 40%;
-=======
 margin: 10px auto 0px 10px;
 text-align: center;
 `
 const MsgError = styled.div`
 width: 100%;
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
 color: white;
 margin-top: 50px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 30px;
-<<<<<<< HEAD
-margin: 100px auto 0px auto;
-text-align: start;
-=======
 margin: 60px auto 0px auto;
 text-align: center;
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
 `

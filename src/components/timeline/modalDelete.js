@@ -5,12 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function ModalDelete(props) {
-<<<<<<< HEAD
-    const { visible, setVisible, postId, getPost ,hashtagController, setHashtagController,userId } = props
-=======
     const { visible, setVisible, postId, getPost, hashtagController, setHashtagController, userId } = props
 
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
     const [loading, setLoading]= useState(false)
     const [deletIcon, setDeletIcon]= useState(false);
     const local = localStorage.getItem("token");
@@ -21,21 +17,10 @@ export default function ModalDelete(props) {
         }
     }
 
-<<<<<<< HEAD
-    const localId = localStorage.getItem("id");
-    useEffect(()=>{
-        if(parseInt(localId)===parseInt(userId)&& userId){
-            setDeletIcon(true);
-        }
-        console.log(userId);
-    },[userId])
-
-=======
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
 
     function yesDelete() {
         setLoading(true)
-        const promise = axios.delete(`https://linkr-db.herokuapp.com/delete/${postId}`, config)
+        const promise = axios.delete(`http://localhost:4000/delete/${postId}`, config)
         promise.then(treatSucess).catch(treatError)
     }
     function notDelet() {
@@ -61,34 +46,6 @@ export default function ModalDelete(props) {
    
     return (
         <>
-<<<<<<< HEAD
-            {deletIcon?
-            <Modal
-                isOpen={visible}
-                style={customStyles}
-            >
-                {loading ? <>
-                <IconLoading />
-                <MsgLoading>loading...</MsgLoading>
-                </>
-                    :
-                    <>
-            <ModalInfo>
-                <ModalF>
-                    Are you sure you want
-                    to delete this post?
-                </ModalF>
-                <Buttons>
-                    <Buttom1 onClick={notDelet}><One>No, go back</One></Buttom1>
-                    <Buttom2 onClick={yesDelete}><Two>Yes, delete it</Two></Buttom2>
-                </Buttons>
-            </ModalInfo>
-            </>
-                }
-            </Modal>
-            :null}
-       </>
-=======
 
         <Modal
             isOpen={visible}
@@ -115,7 +72,6 @@ export default function ModalDelete(props) {
         </Modal>
 
         </>
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
     )
 }
 

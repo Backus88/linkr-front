@@ -10,11 +10,7 @@ export default function PublishPost(props) {
   const local = localStorage.getItem("token");
   const [description, setDescription] = useState('')
   const inputPublish = useRef();
-<<<<<<< HEAD
-  const { getPost, postDescription, postUrl, editing, postId, setEditing, userId, hashtagController, setHashtagController } = props
-=======
   const { hashtagController, setHashtagController, getPost, postDescription, postUrl, editing, postId, setEditing, userId } = props
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
   const config = {
       headers: {
           "Authorization": 'Bearer ' + local
@@ -60,11 +56,11 @@ export default function PublishPost(props) {
             id: postId
         }
         console.log(body)
-        const promise = axios.put('https://linkr-db.herokuapp.com/post',body, config)
+        const promise = axios.put('http://localhost:4000/post',body, config)
         promise.catch(tratarError);
         promise.then(tratarSucesso);
       }else{
-        const promise = axios.post('https://linkr-db.herokuapp.com/post', {
+        const promise = axios.post('http://localhost:4000/post', {
             url: url,
             description: description
         }, config)
@@ -76,11 +72,7 @@ export default function PublishPost(props) {
           setEnabled(true)
       }
       function tratarSucesso() {
-<<<<<<< HEAD
-          setHashtagController(!hashtagController)        
-=======
           setHashtagController(!hashtagController)
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
           setEnabled(true)
           setUrl('')
           setDescription('')
@@ -107,11 +99,7 @@ export default function PublishPost(props) {
                   <Publish>
                       <ProfileImage src={imgLocal} alt =''/>
                       <EditPost userId ={userId} setEditing={setEditing} editing={true} top={'10px'}/>
-<<<<<<< HEAD
-                      <ContainerPost onSubmit={e =>publish(e)}>
-=======
                       <ContainerPost>
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
                           <ShareHeader>What are you going to share today?</ShareHeader>
                           <input ref={inputPublish} type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
                           <textarea onKeyDown={e => handleKeyDown(e)} value={description} type='text' placeholder="Awesome article about #javascript" onChange={e => setDescription(e.target.value)}></textarea>
