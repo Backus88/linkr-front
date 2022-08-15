@@ -117,6 +117,7 @@ export default function Timeline() {
                         imageProfile = {item.profileImgUrl}
                         key={item.url + index}
                         idPost={item.id}
+                        getPost = {getPost}
                             />
                 )
                     :

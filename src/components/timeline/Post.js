@@ -3,60 +3,67 @@ import GlobalStyle from "../../styles/globalStyles";
 import Like from "./Like.js";
 import styled from "styled-components";
 import axios from "axios"
+import { BsTrash } from "react-icons/bs";
+import ModalDelete from "./modalDelete";
+
 
 export default function Post(props) {
-  const [title, setTitle] = useState('');
-  const [descrip, setDescrip] = useState('');
-  const [image, setImage] = useState('');
-  const [uri, setUri] = useState('');
-  let {
-      username,
-      description,
-      renderById,
-      userId,
-      url,
-      imageProfile,
-      idPost
-  } = props
-  function getMetadata() {
-      const promise = axios.get(
-          `http://localhost:4000/url-metadata?url=${url}`)
-      promise.then(response => {
-          setTitle(response.data.title)
-          setDescrip(response.data.description)
-          setImage(response.data.image)
-          setUri(response.data.uri)
-      })
-  }
-  useEffect(getMetadata, [])
+    const [title, setTitle] = useState('');
+    const [descrip, setDescrip] = useState('');
+    const [image, setImage] = useState('');
+    const [uri, setUri] = useState('');
+    const [visible, setVisible] = useState(false)
+    let {
+        username,
+        description,
+        renderById,
+        userId,
+        url,
+        imageProfile,
+        idPost,
+        getPost
+    } = props
+    function getMetadata() {
+        const promise = axios.get(
+            `http://localhost:4000/url-metadata?url=${url}`)
+        promise.then(response => {
+            setTitle(response.data.title)
+            setDescrip(response.data.description)
+            setImage(response.data.image)
+            setUri(response.data.uri)
+        })
+    }
+    useEffect(getMetadata, [])
 
-  return (
-      <>
-        <Publication className="post">
-            <ProfileImage>            
-                <img src={imageProfile}/>
-                <Like idPost ={idPost}/>
-            </ProfileImage>
-
-            <ContainerPost>
-                <h1 onClick={() => renderById(userId)} >{username}</h1>
-                <h2>{description}</h2>
-                <ContainerUrl onClick={() => window.open(uri)}>
-                    <URLInfo>
-                        <h1>{title}</h1>
-                        <h2>{descrip}</h2>
-                        <p>{uri}</p>
-                    </URLInfo>
-                    <URLImage>
-                        <img src={image} alt=''/>
-                    </URLImage>
-                </ContainerUrl>
-            </ContainerPost>
-        </Publication>
-      </>
-  )
+    return (
+        <>
+            <Publication className="post">
+                <ProfileImage>
+                    <img src={imageProfile} />
+                    <Like idPost={idPost} />
+                </ProfileImage>
+        <ModalDelete visible = {visible} setVisible = {setVisible} postId = {idPost} getPost = {getPost}/>
+                <ContainerPost>
+                    <DivDispl>
+                    <h1 onClick={() => renderById(userId)} >{username}</h1>
+                    <IconTrash onClick={()=> setVisible(true)}/>
+                    </DivDispl>
+                    <h2>{description}</h2>
+                    <ContainerUrl onClick={() => window.open(uri)}>
+                        <URLInfo>
+                            <h1>{title}</h1>
+                            <h2>{descrip}</h2>
+                            <p>{uri}</p>
+                        </URLInfo>
+                        <URLImage>
+                            <img src={image} alt='' />
+                        </URLImage>
+                    </ContainerUrl>
+                </ContainerPost>
+            </Publication>
+        </>
+    )
 }
-
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
@@ -150,4 +157,12 @@ img{
     height: 100%;
     border-radius: 0 10px 10px 0;
 }
+`
+const IconTrash = styled(BsTrash)`
+color: white;
+margin-right: 20px;
+`
+const DivDispl = styled.div`
+display: flex;
+justify-content: space-between;
 `
