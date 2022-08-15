@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef, useCallback} from "react";
 import axios from "axios";
 import styled from "styled-components";
+import EditPost from "./EditPost";
 
 export default function PublishPost(props) {
   const [imgLocal, setImgLocal] = useState('')
@@ -8,21 +9,61 @@ export default function PublishPost(props) {
   const [url, setUrl] = useState('')
   const local = localStorage.getItem("token");
   const [description, setDescription] = useState('')
-  const { getPost } = props
+  const inputPublish = useRef();
+  const { getPost, postDescription, postUrl, editing, postId, setEditing, userId } = props
   const config = {
       headers: {
           "Authorization": 'Bearer ' + local
       }
   }
+
+  console.log(description)
+
+  useEffect(()=>{
+    if(postUrl){
+        inputPublish.current.focus();
+        setDescription(postDescription);
+        setUrl(postUrl);
+    }
+  },[])
+
+  const escFunction = useCallback((event) => {
+    if (event.keyCode === 27) {
+      setDescription(postDescription);
+      setUrl(postUrl)
+      setEditing(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction);
+    };
+  }, [escFunction]);
+
+
   function publish() {
       setEnabled(false)
-      const promise = axios.post('http://localhost:4000/post', {
-          url: url,
-          description: description
-      }, config)
-      promise.catch(tratarError)
-      promise.then(tratarSucesso)
-
+      if(editing){
+        const body ={
+            url: url,
+            description: description,
+            id: postId
+        }
+        console.log(body)
+        const promise = axios.put('http://localhost:4000/post',body, config)
+        promise.catch(tratarError);
+        promise.then(tratarSucesso);
+      }else{
+        const promise = axios.post('http://localhost:4000/post', {
+            url: url,
+            description: description
+        }, config)
+        promise.catch(tratarError)
+        promise.then(tratarSucesso)
+      }
       function tratarError() {
           alert('Houve um erro ao publicar seu link')
           setEnabled(true)
@@ -36,6 +77,13 @@ export default function PublishPost(props) {
       }
   }
 
+  function handleKeyDown(e){
+    var key = e.key;
+    if(key === 'Enter'){
+      publish(e);
+    }
+  }
+
   useEffect(()=>{
     const img =localStorage.getItem("img");
     setImgLocal(img);
@@ -47,21 +95,20 @@ export default function PublishPost(props) {
               (enabled === true) ?
                   <Publish>
                       <ProfileImage src={imgLocal} alt =''/>
-                      <ContainerPost>
+                      <EditPost userId ={userId} setEditing={setEditing} editing={true} top={'10px'}/>
+                      <ContainerPost onSubmit={publish}>
                           <ShareHeader>What are you going to share today?</ShareHeader>
-                          <input type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
-                          <textarea value={description} type='text' placeholder="Awesome article about #javascript" onChange={e => setDescription(e.target.value)}></textarea>
-                          <button onClick={publish}>Publish</button>
+                          <input onKeyDown={e => handleKeyDown(e)} ref={inputPublish} type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
+                          <textarea onKeyDown={e => handleKeyDown(e)} value={description} type='text' placeholder="Awesome article about #javascript" onChange={e => setDescription(e.target.value)}></textarea>
+                          <button type="submit">Publish</button>
                       </ContainerPost>
                   </Publish>
                   :
                   <Publish>
-                      <ProfileImage>
-                        <img src = {imgLocal} alt =''/>
-                      </ProfileImage>
+                      <ProfileImage src={imgLocal} alt =''/>
                       <ContainerPost>
                           <ShareHeader>What are you going to share today?</ShareHeader>
-                          <input type='text' placeholder="http://..." disabled />
+                          <input ref={inputPublish} type='text' placeholder="http://..." disabled />
                           <input type='textarea' placeholder="Awesome article about #javascript" disabled/>
                           <button>Publishing...</button>
                       </ContainerPost>
@@ -72,6 +119,7 @@ export default function PublishPost(props) {
 }
 
 const Publish = styled.div`
+position: relative;
 display: flex;
 justify-content: space-between;
 width: 40%;
@@ -91,7 +139,7 @@ margin: 1rem;
 object-fit: cover;
 `
 
-const ContainerPost = styled.div`
+const ContainerPost = styled.form`
     font-family: 'Lato';
     display: flex;
     flex-direction: column;

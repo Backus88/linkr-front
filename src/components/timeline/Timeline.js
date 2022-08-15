@@ -20,6 +20,7 @@ export default function Timeline() {
     const [crash, setCrash] = useState(false)
     const { id: newId } = useParams();
     const local = localStorage.getItem("token");
+    const localId = localStorage.getItem("id");
     console.log(localStorage)
     console.log(local)
     let location = useLocation();
@@ -31,7 +32,12 @@ export default function Timeline() {
 
 
     function renderById(id) {
-        navigate(`/user/${id}`);
+        if(parseInt(id) !== parseInt(localId)){
+            navigate(`/user/${id}`);
+        }else{
+            navigate('/timeline');
+        }
+        
     }
 
     function getPost() {
@@ -117,7 +123,8 @@ export default function Timeline() {
                         imageProfile = {item.profileImgUrl}
                         key={item.url + index}
                         idPost={item.id}
-                            />
+                        getPost ={getPost}
+                    />
                 )
                     :
                         <MsgError>There are no posts yet</MsgError>}
