@@ -19,6 +19,8 @@ export default function Post(props) {
   const [uri, setUri] = useState('');
   const [editing, setEditing]= useState(false);
   const [visible, setVisible] = useState(false);
+  const localId = localStorage.getItem("id");
+  const [deleteIcon, setDeleteIcon] = useState(false)
 
   let {
       hashtagController,
@@ -41,8 +43,14 @@ export default function Post(props) {
           setImage(response.data.image)
           setUri(response.data.uri)
       })
-  }
-  
+    }
+
+    useEffect(()=>{
+    if(parseInt(localId)===parseInt(userId)&& userId){
+        setDeleteIcon(true);
+        }
+    },[userId])
+
   useEffect(getMetadata, [])
   return (
       <>
@@ -62,13 +70,14 @@ export default function Post(props) {
                 <Like idPost ={idPost} />
             </ProfileImage>
             <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} hashtagController={hashtagController} 
-                            setHashtagController={setHashtagController} />
+                            setHashtagController={setHashtagController}
+                             />
             <ContainerPost>
                <DivDispl>
                 <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
                 <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
                 
-                <IconTrash onClick={() => setVisible(true)} />
+                {deleteIcon? <IconTrash userId={userId} onClick={() => setVisible(true)} /> : null}
                 </DivDispl>
                 <h2>
                     <ReactHashtag 

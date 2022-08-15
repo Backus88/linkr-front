@@ -1,18 +1,22 @@
 import Modal from 'react-modal';
 import styled from "styled-components";
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function ModalDelete(props) {
-    const { visible, setVisible, postId, getPost, hashtagController, setHashtagController } = props
+    const { visible, setVisible, postId, getPost, hashtagController, setHashtagController, userId } = props
+
     const [loading, setLoading]= useState(false)
     const local = localStorage.getItem("token");
+    const localId = localStorage.getItem("id");
     const config = {
         headers: {
             "Authorization": 'Bearer ' + local
         }
     }
+
+
     function yesDelete() {
         setLoading(true)
         const promise = axios.delete(`http://localhost:4000/delete/${postId}`, config)
@@ -39,6 +43,8 @@ export default function ModalDelete(props) {
     }
    
     return (
+        <>
+
         <Modal
             isOpen={visible}
             style={customStyles}
@@ -62,6 +68,8 @@ export default function ModalDelete(props) {
         </>
             }
         </Modal>
+
+        </>
     )
 }
 
