@@ -1,27 +1,22 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import axios from "axios";
 import styled from "styled-components";
-import EditPost from "./EditPost";
+import EditPost from "../EditPost";
 
-export default function PublishPost(props) {
+export default function PublishPostMobile(props) {
   const [imgLocal, setImgLocal] = useState('')
   const [enabled, setEnabled] = useState(true)
   const [url, setUrl] = useState('')
   const local = localStorage.getItem("token");
   const [description, setDescription] = useState('')
   const inputPublish = useRef();
-<<<<<<< HEAD
-  const { getPost, postDescription, postUrl, editing, postId, setEditing, userId, hashtagController, setHashtagController } = props
-=======
-  const { hashtagController, setHashtagController, getPost, postDescription, postUrl, editing, postId, setEditing, userId } = props
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
+  const { getPost, postDescription, postUrl, editing, postId, setEditing, userId } = props
   const config = {
       headers: {
           "Authorization": 'Bearer ' + local
       }
   }
 
-  console.log(description)
   console.log(description)
 
   useEffect(()=>{
@@ -49,10 +44,8 @@ export default function PublishPost(props) {
   }, [escFunction]);
 
 
-  function publish(e) {
-      e.preventDefault()
+  function publish() {
       setEnabled(false)
-      console.log(editing)
       if(editing){
         const body ={
             url: url,
@@ -60,11 +53,11 @@ export default function PublishPost(props) {
             id: postId
         }
         console.log(body)
-        const promise = axios.put('https://linkr-db.herokuapp.com/post',body, config)
+        const promise = axios.put('http://localhost:4000/post',body, config)
         promise.catch(tratarError);
         promise.then(tratarSucesso);
       }else{
-        const promise = axios.post('https://linkr-db.herokuapp.com/post', {
+        const promise = axios.post('http://localhost:4000/post', {
             url: url,
             description: description
         }, config)
@@ -76,15 +69,11 @@ export default function PublishPost(props) {
           setEnabled(true)
       }
       function tratarSucesso() {
-<<<<<<< HEAD
-          setHashtagController(!hashtagController)        
-=======
-          setHashtagController(!hashtagController)
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
           setEnabled(true)
           setUrl('')
           setDescription('')
           getPost()
+
       }
   }
 
@@ -105,22 +94,18 @@ export default function PublishPost(props) {
           {
               (enabled === true) ?
                   <Publish>
-                      <ProfileImage src={imgLocal} alt =''/>
+
                       <EditPost userId ={userId} setEditing={setEditing} editing={true} top={'10px'}/>
-<<<<<<< HEAD
-                      <ContainerPost onSubmit={e =>publish(e)}>
-=======
-                      <ContainerPost>
->>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
+                      <ContainerPost onSubmit={publish}>
                           <ShareHeader>What are you going to share today?</ShareHeader>
-                          <input ref={inputPublish} type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
+                          <input onKeyDown={e => handleKeyDown(e)} ref={inputPublish} type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
                           <textarea onKeyDown={e => handleKeyDown(e)} value={description} type='text' placeholder="Awesome article about #javascript" onChange={e => setDescription(e.target.value)}></textarea>
-                          <button onClick={e => publish(e)} type="submit">Publish</button>
+                          <button type="submit">Publish</button>
                       </ContainerPost>
                   </Publish>
                   :
                   <Publish>
-                      <ProfileImage src={imgLocal} alt =''/>
+
                       <ContainerPost>
                           <ShareHeader>What are you going to share today?</ShareHeader>
                           <input onKeyDown={e => handleKeyDown(e)} ref={inputPublish} type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} disabled/>
@@ -137,33 +122,25 @@ const Publish = styled.div`
 position: relative;
 display: flex;
 justify-content: space-between;
-width: 560px;
-height: 210px;
-/* margin-top: 40px; */
-margin: 40px auto;
+width: 100%;
+height: 164px;
+margin: 20px auto;
 background: #FFFFFF;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-border-radius: 16px;
-`
-
-const ProfileImage = styled.img`
-width: 50px;
-height: 50px;
-border-radius: 50%;
-margin: 1rem;
-object-fit: cover;
+border-radius: 0;
 `
 
 const ContainerPost = styled.form`
     font-family: 'Lato';
     display: flex;
     flex-direction: column;
-    width: 90%;
+    align-items: center;
+    width: 100%;
     height: 100%;
     border-radius: 16px;
 
     input{
-        font-family: 'Lato';
+      font-family: 'Lato';
         width: 95%;
         height: 30px;
         margin-top: 0.5rem;
@@ -181,7 +158,7 @@ const ContainerPost = styled.form`
         font-family: 'Lato';
         font-size: 1rem;
         width: 95%;
-        height: 66px;
+        height: 48px;
         margin-top: 0.313rem;
         border-radius: 6px;
         resize: none;
@@ -196,14 +173,17 @@ const ContainerPost = styled.form`
 
     button{
         width: 7rem;
-        height: 2rem;
-        margin-top: 15px;
+        height: 1.37rem;
+        margin-top: 6px;
         align-self: flex-end;
-        margin-right: 1.3rem;
+        margin-right: 0.7rem;
         border: none;
         background-color: #1877F2;
-        border-radius: 1rem;
+        border-radius: 0.31rem;
         color: white;
+        font-size: 0.8rem;
+        font-family: 'Lato';
+        font-weight: 700;
     }
 `
 

@@ -6,15 +6,20 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 
 
+<<<<<<< HEAD
 export default function TrendingBox({hashtagController}){
+=======
+export default function TrendingBox(props){
+>>>>>>> 41fe00a02c969d5d3dcaa076deb55b5d74bb3947
 
     const [hashtag, setHashtag] = useState([]);
     const [loading, setLoading] = useState(true)
     const [crash, setCrash] = useState(false)
+    const {hashtagController} = props
     
     function getTrending(){
         setLoading(true)
-        const promise = axios.get('http://localhost:4000/trending')
+        const promise = axios.get('https://linkr-db.herokuapp.com/trending')
         promise.then(response => {
             let data = [...response.data]
             setHashtag(data)
@@ -98,24 +103,29 @@ h1{
 const IconLoading = styled(AiOutlineLoading3Quarters)`
 color: #FFFFFF;
 margin-top: 60px;
-width: 60%;
+padding-right: 20px;
+width: 100%;
 height: 50px;
 `
 const MsgLoading = styled.div`
+width: 100%;
 color: white;
 margin-top: 10px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 30px;
+text-align: center;
 `
 const MsgError = styled.div`
+width: 100%;
 color: white;
-margin-top: 50px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
-font-size: 30px;
+font-size: 20px;
+margin-left: -7px;
+text-align: center;
 `
 
 const Main = styled.div`
