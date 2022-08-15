@@ -2,15 +2,18 @@ import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom";
 import GlobalStyle from "../../styles/globalStyles";
 import Like from "./Like.js";
+import EditPost from "./EditPost";
 import styled from "styled-components";
 import axios from "axios"
 import ReactHashtag from "@mdnm/react-hashtag";
+import PublishPost from "./PublishPost";
 
 export default function Post(props) {
   const [title, setTitle] = useState('');
   const [descrip, setDescrip] = useState('');
   const [image, setImage] = useState('');
   const [uri, setUri] = useState('');
+  const [editing, setEditing]= useState(false);
   let {
       username,
       description,
@@ -18,7 +21,8 @@ export default function Post(props) {
       userId,
       url,
       imageProfile,
-      idPost
+      idPost,
+      getPost
   } = props
   function getMetadata() {
       const promise = axios.get(
@@ -34,14 +38,22 @@ export default function Post(props) {
 
   return (
       <>
+      {editing? <PublishPost getPost={getPost} 
+        postDescription ={descrip} 
+        postUrl={uri} editing ={editing} 
+        setEditing= {setEditing} 
+        postId = {idPost} 
+        userId= {userId}/>
+      :
         <Publication className="post">
             <ProfileImage>            
                 <img src={imageProfile}/>
-                <Like idPost ={idPost}/>
+                <Like idPost ={idPost} />
             </ProfileImage>
 
             <ContainerPost>
-                <h1 onClick={() => renderById(userId)} >{username}</h1>
+                <EditPost userId ={userId} setEditing={setEditing} editing={false} top={'-10px'} />
+                <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
                 <h2>
                     <ReactHashtag 
                             renderHashtag={(hashtagValue) => {
@@ -54,6 +66,7 @@ export default function Post(props) {
                         {description}
                     </ReactHashtag>
                 </h2>
+
                 <ContainerUrl onClick={() => window.open(uri)}>
                     <URLInfo>
                         <h1>{title}</h1>
@@ -66,6 +79,7 @@ export default function Post(props) {
                 </ContainerUrl>
             </ContainerPost>
         </Publication>
+       }
       </>
   )
 }
@@ -96,6 +110,7 @@ object-fit: cover;
 `
 
 const ContainerPost = styled.div`
+position: relative;
 font-family: 'Lato';
 display: flex;
 flex-direction: column;
@@ -104,6 +119,9 @@ height: 100%;
 border-radius: 16px;
 margin-top: 20px;
 margin-bottom: 20px;
+h1:nth-child(2){
+    cursor: pointer;
+}
 
 h1{
     font-size: 1.2rem;
@@ -164,7 +182,6 @@ img{
     border-radius: 0 10px 10px 0;
 }
 `
-
 const HashtagLink = styled(Link)`
 text-decoration: none;
 `
@@ -176,3 +193,4 @@ font-weight: 700;
     cursor: pointer;
 }
 `;
+
