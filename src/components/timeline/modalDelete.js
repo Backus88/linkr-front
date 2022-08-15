@@ -65,16 +65,6 @@ export default function ModalDelete(props) {
 }
 
 const ModalInfo = styled.div`
-/* width: 25%;
-height: 30%;
-margin-right: -50%;
-transform: translate(-50%, -50%);
-background: blue;
-border-radius: 25px;
-border: none;
-display: flex;
-flex-direction: column;
-opacity: 1; */
 `
 
 const customStyles = {
