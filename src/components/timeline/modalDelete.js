@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function ModalDelete(props) {
-    const { visible, setVisible, postId, getPost } = props
+    const { visible, setVisible, postId, getPost, hashtagController, setHashtagController } = props
     const [loading, setLoading]= useState(false)
     const local = localStorage.getItem("token");
     const config = {
@@ -23,6 +23,7 @@ export default function ModalDelete(props) {
         setLoading(false)
     }
     function treatSucess() {
+        setHashtagController(!hashtagController)
         console.log('sucesso')
         setLoading(false)
         setVisible(false)
@@ -69,8 +70,8 @@ const ModalInfo = styled.div`
 
 const customStyles = {
     content: {
-        width: '45%',
-        height: 'auto',
+        width: '600px',
+        height: '262px',
         top: '50%',
         left: '50%',
         right: 'auto',
@@ -81,7 +82,7 @@ const customStyles = {
         borderRadius: '50px',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+
         opacity: 1,
     },
     overlay: {
@@ -137,6 +138,7 @@ color: #1877F2;
 font-family: 'Lato';
 margin-top: 10px;
 font-weight: 700;
+cursor: pointer;
 `
 const Two = styled.div`
 text-align: center;
@@ -145,10 +147,11 @@ color: #FFFFFF;
 font-family: 'Lato';
 font-weight: 700;
 margin-top: 10px;
+cursor: pointer;
 `
 const IconLoading = styled(AiOutlineLoading3Quarters)`
 color: #FFFFFF;
-margin-top: 60px;
+margin-top: 50px;
 width: 60%;
 height: 50px;
 align-self: center;
@@ -156,6 +159,7 @@ align-self: center;
 const MsgLoading = styled.div`
 color: white;
 margin-top: 10px;
+margin-left: 10px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;

@@ -3,11 +3,11 @@ import styled from "styled-components";
 import { VscChevronDown, VscChevronUp } from "react-icons/vsc";
 import {useNavigate} from "react-router-dom"
 import { useContext } from "react";
-import UserContext from "../../contexts/UserContext";
-import useOutsideAlerter from "../../Hooks/ClickHook";
+import UserContext from "../../../contexts/UserContext";
+import useOutsideAlerter from "../../../Hooks/ClickHook";
 
 
-export default function Profile(){
+export default function ProfileMobile(){
 
   const wrapperRef = useRef(null);
   const {modal, setModal} = useContext(UserContext);
@@ -17,6 +17,11 @@ export default function Profile(){
   useOutsideAlerter(wrapperRef, setModal);
 
   const navigate = useNavigate();
+  useEffect(()=>{
+    const img =localStorage.getItem("img");
+    setImgLocal(img);
+  },[])
+
   useEffect(()=>{
     const img =localStorage.getItem("img");
     setImgLocal(img);
@@ -38,7 +43,6 @@ export default function Profile(){
 
   function HandleLogout(){
     localStorage.removeItem('token')
-    setModal(false)
     setLocal({})
     navigate('/')
   }
@@ -86,7 +90,6 @@ const Menu = styled.div`
     height: 40px;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
   }
 `
 
