@@ -98,24 +98,29 @@ h1{
 const IconLoading = styled(AiOutlineLoading3Quarters)`
 color: #FFFFFF;
 margin-top: 60px;
-width: 60%;
+padding-right: 20px;
+width: 100%;
 height: 50px;
 `
 const MsgLoading = styled.div`
+width: 100%;
 color: white;
 margin-top: 10px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 30px;
+text-align: center;
 `
 const MsgError = styled.div`
+width: 100%;
 color: white;
-margin-top: 50px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
-font-size: 30px;
+font-size: 20px;
+margin-left: -7px;
+text-align: center;
 `
 
 const Main = styled.div`

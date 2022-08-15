@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react"
-import GlobalStyle from "../../styles/globalStyles";
-import Header from '../header/Header.js';
+import GlobalStyle from "../../../styles/globalStyles";
+import HeaderMobile from "../../header/header_mobile/HeaderMobile";
 import styled from "styled-components";
 import axios from "axios"
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import Post from "./Post";
-import TrendingBox from "./TrendingBox";
+import PublishPostMobile from "./PublishPostMobile";
+import PostMobile from "./PostMobile";
+import SearchBarMobile from "./SearchBarMobile";
 
 
-export default function Timeline() {
+export default function TimelineMobile() {
     const [post, setPost] = useState([]);
     const [user, setUser] = useState([]);
     const [username, setUsername]= useState('');
@@ -19,8 +20,8 @@ export default function Timeline() {
     const [loading, setLoading] = useState(true)
     const [crash, setCrash] = useState(false)
     const { id: newId } = useParams();
-    const { hashtag: newHashtag} = useParams();
     const local = localStorage.getItem("token");
+    const localId = localStorage.getItem("id");
     console.log(localStorage)
     console.log(local)
     let location = useLocation();
@@ -30,31 +31,23 @@ export default function Timeline() {
         }
     }
 
-    function checkToken(){
-        const token = localStorage.getItem("token")
-    
-        if(!token){
-          return navigate('/')
-        }
-      }
-    
-      useEffect(()=>{
-        checkToken()
-    }, [])
 
     function renderById(id) {
-        navigate(`/user/${id}`);
+        if(parseInt(id) !== parseInt(localId)){
+            navigate(`/user/${id}`);
+        }else{
+            navigate('/timeline');
+        }
+        
     }
 
     function getPost() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get(`http://localhost:4000/hashtag/${newHashtag}`, config)
+            const promise = axios.get('http://localhost:4000/post', config)
             promise.then(response => {
-                console.log(response.data);
-                let data = [...new Set(response.data)]
-                console.log(data)
+                let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
@@ -103,42 +96,49 @@ export default function Timeline() {
     }
     return (
         <>
-        <GlobalStyle />
-        <Header />
-        <Container>
-        <Main>
+          <GlobalStyle />
+          <HeaderMobile />
+          <Container>
+              <Main>
 
-        {canPublish?<Title>{'# ' + newHashtag}</Title>:<Title>{username.username}'s posts</Title> }
-        {loading ?
-            <>
-                <IconLoading />
-                <MsgLoading>loading...</MsgLoading>
-            </>
-            :
-            crash ?
-                <>
-                    <MsgError>
-                        An error occured while trying to fetch the posts,
-                        please refresh the page
-                    </MsgError>
-                </>
-                :
-                post.length > 0 ? post.map((item, index) =>
-                    <Post username={item.username}
-                        description={item.description}
-                        renderById={renderById}
-                        userId={item.userId}
-                        url={item.url}
-                        imageProfile = {item.profileImgUrl}
-                        key={item.url + index}
-                        idPost={item.id}
-                            />
-                )
-                    :
-                        <MsgError>There are no posts yet</MsgError>}
-        </Main>
-        <TrendingBox/>
-        </Container>
+          {canPublish?
+          <>
+            <SearchBarMobile />
+            <Title>timeline</Title>
+          </>
+          :
+          <Title>{username.username}'s posts</Title> }
+          {canPublish ? <PublishPostMobile getPost={getPost} /> : null}
+          {loading ?
+              <>
+                  <IconLoading />
+                  <MsgLoading>loading...</MsgLoading>
+              </>
+              :
+              crash ?
+                  <>
+                      <MsgError>
+                          An error occured while trying to fetch the posts,
+                          please refresh the page
+                      </MsgError>
+                  </>
+                  :
+                  post.length > 0 ? post.map((item, index) =>
+                      <PostMobile username={item.username}
+                          description={item.description}
+                          renderById={renderById}
+                          userId={item.userId}
+                          url={item.url}
+                          imageProfile = {item.profileImgUrl}
+                          key={item.url + index}
+                          idPost={item.id}
+                          getPost = {getPost}
+                              />
+                  )
+                      :
+                          <MsgError>There are no posts yet</MsgError>}
+              </Main>
+          </Container>
         </>
     )
 }
@@ -148,18 +148,22 @@ const Container = styled.div`
 width: 100%;
 display: flex;
 flex-direction: row;
-justify-content: center;
+justify-content:center;
 margin: auto;
 `
+
+const Main = styled.div`
+width: 100%;
+` 
 
 const Title = styled.div`
 width: 40%;
 font-family: 'Oswald';
 font-style: normal;
 font-weight: 700;
-font-size: 43px;
+font-size: 33px;
 color: #FFFFFF;
-margin: 100px 0 0 0;
+margin: 20px 0 0px 10px;
 text-align: start;
 `
 
@@ -181,27 +185,29 @@ margin-top: 10px;
 
 const IconLoading = styled(AiOutlineLoading3Quarters)`
 color: #FFFFFF;
-margin-top: 60px;
+margin: 60px auto 0px auto;
 width: 60%;
 height: 50px;
 `
 const MsgLoading = styled.div`
+width: 40%;
 color: white;
 margin-top: 10px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 30px;
+margin: 10px auto 0px auto;
+text-align: center;
 `
 const MsgError = styled.div`
+width: 40%;
 color: white;
 margin-top: 50px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 30px;
+margin: 100px auto 0px auto;
+text-align: start;
 `
-
-const Main = styled.div`
-width: 43%;
-` 
