@@ -35,12 +35,12 @@ export default function Post(props) {
       })
   }
   useEffect(getMetadata, [])
-
   return (
       <>
       {editing? <PublishPost getPost={getPost} 
-        postDescription ={descrip} 
-        postUrl={uri} editing ={editing} 
+        postDescription ={description} 
+        postUrl={uri} 
+        editing ={editing} 
         setEditing= {setEditing} 
         postId = {idPost} 
         userId= {userId}/>

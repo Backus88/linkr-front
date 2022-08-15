@@ -58,7 +58,6 @@ const DropdownContainer = styled.div`
     z-index: 1;
     min-height: 0px;
     min-width: inherit;
-    max-width: 100px;
     max-height: 131px;
     width: 100%;
     top: 46px;
@@ -85,7 +84,7 @@ const ItemDiv = styled.div`
     align-items: center;
     padding-top: 14px;
     padding-bottom: 12px;
-    margin-left:12px;
+    padding-left:12px;
     :hover{
         background-color: gray;
         cursor: pointer;
@@ -101,5 +100,6 @@ const ItemDiv = styled.div`
         height: 39px;
         border-radius: 50%;
         margin-right: 12px;
+        object-fit: cover;
     }
 `;
