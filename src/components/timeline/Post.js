@@ -16,7 +16,7 @@ export default function Post(props) {
     const [descrip, setDescrip] = useState('');
     const [image, setImage] = useState('');
     const [uri, setUri] = useState('');
-    const [editing, setEditing]= useState(false);
+    const [editing, setEditing] = useState(false);
     const [visible, setVisible] = useState(false);
     let {
         username,
@@ -42,51 +42,51 @@ export default function Post(props) {
 
     return (
         <>
-        {editing? <PublishPost getPost={getPost} 
-        postDescription ={descrip} 
-        postUrl={uri} editing ={editing} 
-        setEditing= {setEditing} 
-        postId = {idPost} 
-        userId= {userId}/>
-      :
-            <Publication className="post">
-                <ProfileImage>
-                    <img src={imageProfile} />
-                    <Like idPost={idPost} />
-                </ProfileImage>
-        <ModalDelete visible = {visible} setVisible = {setVisible} postId = {idPost} getPost = {getPost}/>
-                <ContainerPost>
-                    <DivDispl>
-                    <EditPost userId ={userId} setEditing={setEditing} editing={false} top={'-10px'} />
-                <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
-                <h2>
-                    <ReactHashtag 
-                            renderHashtag={(hashtagValue) => {
-                                return (
-                                    <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
-                                    <Hashtag>{hashtagValue}</Hashtag>
-                                    </HashtagLink>
-                                )
-                            }}>  
-                        {description}
-                    </ReactHashtag>
-                </h2>
-                    <IconTrash onClick={()=> setVisible(true)}/>
-                    </DivDispl>
-                    <h2>{description}</h2>
-                    <ContainerUrl onClick={() => window.open(uri)}>
-                        <URLInfo>
-                            <h1>{title}</h1>
-                            <h2>{descrip}</h2>
-                            <p>{uri}</p>
-                        </URLInfo>
-                        <URLImage>
-                            <img src={image} alt='' />
-                        </URLImage>
-                    </ContainerUrl>
-                </ContainerPost>
-            </Publication>
-}
+            {editing ? <PublishPost getPost={getPost}
+                postDescription={descrip}
+                postUrl={uri} editing={editing}
+                setEditing={setEditing}
+                postId={idPost}
+                userId={userId} />
+                :
+                <Publication className="post">
+                    <ProfileImage>
+                        <img src={imageProfile} />
+                        <Like idPost={idPost} />
+                    </ProfileImage>
+                    <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} />
+                    <ContainerPost>
+                        <DivDispl>
+                            <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
+                            <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
+                            
+                            <IconTrash onClick={() => setVisible(true)} />
+                        </DivDispl>
+                        <h2>
+                                <ReactHashtag
+                                    renderHashtag={(hashtagValue) => {
+                                        return (
+                                            <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
+                                                <Hashtag>{hashtagValue}</Hashtag>
+                                            </HashtagLink>
+                                        )
+                                    }}>
+                                    {description}
+                                </ReactHashtag>
+                            </h2>
+                        <ContainerUrl onClick={() => window.open(uri)}>
+                            <URLInfo>
+                                <h1>{title}</h1>
+                                <h2>{descrip}</h2>
+                                <p>{uri}</p>
+                            </URLInfo>
+                            <URLImage>
+                                <img src={image} alt='' />
+                            </URLImage>
+                        </ContainerUrl>
+                    </ContainerPost>
+                </Publication>
+            }
         </>
     )
 }
@@ -135,7 +135,7 @@ h1{
     font-weight: 400;
 }
 h2{
-    margin-top: 5px;
+    margin-top: 10px;
     font-size: 1.05rem;
     color: #B7B7B7;
     margin-bottom: 20px;
