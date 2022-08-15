@@ -45,6 +45,7 @@ export default function TimelineMobile() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
+
             const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
             promise.then(response => {
                 let data = [...response.data]

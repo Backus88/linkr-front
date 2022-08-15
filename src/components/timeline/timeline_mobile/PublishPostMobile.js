@@ -58,6 +58,7 @@ export default function PublishPostMobile(props) {
         promise.then(tratarSucesso);
       }else{
         const promise = axios.post('https://linkr-db.herokuapp.com/post', {
+
             url: url,
             description: description
         }, config)

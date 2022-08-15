@@ -22,6 +22,8 @@ export default function Post(props) {
   const [deleteIcon, setDeleteIcon] = useState(false)
 
   let {
+      hashtagController,
+      setHashtagController,
       username,
       description,
       renderById,
@@ -29,9 +31,7 @@ export default function Post(props) {
       url,
       imageProfile,
       idPost,
-      getPost,
-      hashtagController,
-      setHashtagController
+      getPost
   } = props
   function getMetadata() {
       const promise = axios.get(
