@@ -19,7 +19,7 @@ export default function ModalDelete(props) {
 
     function yesDelete() {
         setLoading(true)
-        const promise = axios.delete(`http://localhost:4000/delete/${postId}`, config)
+        const promise = axios.delete(`https://linkr-db.herokuapp.com/delete/${postId}`, config)
         promise.then(treatSucess).catch(treatError)
     }
     function notDelet() {

@@ -50,7 +50,7 @@ export default function Timeline() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get(`http://localhost:4000/hashtag/${newHashtag}`, config)
+            const promise = axios.get(`https://linkr-db.herokuapp.com/hashtag/${newHashtag}`, config)
             promise.then(response => {
                 console.log(response.data);
                 let data = [...new Set(response.data)]
@@ -66,14 +66,14 @@ export default function Timeline() {
             setCanPublish(true)
 
         }else{
-            const promise = axios.get(`http://localhost:4000/user/${id}`, config)
+            const promise = axios.get(`https://linkr-db.herokuapp.com/user/${id}`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
 
-            const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
+            const userById = axios.get(`https://linkr-db.herokuapp.com/user?id=${id}`, config);
             userById.then(response => {
                 let data = {...response.data}
                 setUsername(data)
@@ -98,7 +98,7 @@ export default function Timeline() {
     useEffect(getPost, [id,location,newId, canPublish])
 
     function getUser() {
-        const promise = axios.get('http://localhost:4000/post', config)
+        const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
         promise.then(response => setUser(response.data))
     }
     return (
