@@ -40,7 +40,7 @@ export default function Login(){
       e.target.style.background = '#1877F2';
     } 
 
-    const URL = "http://localhost:4000/signin"
+    const URL = "https://linkr-db.herokuapp.com/signin"
     const signIn = login;
     const promise = axios.post(URL, signIn)
     promise

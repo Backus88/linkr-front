@@ -16,7 +16,7 @@ export default function Dropdown ({usernameString,querieController, setSearching
             "Authorization": `Bearer ${token}`
         }
     }
-    const route =`http://localhost:4000/user?username=${usernameString}`;
+    const route =`https://linkr-db.herokuapp.com/user?username=${usernameString}`;
     useEffect(()=>{
         const querieUsernames =async ()=>{
             try{

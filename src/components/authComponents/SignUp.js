@@ -31,7 +31,7 @@ export default function SignUp(){
       return alert('Fill all the necessary fields');
     } 
 
-    const URL = "http://localhost:4000/signup"
+    const URL = "https://linkr-db.herokuapp.com/signup"
     const signUp = form;
     const promise = axios.post(URL, signUp)
     promise
