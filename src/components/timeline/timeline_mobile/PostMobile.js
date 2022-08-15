@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom";
-import GlobalStyle from "../../styles/globalStyles";
-import Like from "./Like.js";
-import EditPost from "./EditPost";
+import Like from "../Like.js";
 import styled from "styled-components";
 import axios from "axios"
 import { BsTrash } from "react-icons/bs";
-import ModalDelete from "./modalDelete";
+import ModalDelete from "../modalDelete";
 import ReactHashtag from "@mdnm/react-hashtag";
-import PublishPost from "./PublishPost";
+import PublishPostMobile from "./PublishPostMobile";
 
-export default function Post(props) {
+
+export default function PostMobile(props) {
 
   const [title, setTitle] = useState('');
   const [descrip, setDescrip] = useState('');
@@ -18,8 +17,6 @@ export default function Post(props) {
   const [uri, setUri] = useState('');
   const [editing, setEditing]= useState(false);
   const [visible, setVisible] = useState(false);
-  const localId = localStorage.getItem("id");
-  const [deleteIcon, setDeleteIcon] = useState(false)
 
   let {
       username,
@@ -29,54 +26,39 @@ export default function Post(props) {
       url,
       imageProfile,
       idPost,
-      getPost,
-      hashtagController,
-      setHashtagController
+      getPost
   } = props
   function getMetadata() {
       const promise = axios.get(
-          `https://linkr-db.herokuapp.com/url-metadata?url=${url}`)
+          `http://localhost:4000/url-metadata?url=${url}`)
       promise.then(response => {
           setTitle(response.data.title)
           setDescrip(response.data.description)
           setImage(response.data.image)
           setUri(response.data.uri)
       })
-    }
-
-    useEffect(()=>{
-    if(parseInt(localId)===parseInt(userId)&& userId){
-        setDeleteIcon(true);
-        }
-    },[userId])
-
+  }
+  
   useEffect(getMetadata, [])
   return (
       <>
-      {editing? <PublishPost getPost={getPost} 
+      {editing? <PublishPostMobile getPost={getPost} 
         postDescription = {description} 
         postUrl={uri} 
         editing ={editing} 
         setEditing= {setEditing} 
         postId = {idPost} 
-        userId= {userId}
-        hashtagController={hashtagController} 
-        setHashtagController={setHashtagController}/>
+        userId= {userId}/>
       :
         <Publication className="post">
             <ProfileImage>            
                 <img src={imageProfile}/>
                 <Like idPost ={idPost} />
             </ProfileImage>
-            <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} hashtagController={hashtagController} 
-                            setHashtagController={setHashtagController}
-                             />
+            <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} />
             <ContainerPost>
                <DivDispl>
-                <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
                 <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
-                
-                {deleteIcon? <IconTrash userId={userId} onClick={() => setVisible(true)} /> : null}
                 </DivDispl>
                 <h2>
                     <ReactHashtag 
@@ -112,14 +94,16 @@ export default function Post(props) {
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
-width: 560px;
+width: 100%;
+min-height: 232px;
 height: auto;
 margin: 40px auto;
 background: #171717;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-border-radius: 16px;
+border-radius: 0;
 position:relative;
 `
+
 const ProfileImage = styled.div`
 
 img{

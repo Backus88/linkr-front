@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import "@fontsource/passion-one";
 import {useNavigate} from "react-router-dom"
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import axios from "axios"
 import MediaQuery from 'react-responsive'
 import LoginMobile from "./LoginMobile";
@@ -22,7 +22,7 @@ export default function Login(){
   console.log(login)
   const navigate = useNavigate();
 
-  console.log(login)
+  console.log(localStorage.getItem("token"))
 
   function SignIn(e){
     e.preventDefault();
@@ -40,7 +40,7 @@ export default function Login(){
       e.target.style.background = '#1877F2';
     } 
 
-    const URL = "http://localhost:4000/signin"
+    const URL = "https://linkr-db.herokuapp.com/signin"
     const signIn = login;
     const promise = axios.post(URL, signIn)
     promise
@@ -93,7 +93,7 @@ export default function Login(){
 
   return(
     <>
-    <MediaQuery minWidth={1024}>
+    <MediaQuery minWidth={1280}>
       <LogInPage>
         <Logo>
           <h1>linkr</h1>
@@ -120,7 +120,7 @@ export default function Login(){
         </Form>
       </LogInPage>
     </MediaQuery>
-    <MediaQuery maxWidth={1023}>
+    <MediaQuery maxWidth={1279}>
       <LoginMobile/>
     </MediaQuery>
     </>

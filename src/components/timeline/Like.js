@@ -9,7 +9,7 @@ import UserContext from "../../contexts/UserContext";
 
 export default function Like({idPost}){
 
-    const URL = `http://localhost:4000/posts/${idPost}/likes`;
+    const URL = `https://linkr-db.herokuapp.com/posts/${idPost}/likes`;
     // const {info} = useContext(UserContext);
     const info= localStorage.getItem("token");
 

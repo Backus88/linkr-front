@@ -2,11 +2,10 @@ import styled from 'styled-components';
 import { useEffect,useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import UserContext from "../../contexts/UserContext";
 import React from "react";
 
 
-export default function Dropdown ({usernameString,querieController, setSearching, searching}){
+export default function DropdownMobile ({usernameString,querieController, setSearching, searching}){
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     // const { postController, setPostController } = useContext(UserContext);
@@ -16,7 +15,7 @@ export default function Dropdown ({usernameString,querieController, setSearching
             "Authorization": `Bearer ${token}`
         }
     }
-    const route =`https://linkr-db.herokuapp.com/user?username=${usernameString}`;
+    const route =`http://localhost:4000/user?username=${usernameString}`;
     useEffect(()=>{
         const querieUsernames =async ()=>{
             try{

@@ -5,28 +5,22 @@ import React, { useState, useEffect } from 'react';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function ModalDelete(props) {
-    const { visible, setVisible, postId, getPost ,hashtagController, setHashtagController,userId } = props
+    const { visible, setVisible, postId, getPost, hashtagController, setHashtagController, userId } = props
+
     const [loading, setLoading]= useState(false)
     const [deletIcon, setDeletIcon]= useState(false);
     const local = localStorage.getItem("token");
+    const localId = localStorage.getItem("id");
     const config = {
         headers: {
             "Authorization": 'Bearer ' + local
         }
     }
 
-    const localId = localStorage.getItem("id");
-    useEffect(()=>{
-        if(parseInt(localId)===parseInt(userId)&& userId){
-            setDeletIcon(true);
-        }
-        console.log(userId);
-    },[userId])
-
 
     function yesDelete() {
         setLoading(true)
-        const promise = axios.delete(`http://localhost:4000/delete/${postId}`, config)
+        const promise = axios.delete(`https://linkr-db.herokuapp.com/delete/${postId}`, config)
         promise.then(treatSucess).catch(treatError)
     }
     function notDelet() {
@@ -34,6 +28,7 @@ export default function ModalDelete(props) {
         setLoading(false)
     }
     function treatSucess() {
+        setHashtagController(!hashtagController)
         console.log('sucesso')
         setLoading(false)
         setVisible(false)
@@ -51,32 +46,32 @@ export default function ModalDelete(props) {
    
     return (
         <>
-            {deletIcon?
-            <Modal
-                isOpen={visible}
-                style={customStyles}
-            >
-                {loading ? <>
-                <IconLoading />
-                <MsgLoading>loading...</MsgLoading>
-                </>
-                    :
-                    <>
-            <ModalInfo>
-                <ModalF>
-                    Are you sure you want
-                    to delete this post?
-                </ModalF>
-                <Buttons>
-                    <Buttom1 onClick={notDelet}><One>No, go back</One></Buttom1>
-                    <Buttom2 onClick={yesDelete}><Two>Yes, delete it</Two></Buttom2>
-                </Buttons>
-            </ModalInfo>
+
+        <Modal
+            isOpen={visible}
+            style={customStyles}
+        >
+            {loading ? <>
+            <IconLoading />
+            <MsgLoading>loading...</MsgLoading>
             </>
-                }
-            </Modal>
-            :null}
-       </>
+                :
+                <>
+        <ModalInfo>
+            <ModalF>
+                Are you sure you want
+                to delete this post?
+            </ModalF>
+            <Buttons>
+                <Buttom1 onClick={notDelet}><One>No, go back</One></Buttom1>
+                <Buttom2 onClick={yesDelete}><Two>Yes, delete it</Two></Buttom2>
+            </Buttons>
+        </ModalInfo>
+        </>
+            }
+        </Modal>
+
+        </>
     )
 }
 
@@ -85,8 +80,8 @@ const ModalInfo = styled.div`
 
 const customStyles = {
     content: {
-        width: '45%',
-        height: 'auto',
+        width: '600px',
+        height: '262px',
         top: '50%',
         left: '50%',
         right: 'auto',
@@ -97,7 +92,7 @@ const customStyles = {
         borderRadius: '50px',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+
         opacity: 1,
     },
     overlay: {
@@ -153,6 +148,7 @@ color: #1877F2;
 font-family: 'Lato';
 margin-top: 10px;
 font-weight: 700;
+cursor: pointer;
 `
 const Two = styled.div`
 text-align: center;
@@ -161,10 +157,11 @@ color: #FFFFFF;
 font-family: 'Lato';
 font-weight: 700;
 margin-top: 10px;
+cursor: pointer;
 `
 const IconLoading = styled(AiOutlineLoading3Quarters)`
 color: #FFFFFF;
-margin-top: 60px;
+margin-top: 50px;
 width: 60%;
 height: 50px;
 align-self: center;
@@ -172,6 +169,7 @@ align-self: center;
 const MsgLoading = styled.div`
 color: white;
 margin-top: 10px;
+margin-left: 10px;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
