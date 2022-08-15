@@ -1,8 +1,7 @@
-
 import Modal from 'react-modal';
 import styled from "styled-components";
 import axios from 'axios';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function ModalDelete(props) {
@@ -21,6 +20,7 @@ export default function ModalDelete(props) {
     }
     function notDelet() {
         setVisible(false)
+        setLoading(false)
     }
     function treatSucess() {
         console.log('sucesso')
@@ -32,6 +32,7 @@ export default function ModalDelete(props) {
 
     function treatError(error) {
         console.log(error)
+        setLoading(false)
         setVisible(false)
         alert('Não foi possível excluir o post')
     }
@@ -47,46 +48,75 @@ export default function ModalDelete(props) {
             </>
                 :
                 <>
-            <ModalF>Are you sure you want
-            to delete this post?</ModalF>
-        <Buttons>
-            <Buttom1 onClick={notDelet}><One>No, go back</One></Buttom1>
-            <Buttom2 onClick={yesDelete}><Two>Yes, delete it</Two></Buttom2>
-        </Buttons>
+        <ModalInfo>
+            <ModalF>
+                Are you sure you want
+                to delete this post?
+            </ModalF>
+            <Buttons>
+                <Buttom1 onClick={notDelet}><One>No, go back</One></Buttom1>
+                <Buttom2 onClick={yesDelete}><Two>Yes, delete it</Two></Buttom2>
+            </Buttons>
+        </ModalInfo>
         </>
             }
         </Modal>
     )
 }
 
+const ModalInfo = styled.div`
+/* width: 25%;
+height: 30%;
+margin-right: -50%;
+transform: translate(-50%, -50%);
+background: blue;
+border-radius: 25px;
+border: none;
+display: flex;
+flex-direction: column;
+opacity: 1; */
+`
+
 const customStyles = {
     content: {
-        width: '25%',
+        width: '45%',
+        height: 'auto',
         top: '50%',
         left: '50%',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '-50%',
+        margin: 'auto',
         transform: 'translate(-50%, -50%)',
         background: '#333333',
         borderRadius: '50px',
         display: 'flex',
-        flexDirection: 'column'
-
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        opacity: 1,
     },
     overlay: {
-        background: '#DCDCDC'
+        background: 'rgba(255, 255, 255, 0.9)',
+    },
+    modal: {
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: '#DCDCDC',
+        opacity: 1,
     }
 };
 
 const ModalF = styled.div`
+width: 70%;
 font-family: 'Lato';
 font-style: normal;
 font-weight: 700;
-font-size: 20px;
+font-size: 212%;
 text-align: center;
 color: #FFFFFF;
-
+margin: 0 auto 0 auto;
+line-height: 120%;
 `
 const Buttons = styled.div`
 display: flex;
@@ -94,38 +124,37 @@ align-self: center;
 width: 100%;
 margin-top: 10px;
 justify-content: center;
+margin-top: 10%;
+flex-shrink: 1;
 `
 const Buttom1 = styled.div`
 background: #FFFFFF;
 border-radius: 5px;
-width: 30%;
-height: 30px;
-
-
+width: 134px;
+height: 38px;
 `
 const Buttom2 = styled.div`
 background: #1877F2;
 border-radius: 5px;
-width: 30%;
-height: 30px;
+width: 134px;
+height: 38px;
 margin-left: 15px;
-
-
 `
 const One = styled.div`
 text-align: center;
-font-size: 12px;
+font-size: 1.1rem;
 color: #1877F2;
 font-family: 'Lato';
-margin-top: 7px;
-
+margin-top: 10px;
+font-weight: 700;
 `
 const Two = styled.div`
 text-align: center;
-font-size: 12px;
+font-size: 1.1rem;
 color: #FFFFFF;
 font-family: 'Lato';
-margin-top: 7px;
+font-weight: 700;
+margin-top: 10px;
 `
 const IconLoading = styled(AiOutlineLoading3Quarters)`
 color: #FFFFFF;
