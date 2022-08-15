@@ -10,7 +10,7 @@ export default function PublishPost(props) {
   const local = localStorage.getItem("token");
   const [description, setDescription] = useState('')
   const inputPublish = useRef();
-  const { getPost, postDescription, postUrl, editing, postId, setEditing, userId } = props
+  const { hashtagController, setHashtagController, getPost, postDescription, postUrl, editing, postId, setEditing, userId } = props
   const config = {
       headers: {
           "Authorization": 'Bearer ' + local
@@ -44,7 +44,8 @@ export default function PublishPost(props) {
   }, [escFunction]);
 
 
-  function publish() {
+  function publish(e) {
+      e.preventDefault()
       setEnabled(false)
       if(editing){
         const body ={
@@ -69,11 +70,11 @@ export default function PublishPost(props) {
           setEnabled(true)
       }
       function tratarSucesso() {
+          setHashtagController(!hashtagController)
           setEnabled(true)
           setUrl('')
           setDescription('')
           getPost()
-
       }
   }
 
@@ -96,11 +97,11 @@ export default function PublishPost(props) {
                   <Publish>
                       <ProfileImage src={imgLocal} alt =''/>
                       <EditPost userId ={userId} setEditing={setEditing} editing={true} top={'10px'}/>
-                      <ContainerPost onSubmit={publish}>
+                      <ContainerPost>
                           <ShareHeader>What are you going to share today?</ShareHeader>
-                          <input onKeyDown={e => handleKeyDown(e)} ref={inputPublish} type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
+                          <input ref={inputPublish} type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
                           <textarea onKeyDown={e => handleKeyDown(e)} value={description} type='text' placeholder="Awesome article about #javascript" onChange={e => setDescription(e.target.value)}></textarea>
-                          <button type="submit">Publish</button>
+                          <button onClick={e => publish(e)} type="submit">Publish</button>
                       </ContainerPost>
                   </Publish>
                   :

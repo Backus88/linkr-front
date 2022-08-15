@@ -16,6 +16,7 @@ export default function Timeline() {
     const [post, setPost] = useState([]);
     const [user, setUser] = useState([]);
     const [username, setUsername]= useState('');
+    const [hashtagController, setHashtagController] = useState(false)
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
     const navigate = useNavigate();
@@ -117,7 +118,9 @@ export default function Timeline() {
                 <Main>
 
             {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
-            {canPublish ? <PublishPost getPost={getPost} /> : null}
+            {canPublish ? <PublishPost getPost={getPost} 
+            hashtagController={hashtagController} 
+            setHashtagController={setHashtagController} /> : null}
             {loading ?
                 <>
                     <IconLoading />
@@ -142,16 +145,18 @@ export default function Timeline() {
                             key={item.url + index}
                             idPost={item.id}
                             getPost = {getPost}
+                            hashtagController={hashtagController} 
+                            setHashtagController={setHashtagController}
                                 />
                     )
                         :
                             <MsgError>There are no posts yet</MsgError>}
                 </Main>
-            <TrendingBox/>
+            <TrendingBox hashtagController={hashtagController} />
             </Container>
         </MediaQuery>
         <MediaQuery maxWidth={1279}>
-            <TimelineMobile/>
+            <TimelineMobile />
         </MediaQuery>
         </>
     )

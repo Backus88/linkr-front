@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function ModalDelete(props) {
-    const { visible, setVisible, postId, getPost } = props
+    const { visible, setVisible, postId, getPost, hashtagController, setHashtagController } = props
     const [loading, setLoading]= useState(false)
     const local = localStorage.getItem("token");
     const config = {
@@ -23,6 +23,7 @@ export default function ModalDelete(props) {
         setLoading(false)
     }
     function treatSucess() {
+        setHashtagController(!hashtagController)
         console.log('sucesso')
         setLoading(false)
         setVisible(false)

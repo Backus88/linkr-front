@@ -21,6 +21,8 @@ export default function Post(props) {
   const [visible, setVisible] = useState(false);
 
   let {
+      hashtagController,
+      setHashtagController,
       username,
       description,
       renderById,
@@ -50,14 +52,17 @@ export default function Post(props) {
         editing ={editing} 
         setEditing= {setEditing} 
         postId = {idPost} 
-        userId= {userId}/>
+        userId= {userId}
+        hashtagController={hashtagController} 
+        setHashtagController={setHashtagController}/>
       :
         <Publication className="post">
             <ProfileImage>            
                 <img src={imageProfile}/>
                 <Like idPost ={idPost} />
             </ProfileImage>
-            <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} />
+            <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} hashtagController={hashtagController} 
+                            setHashtagController={setHashtagController} />
             <ContainerPost>
                <DivDispl>
                 <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
