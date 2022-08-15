@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {RiEditBoxFill} from 'react-icons/ri';
+import {TiPencil} from 'react-icons/ti'
 
 export default function EditPost({userId, setEditing, editing, top}){
     const [showIcon, setShowIcon]= useState(false);
@@ -28,12 +29,14 @@ export default function EditPost({userId, setEditing, editing, top}){
 }
 
 
-const Icon = styled(RiEditBoxFill)`
+const Icon = styled(TiPencil)`
     position: absolute;
     top: ${props => props.top >0 ?  props.top:props.top};
     right: 15px;
     width: 20px;
     height: 20px;
     cursor: pointer;
-    color: ${props => props.editing ? "#000000":"#FFFFFF"}
+    color: ${props => props.editing ? "#000000":"#FFFFFF"};
+    margin-right: 30px;
+    margin-top: 7px;
 `;
