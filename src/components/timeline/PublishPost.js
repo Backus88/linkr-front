@@ -18,6 +18,7 @@ export default function PublishPost(props) {
   }
 
   console.log(description)
+  console.log(description)
 
   useEffect(()=>{
     if(postUrl){
@@ -47,6 +48,7 @@ export default function PublishPost(props) {
   function publish(e) {
       e.preventDefault()
       setEnabled(false)
+      console.log(editing)
       if(editing){
         const body ={
             url: url,

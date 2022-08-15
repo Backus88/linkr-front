@@ -173,6 +173,7 @@ margin: auto;
 
 const Main = styled.div`
 width: 43%;
+max-width: 560px;
 ` 
 
 const Title = styled.div`

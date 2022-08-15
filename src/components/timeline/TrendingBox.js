@@ -26,7 +26,6 @@ export default function TrendingBox(props){
             setCrash(true)
         })
     
-
     }
 
  useEffect(()=>{
@@ -125,11 +124,14 @@ text-align: center;
 `
 
 const Main = styled.div`
-margin: 22px auto 5px 16px;
+padding-bottom: 20px;
+padding-left: 16px;
+/* margin: 22px auto 5px 16px; */
 `
 
 const HashtagDiv = styled.div`
 margin-top: 10px;
+
 `
 
 

@@ -30,7 +30,7 @@ export default function PostMobile(props) {
   } = props
   function getMetadata() {
       const promise = axios.get(
-          `http://localhost:4000/url-metadata?url=${url}`)
+          `https://linkr-db.herokuapp.com/url-metadata?url=${url}`)
       promise.then(response => {
           setTitle(response.data.title)
           setDescrip(response.data.description)

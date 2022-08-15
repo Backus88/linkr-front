@@ -10,7 +10,6 @@ import ModalDelete from "./modalDelete";
 import ReactHashtag from "@mdnm/react-hashtag";
 import PublishPost from "./PublishPost";
 
-
 export default function Post(props) {
 
   const [title, setTitle] = useState('');
@@ -113,7 +112,8 @@ export default function Post(props) {
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
-width: 560px;
+max-width: 560px; 
+width: 100%;
 height: auto;
 margin: 40px auto;
 background: #171717;
@@ -121,7 +121,6 @@ box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;
 position:relative;
 `
-
 const ProfileImage = styled.div`
 
 img{

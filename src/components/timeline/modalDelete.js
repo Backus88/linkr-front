@@ -8,6 +8,7 @@ export default function ModalDelete(props) {
     const { visible, setVisible, postId, getPost, hashtagController, setHashtagController, userId } = props
 
     const [loading, setLoading]= useState(false)
+    const [deletIcon, setDeletIcon]= useState(false);
     const local = localStorage.getItem("token");
     const localId = localStorage.getItem("id");
     const config = {
@@ -32,6 +33,7 @@ export default function ModalDelete(props) {
         setLoading(false)
         setVisible(false)
         getPost()
+        setHashtagController(hashtagController)
         
     }
 
