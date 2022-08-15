@@ -5,85 +5,91 @@ import Like from "./Like.js";
 import EditPost from "./EditPost";
 import styled from "styled-components";
 import axios from "axios"
+import { BsTrash } from "react-icons/bs";
+import ModalDelete from "./modalDelete";
 import ReactHashtag from "@mdnm/react-hashtag";
 import PublishPost from "./PublishPost";
 
+
 export default function Post(props) {
-  const [title, setTitle] = useState('');
-  const [descrip, setDescrip] = useState('');
-  const [image, setImage] = useState('');
-  const [uri, setUri] = useState('');
-  const [editing, setEditing]= useState(false);
-  let {
-      username,
-      description,
-      renderById,
-      userId,
-      url,
-      imageProfile,
-      idPost,
-      getPost
-  } = props
-  function getMetadata() {
-      const promise = axios.get(
-          `http://localhost:4000/url-metadata?url=${url}`)
-      promise.then(response => {
-          setTitle(response.data.title)
-          setDescrip(response.data.description)
-          setImage(response.data.image)
-          setUri(response.data.uri)
-      })
-  }
-  useEffect(getMetadata, [])
+    const [title, setTitle] = useState('');
+    const [descrip, setDescrip] = useState('');
+    const [image, setImage] = useState('');
+    const [uri, setUri] = useState('');
+    const [editing, setEditing] = useState(false);
+    const [visible, setVisible] = useState(false);
+    let {
+        username,
+        description,
+        renderById,
+        userId,
+        url,
+        imageProfile,
+        idPost,
+        getPost
+    } = props
+    function getMetadata() {
+        const promise = axios.get(
+            `http://localhost:4000/url-metadata?url=${url}`)
+        promise.then(response => {
+            setTitle(response.data.title)
+            setDescrip(response.data.description)
+            setImage(response.data.image)
+            setUri(response.data.uri)
+        })
+    }
+    useEffect(getMetadata, [])
 
-  return (
-      <>
-      {editing? <PublishPost getPost={getPost} 
-        postDescription ={descrip} 
-        postUrl={uri} editing ={editing} 
-        setEditing= {setEditing} 
-        postId = {idPost} 
-        userId= {userId}/>
-      :
-        <Publication className="post">
-            <ProfileImage>            
-                <img src={imageProfile}/>
-                <Like idPost ={idPost} />
-            </ProfileImage>
-
-            <ContainerPost>
-                <EditPost userId ={userId} setEditing={setEditing} editing={false} top={'-10px'} />
-                <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
-                <h2>
-                    <ReactHashtag 
-                            renderHashtag={(hashtagValue) => {
-                                return (
-                                    <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
-                                    <Hashtag>{hashtagValue}</Hashtag>
-                                    </HashtagLink>
-                                )
-                            }}>  
-                        {description}
-                    </ReactHashtag>
-                </h2>
-
-                <ContainerUrl onClick={() => window.open(uri)}>
-                    <URLInfo>
-                        <h1>{title}</h1>
-                        <h2>{descrip}</h2>
-                        <p>{uri}</p>
-                    </URLInfo>
-                    <URLImage>
-                        <img src={image} alt=''/>
-                    </URLImage>
-                </ContainerUrl>
-            </ContainerPost>
-        </Publication>
-       }
-      </>
-  )
+    return (
+        <>
+            {editing ? <PublishPost getPost={getPost}
+                postDescription={descrip}
+                postUrl={uri} editing={editing}
+                setEditing={setEditing}
+                postId={idPost}
+                userId={userId} />
+                :
+                <Publication className="post">
+                    <ProfileImage>
+                        <img src={imageProfile} />
+                        <Like idPost={idPost} />
+                    </ProfileImage>
+                    <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} />
+                    <ContainerPost>
+                        <DivDispl>
+                            <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
+                            <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
+                            
+                            <IconTrash onClick={() => setVisible(true)} />
+                        </DivDispl>
+                        <h2>
+                                <ReactHashtag
+                                    renderHashtag={(hashtagValue) => {
+                                        return (
+                                            <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
+                                                <Hashtag>{hashtagValue}</Hashtag>
+                                            </HashtagLink>
+                                        )
+                                    }}>
+                                    {description}
+                                </ReactHashtag>
+                            </h2>
+                        <ContainerUrl onClick={() => window.open(uri)}>
+                            <URLInfo>
+                                <h1>{title}</h1>
+                                <h2>{descrip}</h2>
+                                <p>{uri}</p>
+                            </URLInfo>
+                            <URLImage>
+                                <img src={image} alt='' />
+                            </URLImage>
+                        </ContainerUrl>
+                    </ContainerPost>
+                </Publication>
+            }
+        </>
+    )
 }
-
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
@@ -129,7 +135,7 @@ h1{
     font-weight: 400;
 }
 h2{
-    margin-top: 5px;
+    margin-top: 10px;
     font-size: 1.05rem;
     color: #B7B7B7;
     margin-bottom: 20px;
@@ -182,6 +188,14 @@ img{
     border-radius: 0 10px 10px 0;
 }
 `
+const IconTrash = styled(BsTrash)`
+color: white;
+margin-right: 20px;
+`
+const DivDispl = styled.div`
+display: flex;
+justify-content: space-between;
+`
 const HashtagLink = styled(Link)`
 text-decoration: none;
 `
@@ -193,4 +207,3 @@ font-weight: 700;
     cursor: pointer;
 }
 `;
-
