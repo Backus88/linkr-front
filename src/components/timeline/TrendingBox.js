@@ -15,7 +15,7 @@ export default function TrendingBox(props){
     
     function getTrending(){
         setLoading(true)
-        const promise = axios.get('https://linkr-db.herokuapp.com/trending')
+        const promise = axios.get('http://localhost:4000/trending')
         promise.then(response => {
             let data = [...response.data]
             setHashtag(data)

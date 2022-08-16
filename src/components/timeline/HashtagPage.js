@@ -50,7 +50,7 @@ export default function Timeline() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get(`https://linkr-db.herokuapp.com/hashtag/${newHashtag}`, config)
+            const promise = axios.get(`http://localhost:4000/hashtag/${newHashtag}`, config)
             promise.then(response => {
                 console.log(response.data);
                 let data = [...new Set(response.data)]

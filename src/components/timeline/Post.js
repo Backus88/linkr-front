@@ -22,8 +22,6 @@ export default function Post(props) {
   const [deleteIcon, setDeleteIcon] = useState(false)
 
   let {
-      hashtagController,
-      setHashtagController,
       username,
       description,
       renderById,
@@ -35,7 +33,7 @@ export default function Post(props) {
   } = props
   function getMetadata() {
       const promise = axios.get(
-          `https://linkr-db.herokuapp.com/url-metadata?url=${url}`)
+          `http://localhost:4000/url-metadata?url=${url}`)
       promise.then(response => {
           setTitle(response.data.title)
           setDescrip(response.data.description)
@@ -112,7 +110,11 @@ export default function Post(props) {
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
+<<<<<<< HEAD
 max-width: 560px; 
+=======
+max-width: 560px;
+>>>>>>> e490e03dd6deb35016f0e18def036e40992c5d43
 width: 100%;
 height: auto;
 margin: 40px auto;
