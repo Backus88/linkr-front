@@ -3,6 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import EditPost from "./EditPost";
 
+
 export default function PublishPost(props) {
   const [imgLocal, setImgLocal] = useState('')
   const [enabled, setEnabled] = useState(true)

@@ -10,6 +10,7 @@ import Post from "./Post";
 import TrendingBox from "./TrendingBox";
 import MediaQuery from 'react-responsive'
 import TimelineMobile from "./timeline_mobile/TimelineMobile";
+import NewPosts from "./NewPost";
 
 
 export default function Timeline() {
@@ -105,10 +106,6 @@ export default function Timeline() {
 
     useEffect(getPost, [id,location,newId, canPublish])
 
-    function getUser() {
-        const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
-        promise.then(response => setUser(response.data))
-    }
     return (
         <>
         <MediaQuery minWidth={1280}>
@@ -120,7 +117,8 @@ export default function Timeline() {
             {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
             {canPublish ? <PublishPost getPost={getPost} 
             hashtagController={hashtagController} 
-            setHashtagController={setHashtagController} /> : null}
+            setHashtagController={setHashtagController} /> : null} 
+            <NewPosts getPost={getPost} post = {post} loading = {loading}/>
             {loading ?
                 <>
                     <IconLoading />
