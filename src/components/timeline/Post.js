@@ -113,7 +113,8 @@ export default function Post(props) {
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
-width: 560px;
+max-width: 560px;
+width: 100%;
 height: auto;
 margin: 40px auto;
 background: #171717;

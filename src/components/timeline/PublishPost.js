@@ -125,9 +125,9 @@ const Publish = styled.div`
 position: relative;
 display: flex;
 justify-content: space-between;
-width: 560px;
+width:100%;
+max-width: 560px;
 height: 210px;
-/* margin-top: 40px; */
 margin: 40px auto;
 background: #FFFFFF;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
