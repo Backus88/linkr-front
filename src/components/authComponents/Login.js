@@ -13,6 +13,8 @@ export default function Login(){
 
   const { setInfo } = useContext(UserContext);
   const {local, setLocal} = useContext(UserContext);
+  
+
 
   const [login, setLogIn] = useState({
     email: '',
@@ -32,6 +34,9 @@ export default function Login(){
       e.target.style.background = "grey";
     }
 
+    const URI = process.env.REACT_APP_DATABASE_URI
+    console.log(URI)
+    
     console.log('clicked')
 
     if(!login.email || !login.password){
@@ -40,7 +45,7 @@ export default function Login(){
       e.target.style.background = '#1877F2';
     } 
 
-    const URL = "https://linkr-db.herokuapp.com/signin"
+    const URL = `${URI}/signin`
     const signIn = login;
     const promise = axios.post(URL, signIn)
     promise

@@ -176,7 +176,7 @@ width: 43%;
 ` 
 
 const Title = styled.div`
-width: 40%;
+width: 100%;
 font-family: 'Oswald';
 font-style: normal;
 font-weight: 700;
