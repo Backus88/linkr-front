@@ -8,13 +8,13 @@ import LoginMobile from "./LoginMobile";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
 
-
 export default function Login(){
 
+  const URI = process.env.REACT_APP_DATABASE_URI
   const { setInfo } = useContext(UserContext);
   const {local, setLocal} = useContext(UserContext);
   
-
+  console.log(URI)
 
   const [login, setLogIn] = useState({
     email: '',
@@ -34,9 +34,6 @@ export default function Login(){
       e.target.style.background = "grey";
     }
 
-    const URI = process.env.REACT_APP_DATABASE_URI
-    console.log(URI)
-    
     console.log('clicked')
 
     if(!login.email || !login.password){

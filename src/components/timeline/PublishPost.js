@@ -16,7 +16,9 @@ export default function PublishPost(props) {
           "Authorization": 'Bearer ' + local
       }
   }
+  const URI = process.env.REACT_APP_DATABASE_URI
 
+  console.log(description)
   console.log(description)
 
   useEffect(()=>{
@@ -47,6 +49,7 @@ export default function PublishPost(props) {
   function publish(e) {
       e.preventDefault()
       setEnabled(false)
+      console.log(editing)
       if(editing){
         const body ={
             url: url,
@@ -54,11 +57,11 @@ export default function PublishPost(props) {
             id: postId
         }
         console.log(body)
-        const promise = axios.put('https://linkr-db.herokuapp.com/post',body, config)
+        const promise = axios.put(`${URI}/post`,body, config)
         promise.catch(tratarError);
         promise.then(tratarSucesso);
       }else{
-        const promise = axios.post('https://linkr-db.herokuapp.com/post', {
+        const promise = axios.post(`${URI}/post`, {
             url: url,
             description: description
         }, config)
@@ -123,9 +126,9 @@ const Publish = styled.div`
 position: relative;
 display: flex;
 justify-content: space-between;
-width: 560px;
+width:100%;
+max-width: 560px;
 height: 210px;
-/* margin-top: 40px; */
 margin: 40px auto;
 background: #FFFFFF;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);

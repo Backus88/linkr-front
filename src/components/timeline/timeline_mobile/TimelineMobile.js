@@ -11,6 +11,7 @@ import SearchBarMobile from "./SearchBarMobile";
 
 
 export default function TimelineMobile() {
+    const URI = process.env.REACT_APP_DATABASE_URI
     const [post, setPost] = useState([]);
     const [user, setUser] = useState([]);
     const [username, setUsername]= useState('');
@@ -45,7 +46,7 @@ export default function TimelineMobile() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get('http://localhost:4000/post', config)
+            const promise = axios.get(`${URI}/post`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
@@ -59,14 +60,14 @@ export default function TimelineMobile() {
             setCanPublish(true)
 
         }else{
-            const promise = axios.get(`http://localhost:4000/user/${id}`, config)
+            const promise = axios.get(`${URI}/user/${id}`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
 
-            const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
+            const userById = axios.get(`${URI}/user?id=${id}`, config);
             userById.then(response => {
                 let data = {...response.data}
                 setUsername(data)
@@ -91,7 +92,7 @@ export default function TimelineMobile() {
     useEffect(getPost, [id,location,newId, canPublish])
 
     function getUser() {
-        const promise = axios.get('http://localhost:4000/post', config)
+        const promise = axios.get(`${URI}/post`, config)
         promise.then(response => setUser(response.data))
     }
     return (

@@ -13,12 +13,13 @@ import TimelineMobile from "./timeline_mobile/TimelineMobile";
 
 
 export default function Timeline() {
+    const URI = process.env.REACT_APP_DATABASE_URI
     const [post, setPost] = useState([]);
     const [user, setUser] = useState([]);
     const [username, setUsername]= useState('');
-    const [hashtagController, setHashtagController] = useState(false)
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
+    const [hashtagController, setHashtagController] = useState(false);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
     const [crash, setCrash] = useState(false)
@@ -60,7 +61,8 @@ export default function Timeline() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
+
+            const promise = axios.get(`${URI}/post`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
@@ -74,14 +76,14 @@ export default function Timeline() {
             setCanPublish(true)
 
         }else{
-            const promise = axios.get(`https://linkr-db.herokuapp.com/user/${id}`, config)
+            const promise = axios.get(`${URI}/user/${id}`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
 
-            const userById = axios.get(`https://linkr-db.herokuapp.com/user?id=${id}`, config);
+            const userById = axios.get(`${URI}/user?id=${id}`, config);
             userById.then(response => {
                 let data = {...response.data}
                 setUsername(data)
@@ -106,7 +108,7 @@ export default function Timeline() {
     useEffect(getPost, [id,location,newId, canPublish])
 
     function getUser() {
-        const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
+        const promise = axios.get(`${URI}/post`, config)
         promise.then(response => setUser(response.data))
     }
     return (
@@ -173,6 +175,7 @@ margin: auto;
 
 const Main = styled.div`
 width: 43%;
+max-width: 560px;
 ` 
 
 const Title = styled.div`

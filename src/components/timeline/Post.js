@@ -9,6 +9,8 @@ import { BsTrash } from "react-icons/bs";
 import ModalDelete from "./modalDelete";
 import ReactHashtag from "@mdnm/react-hashtag";
 import PublishPost from "./PublishPost";
+import Repost from "./Repost";
+import Comment from "./Comment";
 
 
 export default function Post(props) {
@@ -21,10 +23,9 @@ export default function Post(props) {
   const [visible, setVisible] = useState(false);
   const localId = localStorage.getItem("id");
   const [deleteIcon, setDeleteIcon] = useState(false)
+  const URI = process.env.REACT_APP_DATABASE_URI
 
   let {
-      hashtagController,
-      setHashtagController,
       username,
       description,
       renderById,
@@ -32,11 +33,13 @@ export default function Post(props) {
       url,
       imageProfile,
       idPost,
-      getPost
+      getPost,
+      hashtagController,
+      setHashtagController
   } = props
   function getMetadata() {
       const promise = axios.get(
-          `https://linkr-db.herokuapp.com/url-metadata?url=${url}`)
+          `${URI}/url-metadata?url=${url}`)
       promise.then(response => {
           setTitle(response.data.title)
           setDescrip(response.data.description)
@@ -68,6 +71,8 @@ export default function Post(props) {
             <ProfileImage>            
                 <img src={imageProfile}/>
                 <Like idPost ={idPost} />
+                <Comment />
+                <Repost userId={userId} postId={idPost} getPost={getPost} hashtagController={hashtagController} setHashtagController={setHashtagController}/>
             </ProfileImage>
             <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} hashtagController={hashtagController} 
                             setHashtagController={setHashtagController}
@@ -113,7 +118,8 @@ export default function Post(props) {
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
-width: 560px;
+max-width: 560px;
+width: 100%;
 height: auto;
 margin: 40px auto;
 background: #171717;
@@ -121,8 +127,9 @@ box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;
 position:relative;
 `
-
 const ProfileImage = styled.div`
+display: flex;
+flex-direction: column;
 
 img{
 background-color : black;
@@ -199,8 +206,6 @@ p{
     text-overflow: ellipsis; 
     color: white;
 }
-
-
 `
 
 const URLImage = styled.div`
@@ -230,4 +235,4 @@ font-weight: 700;
 :hover{
     cursor: pointer;
 }
-`;
+`
