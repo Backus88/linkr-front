@@ -10,12 +10,13 @@ import Post from "./Post";
 import TrendingBox from "./TrendingBox";
 import MediaQuery from 'react-responsive'
 import TimelineMobile from "./timeline_mobile/TimelineMobile";
+import InfiniteScroll from 'react-infinite-scroller';
 
 
 export default function Timeline() {
     const [post, setPost] = useState([]);
     const [user, setUser] = useState([]);
-    const [username, setUsername]= useState('');
+    const [username, setUsername] = useState('');
     const [hashtagController, setHashtagController] = useState(false)
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
@@ -25,6 +26,7 @@ export default function Timeline() {
     const { id: newId } = useParams();
     const local = localStorage.getItem("token");
     const localId = localStorage.getItem("id");
+    const [hasMore, setHasMore] = useState(true)
     console.log(localStorage)
     console.log(local)
     let location = useLocation();
@@ -34,46 +36,62 @@ export default function Timeline() {
         }
     }
 
-    function checkToken(){
+    function checkToken() {
         const token = localStorage.getItem("token")
-    
-        if(!token){
-          return navigate('/')
+
+        if (!token) {
+            return navigate('/')
         }
-      }
-    
-      useEffect(()=>{
+    }
+
+    useEffect(() => {
         checkToken()
     }, [])
 
 
     function renderById(id) {
-        if(parseInt(id) !== parseInt(localId)){
+        if (parseInt(id) !== parseInt(localId)) {
             navigate(`/user/${id}`);
-        }else{
+        } else {
             navigate('/timeline');
         }
-        
+
+    }
+    
+    function handleHasMore(){
+       
+        if (!loading) {
+            getPost()
+        }
     }
 
     function getPost() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
-            promise.then(response => {
-                let data = [...response.data]
-                setPost(data)
+                const offset = post.length
+                const promise = axios.get(`http://localhost:4000/post?offset=${offset}`, config)
+                promise.then(response => {
+                    let data = [...post, ...response.data]
+                    let size = post.length
+                    if(size > 0 && (post[size-1].id === response.data[response.data.length-1].id)){
+                        setHasMore(false)
+                    }else{
+                        setPost(data)
+                        
+                    }
+                    
+                    setLoading(false)
+                })
+                promise.catch(() => {
+                    setLoading(false)
+                    setCrash(true)
+                })
+                setCanPublish(true)
                 setLoading(false)
-            })
+           
 
-            promise.catch(()=> {
-                setLoading(false)
-                setCrash(true)
-            })
-            setCanPublish(true)
-
-        }else{
+        } else {
             const promise = axios.get(`https://linkr-db.herokuapp.com/user/${id}`, config)
             promise.then(response => {
                 let data = [...response.data]
@@ -83,17 +101,17 @@ export default function Timeline() {
 
             const userById = axios.get(`https://linkr-db.herokuapp.com/user?id=${id}`, config);
             userById.then(response => {
-                let data = {...response.data}
+                let data = { ...response.data }
                 setUsername(data)
                 setLoading(false)
             });
-          
 
-            promise.catch(()=> {
+
+            promise.catch(() => {
                 setLoading(false)
                 setCrash(true)
             })
-            userById.catch(()=> {
+            userById.catch(() => {
                 setLoading(false)
                 setCrash(true)
             })
@@ -103,7 +121,7 @@ export default function Timeline() {
     }
 
 
-    useEffect(getPost, [id,location,newId, canPublish])
+    //useEffect(getPost, [id, location, newId, canPublish])
 
     function getUser() {
         const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
@@ -111,53 +129,66 @@ export default function Timeline() {
     }
     return (
         <>
-        <MediaQuery minWidth={1280}>
-            <GlobalStyle />
-            <Header />
-            <Container>
-                <Main>
+            <MediaQuery minWidth={1280}>
+                <GlobalStyle />
+                <Header />
+                <Container>
+                    <Main>
 
-            {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
-            {canPublish ? <PublishPost getPost={getPost} 
-            hashtagController={hashtagController} 
-            setHashtagController={setHashtagController} /> : null}
-            {loading ?
-                <>
-                    <IconLoading />
-                    <MsgLoading>loading...</MsgLoading>
-                </>
-                :
-                crash ?
-                    <>
-                        <MsgError>
-                            An error occured while trying to fetch the posts,
-                            please refresh the page
-                        </MsgError>
-                    </>
-                    :
-                    post.length > 0 ? post.map((item, index) =>
-                        <Post username={item.username}
-                            description={item.description}
-                            renderById={renderById}
-                            userId={item.userId}
-                            url={item.url}
-                            imageProfile = {item.profileImgUrl}
-                            key={item.url + index}
-                            idPost={item.id}
-                            getPost = {getPost}
-                            hashtagController={hashtagController} 
-                            setHashtagController={setHashtagController}
-                                />
-                    )
-                        :
-                            <MsgError>There are no posts yet</MsgError>}
-                </Main>
-            <TrendingBox hashtagController={hashtagController} />
-            </Container>
-        </MediaQuery>
-        <MediaQuery maxWidth={1279}>
-            <TimelineMobile />
-        </MediaQuery>
+                        {canPublish ? <Title>timeline</Title> : <Title>{username.username}'s posts</Title>}
+                        {canPublish ? <PublishPost getPost={getPost}
+                            hashtagController={hashtagController}
+                            setHashtagController={setHashtagController} /> : null}
+                        {loading ?
+                            <>
+                                <IconLoading />
+                                <MsgLoading>loading...</MsgLoading>
+                            </>
+                            :
+                            crash ?
+                                <>
+                                    <MsgError>
+                                        An error occured while trying to fetch the posts,
+                                        please refresh the page
+                                    </MsgError>
+                                </>
+                                :
+                                <InfiniteScroll
+                                        loadMore={handleHasMore}
+                                        pageStart={0}
+                                        hasMore={hasMore}
+                                        loader={<div className="loader" key={0}
+                                        style={{clear: "both"}}>Loading ...</div>
+                                        } 
+                                        initialLoad={true}
+                                        style={{overflowY: "auto", clear: "both"}}
+                                    >
+                                {post.length > 0 ?
+                                    
+                                        post.map((item, index) =>
+                                            <Post username={item.username}
+                                                description={item.description}
+                                                renderById={renderById}
+                                                userId={item.userId}
+                                                url={item.url}
+                                                imageProfile={item.profileImgUrl}
+                                                key={item.url + index}
+                                                idPost={item.id}
+                                                getPost={getPost}
+                                                hashtagController={hashtagController}
+                                                setHashtagController={setHashtagController}
+                                            />
+                                        )
+                                     :
+                                    <MsgError>There are no posts yet</MsgError>}
+                                    </InfiniteScroll>}
+                    </Main>
+                    <TrendingBox hashtagController={hashtagController} />
+                </Container>
+            </MediaQuery>
+            <MediaQuery maxWidth={1279}>
+                <TimelineMobile />
+            </MediaQuery>
         </>
     )
 }
@@ -174,7 +205,7 @@ margin: auto;
 const Main = styled.div`
 width: 43%;
 max-width: 560px;
-` 
+`
 
 const Title = styled.div`
 width: 40%;
