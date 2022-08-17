@@ -63,7 +63,7 @@ export default function SignUp(){
 
   return(
     <>
-      <MediaQuery minWidth={1024}>
+      <MediaQuery minWidth={1280}>
       <SignUpPage>
         <Logo>
           <h1>linkr</h1>
@@ -100,7 +100,7 @@ export default function SignUp(){
         </Form>
       </SignUpPage>
       </MediaQuery>
-      <MediaQuery maxWidth={1023}>
+      <MediaQuery maxWidth={1279}>
         <SignUpMobile />
       </MediaQuery>
     </>

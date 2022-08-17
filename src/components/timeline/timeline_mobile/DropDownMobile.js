@@ -15,7 +15,7 @@ export default function DropdownMobile ({usernameString,querieController, setSea
             "Authorization": `Bearer ${token}`
         }
     }
-    const route =`https://linkr-db.herokuapp.com/user?username=${usernameString}`;
+    const route =`http://localhost:4000/user?username=${usernameString}`;
     useEffect(()=>{
         const querieUsernames =async ()=>{
             try{

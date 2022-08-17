@@ -10,6 +10,7 @@ import Post from "./Post";
 import TrendingBox from "./TrendingBox";
 import MediaQuery from 'react-responsive'
 import TimelineMobile from "./timeline_mobile/TimelineMobile";
+import Follow from "./Follow";
 
 
 export default function Timeline() {
@@ -18,6 +19,7 @@ export default function Timeline() {
     const [username, setUsername]= useState('');
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
+    const [hashtagController, setHashtagController] = useState(false);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
     const [crash, setCrash] = useState(false)
@@ -151,7 +153,10 @@ export default function Timeline() {
                         :
                             <MsgError>There are no posts yet</MsgError>}
                 </Main>
-            <TrendingBox hashtagController={hashtagController} />
+                <RightSide>
+                {canPublish?<></>:<Follow followedId={id} config={config} />}
+                <TrendingBox hashtagController={hashtagController} />
+                </RightSide>
             </Container>
         </MediaQuery>
         <MediaQuery maxWidth={1279}>
@@ -230,4 +235,10 @@ font-weight: 400;
 font-size: 30px;
 margin: 60px auto 0px auto;
 text-align: center;
+`
+
+const RightSide = styled.div`
+display: flex;
+flex-direction: column;
+align-items: flex-end;
 `

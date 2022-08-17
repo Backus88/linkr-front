@@ -53,11 +53,11 @@ export default function PublishPostMobile(props) {
             id: postId
         }
         console.log(body)
-        const promise = axios.put('https://linkr-db.herokuapp.com/post',body, config)
+        const promise = axios.put('http://localhost:4000/post',body, config)
         promise.catch(tratarError);
         promise.then(tratarSucesso);
       }else{
-        const promise = axios.post('https://linkr-db.herokuapp.com/post', {
+        const promise = axios.post('http://localhost:4000/post', {
 
             url: url,
             description: description

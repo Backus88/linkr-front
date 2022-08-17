@@ -10,6 +10,7 @@ import ModalDelete from "./modalDelete";
 import ReactHashtag from "@mdnm/react-hashtag";
 import PublishPost from "./PublishPost";
 
+
 export default function Post(props) {
 
   const [title, setTitle] = useState('');
@@ -29,7 +30,9 @@ export default function Post(props) {
       url,
       imageProfile,
       idPost,
-      getPost
+      getPost,
+      hashtagController,
+      setHashtagController
   } = props
   function getMetadata() {
       const promise = axios.get(
@@ -110,11 +113,7 @@ export default function Post(props) {
 const Publication = styled.div`
 display: flex;
 justify-content: space-between;
-<<<<<<< HEAD
-max-width: 560px; 
-=======
 max-width: 560px;
->>>>>>> e490e03dd6deb35016f0e18def036e40992c5d43
 width: 100%;
 height: auto;
 margin: 40px auto;
