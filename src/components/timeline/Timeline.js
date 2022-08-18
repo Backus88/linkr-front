@@ -14,6 +14,7 @@ import Follow from "./Follow";
 
 
 export default function Timeline() {
+    const URI = process.env.REACT_APP_DATABASE_URI
     const [post, setPost] = useState([]);
     const [user, setUser] = useState([]);
     const [username, setUsername]= useState('');
@@ -47,6 +48,21 @@ export default function Timeline() {
         checkToken()
     }, [])
 
+    useEffect(() => {
+        getReposts()
+      },[])
+    
+      async function getReposts(){
+        try {
+          const promise = await axios.get(`${URI}/repost-count`)
+          console.log(promise.data)
+          const count = promise.data.count
+          console.log(count)
+        } catch (error) {
+          console.error(error)
+        }
+      }
+
 
     function renderById(id) {
         if(parseInt(id) !== parseInt(localId)){
@@ -61,7 +77,8 @@ export default function Timeline() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get('http://localhost:4000/post', config)
+
+            const promise = axios.get(`${URI}/post`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
@@ -75,14 +92,14 @@ export default function Timeline() {
             setCanPublish(true)
 
         }else{
-            const promise = axios.get(`http://localhost:4000/user/${id}`, config)
+            const promise = axios.get(`${URI}/user/${id}`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
 
-            const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
+            const userById = axios.get(`${URI}/user?id=${id}`, config);
             userById.then(response => {
                 let data = {...response.data}
                 setUsername(data)
@@ -107,7 +124,7 @@ export default function Timeline() {
     useEffect(getPost, [id,location,newId, canPublish])
 
     function getUser() {
-        const promise = axios.get('http://localhost:4000/post', config)
+        const promise = axios.get(`${URI}/post`, config)
         promise.then(response => setUser(response.data))
     }
     return (
@@ -181,7 +198,7 @@ max-width: 560px;
 ` 
 
 const Title = styled.div`
-width: 40%;
+width: 100%;
 font-family: 'Oswald';
 font-style: normal;
 font-weight: 700;

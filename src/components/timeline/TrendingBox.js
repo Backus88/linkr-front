@@ -15,7 +15,8 @@ export default function TrendingBox(props){
     
     function getTrending(){
         setLoading(true)
-        const promise = axios.get('http://localhost:4000/trending')
+        const URI = process.env.REACT_APP_DATABASE_URI
+        const promise = axios.get(`${URI}/trending`)
         promise.then(response => {
             let data = [...response.data]
             setHashtag(data)
@@ -124,9 +125,13 @@ text-align: center;
 `
 
 const Main = styled.div`
+<<<<<<< HEAD
 padding-bottom: 20px;
 padding-left: 16px;
 /* margin: 22px auto 5px 16px; */
+=======
+margin: 14px auto 5px 16px;
+>>>>>>> 6f53a08a35467118be445d70ee2e8773f1f38bc8
 `
 
 const HashtagDiv = styled.div`

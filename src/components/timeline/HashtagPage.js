@@ -21,6 +21,7 @@ export default function Timeline() {
     const { id: newId } = useParams();
     const { hashtag: newHashtag} = useParams();
     const local = localStorage.getItem("token");
+    const URI = process.env.REACT_APP_DATABASE_URI
     console.log(localStorage)
     console.log(local)
     let location = useLocation();
@@ -50,7 +51,7 @@ export default function Timeline() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get(`http://localhost:4000/hashtag/${newHashtag}`, config)
+            const promise = axios.get(`${URI}/hashtag/${newHashtag}`, config)
             promise.then(response => {
                 console.log(response.data);
                 let data = [...new Set(response.data)]
@@ -66,14 +67,22 @@ export default function Timeline() {
             setCanPublish(true)
 
         }else{
+<<<<<<< HEAD
             const promise = axios.get(`http://localhost:4000/user/${id}`, config)
+=======
+            const promise = axios.get(`${URI}/user/${id}`, config)
+>>>>>>> 6f53a08a35467118be445d70ee2e8773f1f38bc8
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
 
+<<<<<<< HEAD
             const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
+=======
+            const userById = axios.get(`${URI}/user?id=${id}`, config);
+>>>>>>> 6f53a08a35467118be445d70ee2e8773f1f38bc8
             userById.then(response => {
                 let data = {...response.data}
                 setUsername(data)
@@ -98,7 +107,11 @@ export default function Timeline() {
     useEffect(getPost, [id,location,newId, canPublish])
 
     function getUser() {
+<<<<<<< HEAD
         const promise = axios.get('http://localhost:4000/post', config)
+=======
+        const promise = axios.get(`${URI}/post`, config)
+>>>>>>> 6f53a08a35467118be445d70ee2e8773f1f38bc8
         promise.then(response => setUser(response.data))
     }
     return (

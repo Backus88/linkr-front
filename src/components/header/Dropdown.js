@@ -16,9 +16,10 @@ export default function Dropdown ({usernameString,querieController, setSearching
             "Authorization": `Bearer ${token}`
         }
     }
-    const route =`http://localhost:4000/user?username=${usernameString}`;
+    const URI = process.env.REACT_APP_DATABASE_URI
+    const route =`${URI}/user?username=${usernameString}`;
     useEffect(()=>{
-        const querieUsernames =async ()=>{
+        const querieUsernames = async ()=>{
             try{
                 const {data:arrayUsernames} = await axios.get(route, config);
                 setQuerie([...arrayUsernames]);
