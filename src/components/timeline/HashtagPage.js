@@ -67,22 +67,14 @@ export default function Timeline() {
             setCanPublish(true)
 
         }else{
-<<<<<<< HEAD
-            const promise = axios.get(`http://localhost:4000/user/${id}`, config)
-=======
             const promise = axios.get(`${URI}/user/${id}`, config)
->>>>>>> 6f53a08a35467118be445d70ee2e8773f1f38bc8
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
 
-<<<<<<< HEAD
-            const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
-=======
             const userById = axios.get(`${URI}/user?id=${id}`, config);
->>>>>>> 6f53a08a35467118be445d70ee2e8773f1f38bc8
             userById.then(response => {
                 let data = {...response.data}
                 setUsername(data)
@@ -107,11 +99,7 @@ export default function Timeline() {
     useEffect(getPost, [id,location,newId, canPublish])
 
     function getUser() {
-<<<<<<< HEAD
-        const promise = axios.get('http://localhost:4000/post', config)
-=======
         const promise = axios.get(`${URI}/post`, config)
->>>>>>> 6f53a08a35467118be445d70ee2e8773f1f38bc8
         promise.then(response => setUser(response.data))
     }
     return (

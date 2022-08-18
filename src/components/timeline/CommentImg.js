@@ -2,12 +2,16 @@ import React from "react"
 import { AiOutlineComment } from "react-icons/ai";
 import styled from "styled-components";
 
-export default function Comment(){
+export default function CommentImg({commentCount , showComments, setShowComments}){
+
+  function handleClick(){
+    setShowComments(!showComments)
+  }
 
   return(
     <CommentPage>
-      <CommentIcon/>
-      <CommentCount>0 comments</CommentCount>
+      <CommentIcon role='button' onClick={handleClick} />
+      <CommentCount>{commentCount} comments</CommentCount>
     </CommentPage>
   )
 }
@@ -23,6 +27,7 @@ width: 30px;
 height: 36px;
 color: white;
 margin-left: 12px;
+cursor: pointer;
 `
 
 const CommentCount = styled.div`

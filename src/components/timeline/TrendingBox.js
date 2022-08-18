@@ -125,13 +125,10 @@ text-align: center;
 `
 
 const Main = styled.div`
-<<<<<<< HEAD
 padding-bottom: 20px;
 padding-left: 16px;
 /* margin: 22px auto 5px 16px; */
-=======
-margin: 14px auto 5px 16px;
->>>>>>> 6f53a08a35467118be445d70ee2e8773f1f38bc8
+//margin: 14px auto 5px 16px;
 `
 
 const HashtagDiv = styled.div`

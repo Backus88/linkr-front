@@ -129,7 +129,7 @@ export default function Timeline() {
     }
     return (
         <>
-        <MediaQuery minWidth={1280}>
+        <MediaQuery minWidth={700}>
             <GlobalStyle />
             <Header />
             <Container>
@@ -176,7 +176,7 @@ export default function Timeline() {
                 </RightSide>
             </Container>
         </MediaQuery>
-        <MediaQuery maxWidth={1279}>
+        <MediaQuery maxWidth={699}>
             <TimelineMobile />
         </MediaQuery>
         </>
@@ -192,7 +192,7 @@ justify-content:center;
 margin: auto;
 `
 
-const Main = styled.div`
+export const Main = styled.div`
 width: 43%;
 max-width: 560px;
 ` 

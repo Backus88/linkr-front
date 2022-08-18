@@ -102,7 +102,7 @@ export default function PublishPost(props) {
                       <EditPost userId ={userId} setEditing={setEditing} editing={true} top={'10px'}/>
                       <ContainerPost>
                           <ShareHeader>What are you going to share today?</ShareHeader>
-                          <input ref={inputPublish} type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
+                          <input  onKeyDown={e => handleKeyDown(e)} ref={inputPublish} type='text' value={url} placeholder="http://..." onChange={e => setUrl(e.target.value)} />
                           <textarea onKeyDown={e => handleKeyDown(e)} value={description} type='text' placeholder="Awesome article about #javascript" onChange={e => setDescription(e.target.value)}></textarea>
                           <button onClick={e => publish(e)} type="submit">Publish</button>
                       </ContainerPost>

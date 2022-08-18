@@ -58,12 +58,7 @@ export default function PublishPostMobile(props) {
         promise.catch(tratarError);
         promise.then(tratarSucesso);
       }else{
-<<<<<<< HEAD
-        const promise = axios.post('http://localhost:4000/post', {
-
-=======
         const promise = axios.post(`${URI}/post`, {
->>>>>>> 6f53a08a35467118be445d70ee2e8773f1f38bc8
             url: url,
             description: description
         }, config)
