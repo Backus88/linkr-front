@@ -16,6 +16,7 @@ export default function PublishPost(props) {
           "Authorization": 'Bearer ' + local
       }
   }
+  const URI = process.env.REACT_APP_DATABASE_URI
 
   console.log(description)
   console.log(description)
@@ -56,11 +57,11 @@ export default function PublishPost(props) {
             id: postId
         }
         console.log(body)
-        const promise = axios.put('http://localhost:4000/post',body, config)
+        const promise = axios.put(`${URI}/post`,body, config)
         promise.catch(tratarError);
         promise.then(tratarSucesso);
       }else{
-        const promise = axios.post('http://localhost:4000/post', {
+        const promise = axios.post(`${URI}/post`, {
             url: url,
             description: description
         }, config)
@@ -128,7 +129,7 @@ justify-content: space-between;
 width:100%;
 max-width: 560px;
 height: 210px;
-margin: 40px auto;
+margin: 40px auto 40px auto;
 background: #FFFFFF;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;

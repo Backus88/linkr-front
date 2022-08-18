@@ -6,13 +6,15 @@ import { TbSend } from 'react-icons/tb';
 import {BsFillCircleFill} from 'react-icons/bs'
 
 
-export default function Comments({userId, postId}) {
+export default function Comments({ userId, postId, setCommentCount, showComments }) {
     const [renderComment, setRenderComment]= useState(false);
     const [cantComment, setCantComment]= useState(false);
     const [commentary, setCommentary]= useState('');
     const [infoComment, setInfoComment] = useState([]);
+    const [isAuthor, setIsAuthor]= useState(false);
     const local = localStorage.getItem("token");
     const imgLocal =localStorage.getItem("img");
+    const id =localStorage.getItem("id");
     console.log(postId);
     const config = {
         headers: {
@@ -26,6 +28,12 @@ export default function Comments({userId, postId}) {
                 const {data: commentsInfo} = await axios.get(`http://localhost:4000/comment/${parseInt(postId)}`, config);
                 console.log(commentsInfo);
                 setInfoComment([...commentsInfo]);
+                setCommentCount(commentsInfo.length);
+                if(parseInt(id)===parseInt(userId)){
+                    setIsAuthor(true);
+                }else{
+                    setIsAuthor(false);
+                }
             }catch(error){
                 console.log(error);
             }
@@ -63,23 +71,31 @@ export default function Comments({userId, postId}) {
 
     return (
         <ColumnDiv>
-        {infoComment?.map((item, index)=>{
-            return(
-            <CommentItens key={index}>
-                <img src={item.profileImgUrl} alt="" />
-                <ColumnDiv>
-                    <TitleDiv>
-                        <h1>{item.username}</h1>
-                        <CircleIcon/>
-                        <h2>relacao</h2>
-                    </TitleDiv>
-                    <TextDiv>
-                        <h3>{item.commentary}</h3>
-                    </TextDiv>
-                </ColumnDiv>
-                <Border/>
-            </CommentItens>
-        )})}
+         {showComments?
+         <>
+            {infoComment?.map((item, index)=>{
+                return(
+                <CommentItens key={index}>
+                    <img src={item.profileImgUrl} alt="" />
+                    <ColumnDiv>
+                        <TitleDiv>
+                            <h1>{item.username}</h1>
+                            {isAuthor?
+                                <>
+                                    <CircleIcon/>
+                                    <h2>{"post’s author"}</h2>
+                                </>
+                            :null}
+                        </TitleDiv>
+                        <TextDiv>
+                            <h3>{item.commentary}</h3>
+                        </TextDiv>
+                    </ColumnDiv>
+                    <Border/>
+                </CommentItens>
+            )})}
+         </>
+         :null}
             <CommentBox>
                 <img src={imgLocal} alt='' />
                 <CommentInputBox>
@@ -104,18 +120,18 @@ const ColumnDiv = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
 `
 
 const CommentItens = styled.div`
     width: 100%;
     height: auto;
     padding: 5px 0px;
+    padding-left: 16px;
     min-height: 71px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin: 0px 15px;
     position: relative;
     /* flex-wrap: wrap; */
     word-break: break-all;
@@ -125,13 +141,13 @@ const CommentItens = styled.div`
         border-radius: 50%; 
         object-fit: cover;
         margin-left: 3px;
-        margin-right: 18px;
+        margin-right: 0px;
     }
 `
 const Border = styled.div`
     position: absolute;
     bottom: 0;
-    left: 6px;
+    left: 20px;
     width: 93%;
     border-bottom: 1px solid #353535;
 `;
@@ -141,9 +157,9 @@ const TitleDiv = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: auto;
+    justify-content: baseline;
+    width: 90%;
     height: auto;
-    max-width: 60%;
     h1{
         font-size: 16px;
         font-style: bold;
