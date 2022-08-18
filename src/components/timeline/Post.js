@@ -9,6 +9,7 @@ import { BsTrash } from "react-icons/bs";
 import ModalDelete from "./modalDelete";
 import ReactHashtag from "@mdnm/react-hashtag";
 import PublishPost from "./PublishPost";
+import Comments from "./Comments";
 
 
 export default function Post(props) {
@@ -64,46 +65,50 @@ export default function Post(props) {
         hashtagController={hashtagController} 
         setHashtagController={setHashtagController}/>
       :
-        <Publication className="post">
-            <ProfileImage>            
-                <img src={imageProfile}/>
-                <Like idPost ={idPost} />
-            </ProfileImage>
-            <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} hashtagController={hashtagController} 
-                            setHashtagController={setHashtagController}
-                             />
-            <ContainerPost>
-               <DivDispl>
-                <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
-                <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
+        <ColumnDiv>
+            <Publication className="post">
+                <ProfileImage>            
+                    <img src={imageProfile}/>
+                    <Like idPost ={idPost} />
+                </ProfileImage>
+                <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} hashtagController={hashtagController} 
+                                setHashtagController={setHashtagController}
+                                />
                 
-                {deleteIcon? <IconTrash userId={userId} onClick={() => setVisible(true)} /> : null}
-                </DivDispl>
-                <h2>
-                    <ReactHashtag 
-                            renderHashtag={(hashtagValue) => {
-                                return (
-                                    <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
-                                    <Hashtag>{hashtagValue}</Hashtag>
-                                    </HashtagLink>
-                                )
-                            }}>  
-                        {description}
-                    </ReactHashtag>
-                </h2>
+                <ContainerPost>
+                <DivDispl>
+                    <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
+                    <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
+                    
+                    {deleteIcon? <IconTrash userId={userId} onClick={() => setVisible(true)} /> : null}
+                    </DivDispl>
+                    <h2>
+                        <ReactHashtag 
+                                renderHashtag={(hashtagValue) => {
+                                    return (
+                                        <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
+                                        <Hashtag>{hashtagValue}</Hashtag>
+                                        </HashtagLink>
+                                    )
+                                }}>  
+                            {description}
+                        </ReactHashtag>
+                    </h2>
 
-                <ContainerUrl onClick={() => window.open(uri)}>
-                    <URLInfo>
-                        <h1>{title}</h1>
-                        <h2>{descrip}</h2>
-                        <p>{uri}</p>
-                    </URLInfo>
-                    <URLImage>
-                        <img src={image} alt=''/>
-                    </URLImage>
-                </ContainerUrl>
-            </ContainerPost>
-        </Publication>
+                    <ContainerUrl onClick={() => window.open(uri)}>
+                        <URLInfo>
+                            <h1>{title}</h1>
+                            <h2>{descrip}</h2>
+                            <p>{uri}</p>
+                        </URLInfo>
+                        <URLImage>
+                            <img src={image} alt=''/>
+                        </URLImage>
+                    </ContainerUrl>
+                </ContainerPost>
+            </Publication>
+            <Comments userId = {userId} postId ={idPost} />
+        </ColumnDiv>
        }
       </>
   )
@@ -116,12 +121,21 @@ justify-content: space-between;
 max-width: 560px;
 width: 100%;
 height: auto;
-margin: 40px auto;
 background: #171717;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;
 position:relative;
 `
+const ColumnDiv = styled.div`
+display: flex;
+flex-direction: column;
+height: auto;
+width: 100%;
+background-color: #1E1E1E;
+margin: 40px auto;
+border-radius: 8px;
+`
+
 const ProfileImage = styled.div`
 
 img{

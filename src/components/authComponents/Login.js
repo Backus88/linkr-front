@@ -93,7 +93,7 @@ export default function Login(){
 
   return(
     <>
-    <MediaQuery minWidth={1280}>
+    <MediaQuery minWidth={700}>
       <LogInPage>
         <Logo>
           <h1>linkr</h1>
@@ -120,7 +120,7 @@ export default function Login(){
         </Form>
       </LogInPage>
     </MediaQuery>
-    <MediaQuery maxWidth={1279}>
+    <MediaQuery maxWidth={700}>
       <LoginMobile/>
     </MediaQuery>
     </>
