@@ -13,8 +13,11 @@ import Like from "./Like.js";
 import EditPost from "./EditPost";
 import ModalDelete from "./modalDelete";
 import PublishPost from "./PublishPost";
+
+import Comments from "./Comments";
 import Repost from "./Repost";
-import Comment from "./Comment";
+import CommentImg from "./CommentImg";
+
 
 
 
@@ -27,7 +30,9 @@ export default function Post(props) {
   const [editing, setEditing]= useState(false);
   const [visible, setVisible] = useState(false);
   const localId = localStorage.getItem("id");
-  const [deleteIcon, setDeleteIcon] = useState(false)
+  const [deleteIcon, setDeleteIcon] = useState(false);
+  const [commentCount, setCommentCount] = useState(0);
+  const [showComments, setShowComments] = useState(false);
   const URI = process.env.REACT_APP_DATABASE_URI
 
   let {
@@ -75,54 +80,57 @@ export default function Post(props) {
         hashtagController={hashtagController} 
         setHashtagController={setHashtagController}/>
       :
-      <PostPage>
-        <RepostedByYou>
-            <Icon></Icon>
-            <h1>Re-posted by <b>you</b></h1>
-        </RepostedByYou>
-        <Publication className="post">
-            <ProfileImage>            
-                <img src={imageProfile}/>
-                <Like idPost ={idPost} />
-                <Comment />
-                <Repost userId={userId} postId={idPost} getPost={getPost} hashtagController={hashtagController} setHashtagController={setHashtagController}/>
-            </ProfileImage>
-            <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} hashtagController={hashtagController} 
-                            setHashtagController={setHashtagController}
-                             />
-            <ContainerPost>
-               <DivDispl>
-                <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
-                <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
-                
-                {deleteIcon? <IconTrash userId={userId} onClick={() => setVisible(true)} /> : null}
-                </DivDispl>
-                <h2>
-                    <ReactHashtag 
-                            renderHashtag={(hashtagValue) => {
-                                return (
-                                    <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
-                                    <Hashtag>{hashtagValue}</Hashtag>
-                                    </HashtagLink>
-                                )
-                            }}>  
-                        {description}
-                    </ReactHashtag>
-                </h2>
+              <PostPage>
+                  <RepostedByYou>
+                      <Icon></Icon>
+                      <h1>Re-posted by <b>you</b></h1>
+                  </RepostedByYou>
+                  <ColumnDiv>
+                      <Publication className="post">
+                          <ProfileImage>
+                              <img src={imageProfile} />
+                              <Like idPost={idPost} />
+                              <CommentImg commentCount={commentCount} showComments={showComments} setShowComments={setShowComments} />
+                              <Repost userId={userId} postId={idPost} getPost={getPost} hashtagController={hashtagController} setHashtagController={setHashtagController} />
+                          </ProfileImage>
+                          <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} hashtagController={hashtagController}
+                              setHashtagController={setHashtagController}
+                          />
+                          <ContainerPost>
+                              <DivDispl>
+                                  <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
+                                  <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
 
-                <ContainerUrl onClick={() => window.open(uri)}>
-                    <URLInfo>
-                        <h1>{title}</h1>
-                        <h2>{descrip}</h2>
-                        <p>{uri}</p>
-                    </URLInfo>
-                    <URLImage>
-                        <img src={image} alt=''/>
-                    </URLImage>
-                </ContainerUrl>
-            </ContainerPost>
-        </Publication>
-        </PostPage>
+                                  {deleteIcon ? <IconTrash userId={userId} onClick={() => setVisible(true)} /> : null}
+                              </DivDispl>
+                              <h2>
+                                  <ReactHashtag
+                                      renderHashtag={(hashtagValue) => {
+                                          return (
+                                              <HashtagLink to={`/hashtag/${hashtagValue.slice(1)}`}>
+                                                  <Hashtag>{hashtagValue}</Hashtag>
+                                              </HashtagLink>
+                                          )
+                                      }}>
+                                      {description}
+                                  </ReactHashtag>
+                              </h2>
+
+                              <ContainerUrl onClick={() => window.open(uri)}>
+                                  <URLInfo>
+                                      <h1>{title}</h1>
+                                      <h2>{descrip}</h2>
+                                      <p>{uri}</p>
+                                  </URLInfo>
+                                  <URLImage>
+                                      <img src={image} alt='' />
+                                  </URLImage>
+                              </ContainerUrl>
+                          </ContainerPost>
+                      </Publication>
+                      <Comments userId={userId} postId={idPost} setCommentCount ={setCommentCount} showComments={showComments} />
+                  </ColumnDiv>
+              </PostPage>
        }
       </>
   )
@@ -133,7 +141,6 @@ const PostPage = styled.div`
     position: relative;
     width: 100%;
     height: auto;
-
 `
 
 const RepostedByYou = styled.div`
@@ -165,7 +172,6 @@ const Icon = styled(BiRepost)`
 `
 
 const Publication = styled.div`
-margin: 80px auto 40px auto;
 display: flex;
 justify-content: space-between;
 max-width: 560px;
@@ -174,7 +180,18 @@ height: auto;
 background: #171717;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;
-position:relative;
+position: relative;
+`
+
+const ColumnDiv = styled.div`
+display: flex;
+flex-direction: column;
+height: auto;
+width: 100%;
+background-color: #1E1E1E;
+margin: 40px auto;
+border-radius: 8px;
+
 `
 
 const ProfileImage = styled.div`
