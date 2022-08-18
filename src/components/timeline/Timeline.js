@@ -27,8 +27,6 @@ export default function Timeline() {
     const local = localStorage.getItem("token");
     const localId = localStorage.getItem("id");
     const [hasMore, setHasMore] = useState(true)
-    console.log(localStorage)
-    console.log(local)
     let location = useLocation();
     const config = {
         headers: {
@@ -73,8 +71,7 @@ export default function Timeline() {
                 const promise = axios.get(`http://localhost:4000/post?offset=${offset}`, config)
                 promise.then(response => {
                     let data = [...post, ...response.data]
-                    let size = post.length
-                    if(size > 0 && (post[size-1].id === response.data[response.data.length-1].id)){
+                    if(response.data.length === 0){
                         setHasMore(false)
                     }else{
                         setPost(data)
@@ -82,6 +79,7 @@ export default function Timeline() {
                     }
                     
                     setLoading(false)
+                   
                 })
                 promise.catch(() => {
                     setLoading(false)
@@ -157,11 +155,14 @@ export default function Timeline() {
                                         loadMore={handleHasMore}
                                         pageStart={0}
                                         hasMore={hasMore}
-                                        loader={<div className="loader" key={0}
-                                        style={{clear: "both"}}>Loading ...</div>
+                                        loader={
+                                         <div style={{clear: "both"}}>
+                                         <IconLoading/>
+                                         <MsgLoading>Loading more posts...</MsgLoading>
+                                         </div>
                                         } 
                                         initialLoad={true}
-                                        style={{overflowY: "auto", clear: "both"}}
+                                        
                                     >
                                 {post.length > 0 ?
                                     
