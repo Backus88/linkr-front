@@ -49,6 +49,9 @@ export default function Timeline() {
 
     function renderById(id) {
         if (parseInt(id) !== parseInt(localId)) {
+            setId(parseInt(id))
+            setPost([])
+            setHasMore(true)
             navigate(`/user/${id}`);
         } else {
             navigate('/timeline');
@@ -62,10 +65,14 @@ export default function Timeline() {
             getPost()
         }
     }
-
+function verifyId(){
+    if(newId){
+        setId(parseInt(newId))
+    }
+}
+useEffect(verifyId,[id, newId])
     function getPost() {
         setLoading(true)
-        setId(parseInt(newId))
         if (!id) {
                 const offset = post.length
                 const promise = axios.get(`http://localhost:4000/post?offset=${offset}`, config)
@@ -73,6 +80,7 @@ export default function Timeline() {
                     let data = [...post, ...response.data]
                     if(response.data.length === 0){
                         setHasMore(false)
+
                     }else{
                         setPost(data)
                         
@@ -90,14 +98,19 @@ export default function Timeline() {
            
 
         } else {
-            const promise = axios.get(`https://linkr-db.herokuapp.com/user/${id}`, config)
+            const offset = post.length
+            const promise = axios.get(`http://localhost:4000/user/${id}?offset=${offset}`, config)
             promise.then(response => {
-                let data = [...response.data]
-                setPost(data)
+                let data = [...post, ...response.data]
+                if(response.data.length === 0){
+                    setHasMore(false)
+                }else{
+                    setPost(data)
+                }
                 setLoading(false)
             })
 
-            const userById = axios.get(`https://linkr-db.herokuapp.com/user?id=${id}`, config);
+            const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
             userById.then(response => {
                 let data = { ...response.data }
                 setUsername(data)
