@@ -31,7 +31,7 @@ export default function Like({idPost}){
             handleSucess(response);
 
         } catch (error) {
-            console.log(error.response.data.message);
+            console.log(error);
         }
     };
     
@@ -65,7 +65,7 @@ export default function Like({idPost}){
             fetchLikes();
 
         } catch (error) {
-            console.log(error.response.data.message);
+            console.log(error);
         }
 
     }

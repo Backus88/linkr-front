@@ -100,7 +100,7 @@ export default function SignUp(){
         </Form>
       </SignUpPage>
       </MediaQuery>
-      <MediaQuery maxWidth={700}>
+      <MediaQuery maxWidth={699}>
         <SignUpMobile />
       </MediaQuery>
     </>

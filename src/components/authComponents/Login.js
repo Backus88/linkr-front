@@ -122,7 +122,7 @@ export default function Login(){
         </Form>
       </LogInPage>
     </MediaQuery>
-    <MediaQuery maxWidth={700}>
+    <MediaQuery maxWidth={699}>
       <LoginMobile/>
     </MediaQuery>
     </>
