@@ -9,21 +9,21 @@ export default function Repost(props){
   const {userId, postId, getPost, hashtagController, setHashtagController} = props
 
   const [modal, setModal] = useState(false)
+  const URI = process.env.REACT_APP_DATABASE_URI
 
-  const repost = 0;
-  // useEffect (()=>{
-  //   if(repost === 0){
-  //     document.getElementById('comm').hidden = true;
-  //       } else{
-  //         document.getElementById('comm').hidden = false;
-  //       }
-  //   },[repost])
+
+
+  // onClick={() => setModal(!modal)
+  function handleClick(){
+    setModal(!modal)
+    console.log(postId)
+  }
 
   return(
     <RepostPage>
-      <RepostIcon   onClick={() => setModal(!modal)}/>
-      <RepostCount id={'comm'}>{repost} re-posts</RepostCount>
-      <ModalRepost modal={modal} setModal={setModal} postId={postId} getPost={getPost} hashtagController={hashtagController} setHashtagController={setHashtagController} userId={userId}/>
+      <RepostIcon onClick={handleClick}/>
+      <RepostCount id={"comm"}> 0 re-posts</RepostCount>
+      <ModalRepost  modal={modal} setModal={setModal} postId={postId} getPost={getPost} hashtagController={hashtagController} setHashtagController={setHashtagController} userId={userId}/>
     </RepostPage>
   )
 }

@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom";
 import GlobalStyle from "../../styles/globalStyles";
-import Like from "./Like.js";
-import EditPost from "./EditPost";
+
 import styled from "styled-components";
 import axios from "axios"
-import { BsTrash } from "react-icons/bs";
-import ModalDelete from "./modalDelete";
 import ReactHashtag from "@mdnm/react-hashtag";
+
+import { BsTrash } from "react-icons/bs";
+import {BiRepost} from "react-icons/bi"
+
+import Like from "./Like.js";
+import EditPost from "./EditPost";
+import ModalDelete from "./modalDelete";
 import PublishPost from "./PublishPost";
 import Repost from "./Repost";
 import Comment from "./Comment";
+
 
 
 export default function Post(props) {
@@ -55,6 +60,9 @@ export default function Post(props) {
     },[userId])
 
   useEffect(getMetadata, [])
+
+ 
+
   return (
       <>
       {editing? <PublishPost getPost={getPost} 
@@ -67,6 +75,11 @@ export default function Post(props) {
         hashtagController={hashtagController} 
         setHashtagController={setHashtagController}/>
       :
+      <PostPage>
+        <RepostedByYou>
+            <Icon></Icon>
+            <h1>Re-posted by <b>you</b></h1>
+        </RepostedByYou>
         <Publication className="post">
             <ProfileImage>            
                 <img src={imageProfile}/>
@@ -109,24 +122,61 @@ export default function Post(props) {
                 </ContainerUrl>
             </ContainerPost>
         </Publication>
+        </PostPage>
        }
       </>
   )
 
 }
 
+const PostPage = styled.div`
+    position: relative;
+    width: 100%;
+    height: auto;
+
+`
+
+const RepostedByYou = styled.div`
+position: absolute;
+z-index:-1;
+top: -30px;
+width: 100%;
+height: 60px;
+background-color: #1E1E1E;
+font-family: 'Lato';
+border-radius: 16px 16px 0 0;
+padding: 6px 0 6px 12px;
+display: flex;
+
+h1{
+    color:white;
+    font-weight: 700;
+    font-size: 11px;
+    margin-top: 3px;
+}
+`
+
+const Icon = styled(BiRepost)`
+    width: 30px;
+    height: 24px;
+    margin-right: 4px;
+    margin-top: -2px;
+    color: white;
+`
+
 const Publication = styled.div`
+margin: 80px auto 40px auto;
 display: flex;
 justify-content: space-between;
 max-width: 560px;
 width: 100%;
 height: auto;
-margin: 40px auto;
 background: #171717;
 box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 border-radius: 16px;
 position:relative;
 `
+
 const ProfileImage = styled.div`
 display: flex;
 flex-direction: column;

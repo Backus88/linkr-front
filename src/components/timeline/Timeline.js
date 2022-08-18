@@ -47,6 +47,21 @@ export default function Timeline() {
         checkToken()
     }, [])
 
+    useEffect(() => {
+        getReposts()
+      },[])
+    
+      async function getReposts(){
+        try {
+          const promise = await axios.get(`${URI}/repost-count`)
+          console.log(promise.data)
+          const count = promise.data.count
+          console.log(count)
+        } catch (error) {
+          console.error(error)
+        }
+      }
+
 
     function renderById(id) {
         if(parseInt(id) !== parseInt(localId)){

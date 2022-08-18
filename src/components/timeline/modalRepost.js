@@ -17,11 +17,16 @@ export default function ModalRepost(props) {
         }
     }
 
-
     function yesDelete() {
+        console.log(postId)
+        console.log(userId)
+        const repost = {
+          postId,
+          userId
+        }
         setLoading(true)
-        const promise = axios.delete(`${URI}/delete/${postId}`, config)
-        promise.then(treatSucess).catch(treatError)
+        // const promise = axios.delete(`${URI}/delete/${postId}`, config)
+        // promise.then(treatSucess).catch(treatError)
     }
     function notDelet() {
         setModal(false)
