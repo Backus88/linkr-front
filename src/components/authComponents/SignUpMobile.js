@@ -27,7 +27,8 @@ export default function SignUpMobile(){
       return alert('Fill all the necessary fields')
     } 
 
-    const URL = "http://localhost:4000/signup"
+    const URI = process.env.REACT_APP_DATABASE_URI
+    const URL = `${URI}/signup`
     const signUp = form;
     const promise = axios.post(URL, signUp)
     promise
