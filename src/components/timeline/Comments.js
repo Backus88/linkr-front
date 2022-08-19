@@ -62,7 +62,7 @@ export default function Comments({ userId, postId, setCommentCount, showComments
     async function handleClick(e){
         e.preventDefault();
         const body = {
-            userId: userId,
+            userId: id,
             postId: postId,
             commentary: commentary
         }
@@ -92,7 +92,7 @@ export default function Comments({ userId, postId, setCommentCount, showComments
                     <ColumnDiv>
                         <TitleDiv>
                             <h1>{item.username}</h1>
-                            {parseInt(item.userId)=== parseInt(userId)?
+                            {parseInt(item.userId)=== parseInt(id)?
                                 <>
                                     <CircleIcon/>
                                     <h2>{"post’s author"}</h2>
