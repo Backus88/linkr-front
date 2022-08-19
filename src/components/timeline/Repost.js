@@ -39,6 +39,7 @@ width: 30px;
 height: 36px;
 color: white;
 margin-left: 10px;
+cursor: pointer;
 `
 
 const RepostCount = styled.div`

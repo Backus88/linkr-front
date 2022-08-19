@@ -47,12 +47,11 @@ export default function Comments({ userId, postId, setCommentCount, showComments
         var key = e.key;
         if(key === 'Enter'){
             handleClick(e);
-            setRenderComment(!renderComment);
         }
       }
 
     async function handleClick(e){
-        e.preventDefault()
+        e.preventDefault();
         const body = {
             userId: userId,
             postId: postId,

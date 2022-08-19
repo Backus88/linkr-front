@@ -116,6 +116,7 @@ display: flex;
 flex-direction: column;
 align-items: center;
 margin-left: 15px;
+cursor: pointer;
 `
 
 const UnlikedIcon = styled(AiOutlineHeart)`
