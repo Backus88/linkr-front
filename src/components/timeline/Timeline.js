@@ -55,9 +55,9 @@ export default function Timeline() {
       async function getReposts(){
         try {
           const promise = await axios.get(`${URI}/repost-count`)
-          console.log(promise.data)
+        
           const count = promise.data.count
-          console.log(count)
+    
         } catch (error) {
           console.error(error)
         }
@@ -83,6 +83,7 @@ export default function Timeline() {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
+                console.log(data)
             })
 
             promise.catch(()=> {
@@ -162,6 +163,8 @@ export default function Timeline() {
                             imageProfile = {item.profileImgUrl}
                             key={item.url + index}
                             idPost={item.id}
+                            repostUsername= {item.repostUsername}
+                            repostCount ={item.repostCount}
                             getPost = {getPost}
                             hashtagController={hashtagController} 
                             setHashtagController={setHashtagController}

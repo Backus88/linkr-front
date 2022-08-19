@@ -75,7 +75,6 @@ export default function Comments({ userId, postId, setCommentCount, showComments
          {showComments?
          <>
             {infoComment?.map((item, index)=>{
-                console.log(item.isFollower);
                 return(
                 <CommentItens key={index}>
                     <img src={item.profileImgUrl} alt="" />

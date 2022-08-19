@@ -44,6 +44,8 @@ export default function Post(props) {
       imageProfile,
       idPost,
       getPost,
+      repostUsername,
+      repostCount,
       hashtagController,
       setHashtagController
   } = props
@@ -58,6 +60,8 @@ export default function Post(props) {
       })
     }
 
+    console.log(repostUsername);
+    console.log(repostCount);
     useEffect(()=>{
     if(parseInt(localId)===parseInt(userId)&& userId){
         setDeleteIcon(true);
@@ -81,17 +85,24 @@ export default function Post(props) {
         setHashtagController={setHashtagController}/>
       :
               <PostPage>
+                {repostCount > 0?
                   <RepostedByYou>
                       <Icon></Icon>
-                      <h1>Re-posted by <b>you</b></h1>
+                      <h1>Re-posted by <b>{repostUsername}</b></h1>
                   </RepostedByYou>
+                :null}
                   <ColumnDiv>
                       <Publication className="post">
                           <ProfileImage>
                               <img src={imageProfile} />
                               <Like idPost={idPost} />
                               <CommentImg commentCount={commentCount} showComments={showComments} setShowComments={setShowComments} />
-                              <Repost userId={userId} postId={idPost} getPost={getPost} hashtagController={hashtagController} setHashtagController={setHashtagController} />
+                              <Repost userId={userId}
+                               postId={idPost} 
+                               getPost={getPost} 
+                               hashtagController={hashtagController} 
+                               setHashtagController={setHashtagController}
+                               repostCount={repostCount} />
                           </ProfileImage>
                           <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} hashtagController={hashtagController}
                               setHashtagController={setHashtagController}
