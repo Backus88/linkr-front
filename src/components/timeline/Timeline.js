@@ -23,6 +23,7 @@ export default function Timeline() {
     const [canPublish, setCanPublish] = useState(true);
     const [hashtagController, setHashtagController] = useState(false);
     const navigate = useNavigate();
+    const [isAFollower, setIsAFollower] = useState(false);
     const [loading, setLoading] = useState(false)
     const [crash, setCrash] = useState(false)
     const { id: newId } = useParams();
@@ -82,9 +83,10 @@ export default function Timeline() {
             const promise = axios.get(`${URI}/post`, config)
             promise.then(response => {
                 let data = [...response.data]
-                setPost(data)
+                setPost(data[0].posts)
+                setIsAFollower(data[0].followsAnybody)
                 setLoading(false)
-                console.log(data)
+                console.log(data, data[0].posts)
             })
 
             promise.catch(()=> {
@@ -168,8 +170,11 @@ export default function Timeline() {
                             setHashtagController={setHashtagController}
                                 />
                     )
-                        :
-                            <MsgError>There are no posts yet</MsgError>}
+                        : canPublish? 
+                            isAFollower ?
+                                <MsgError> No posts found from your friends </MsgError> : 
+                                <MsgError> You don't follow anyone yet. Search for new friends!</MsgError>:
+                                <MsgError>There are no posts yet</MsgError>}
                 </Main>
                 <RightSide>
                 {canPublish?<></>:<Follow followedId={id} config={config} />}

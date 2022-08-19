@@ -49,7 +49,6 @@ export default function LoginMobile(){
       localStorage.setItem("token", dados.token);
       localStorage.setItem("img", dados.profileImgUrl);
       localStorage.setItem("id", dados.id);      
-      //setLocal(localStorage.getItem("token"))
 
         if(local.length === 0){
           alert('bad request')
