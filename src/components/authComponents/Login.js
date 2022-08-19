@@ -8,11 +8,13 @@ import LoginMobile from "./LoginMobile";
 import { useContext } from "react";
 import UserContext from "../../contexts/UserContext";
 
-
 export default function Login(){
 
+  const URI = process.env.REACT_APP_DATABASE_URI
   const { setInfo } = useContext(UserContext);
   const {local, setLocal} = useContext(UserContext);
+  
+  console.log(URI)
 
   const [login, setLogIn] = useState({
     email: '',
@@ -40,7 +42,7 @@ export default function Login(){
       e.target.style.background = '#1877F2';
     } 
 
-    const URL = "https://linkr-db.herokuapp.com/signin"
+    const URL = `${URI}/signin`
     const signIn = login;
     const promise = axios.post(URL, signIn)
     promise
@@ -93,7 +95,7 @@ export default function Login(){
 
   return(
     <>
-    <MediaQuery minWidth={1280}>
+    <MediaQuery minWidth={700}>
       <LogInPage>
         <Logo>
           <h1>linkr</h1>
@@ -120,7 +122,7 @@ export default function Login(){
         </Form>
       </LogInPage>
     </MediaQuery>
-    <MediaQuery maxWidth={1279}>
+    <MediaQuery maxWidth={699}>
       <LoginMobile/>
     </MediaQuery>
     </>

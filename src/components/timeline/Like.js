@@ -7,9 +7,11 @@ import axios from "axios";
 import UserContext from "../../contexts/UserContext";
 
 
-export default function Like({idPost}){
+export default function Like({idPost, repostUsername}){
 
-    const URL = `https://linkr-db.herokuapp.com/posts/${idPost}/likes`;
+    const URI = process.env.REACT_APP_DATABASE_URI
+
+    const URL = `${URI}/posts/${idPost}/likes`;
     // const {info} = useContext(UserContext);
     const info= localStorage.getItem("token");
 
@@ -29,7 +31,7 @@ export default function Like({idPost}){
             handleSucess(response);
 
         } catch (error) {
-            console.log(error.response.data.message);
+            console.log(error);
         }
     };
     
@@ -63,15 +65,19 @@ export default function Like({idPost}){
             fetchLikes();
 
         } catch (error) {
-            console.log(error.response.data.message);
+            console.log(error);
         }
 
     }
 
     function renderLikeIcon(){
-
-        if(userHasLiked) return <LikedIcon onClick={dislikePost}/>
-        else return <UnlikedIcon onClick={likePost}/>
+        if(!repostUsername){
+            if(userHasLiked) return <LikedIcon onClick={dislikePost}/>
+            else return <UnlikedIcon onClick={likePost}/>
+        }else{
+            if(userHasLiked) return <LikedIcon />
+        else return <UnlikedIcon />
+        }
     }
 
     const likeIcon = renderLikeIcon();
@@ -97,7 +103,7 @@ export default function Like({idPost}){
     const toRenderLikesTooltip = renderLikesTooltip();
 
     return(
-        <LikeBox> 
+        <LikeBox repostUsername ={repostUsername}> 
             {likeIcon}
             <NumberLikes>
                 {toRenderLikesTooltip} 
@@ -114,6 +120,7 @@ display: flex;
 flex-direction: column;
 align-items: center;
 margin-left: 15px;
+cursor: ${props => props.repostUsername? 'default': 'pointer'};
 `
 
 const UnlikedIcon = styled(AiOutlineHeart)`
@@ -133,9 +140,6 @@ font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 11px;
-line-height: 13px;
-text-align: center;
-
 color: #FFFFFF;
-padding-top: 4px;
+padding-top: 0px;
 `

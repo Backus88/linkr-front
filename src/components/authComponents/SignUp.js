@@ -30,8 +30,8 @@ export default function SignUp(){
       e.currentTarget.disabled=false;
       return alert('Fill all the necessary fields');
     } 
-
-    const URL = "https://linkr-db.herokuapp.com/signup"
+    const URI = process.env.REACT_APP_DATABASE_URI
+    const URL = `${URI}/signup`
     const signUp = form;
     const promise = axios.post(URL, signUp)
     promise
@@ -63,7 +63,7 @@ export default function SignUp(){
 
   return(
     <>
-      <MediaQuery minWidth={1024}>
+      <MediaQuery minWidth={700}>
       <SignUpPage>
         <Logo>
           <h1>linkr</h1>
@@ -100,7 +100,7 @@ export default function SignUp(){
         </Form>
       </SignUpPage>
       </MediaQuery>
-      <MediaQuery maxWidth={1023}>
+      <MediaQuery maxWidth={699}>
         <SignUpMobile />
       </MediaQuery>
     </>

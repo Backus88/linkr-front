@@ -35,7 +35,9 @@ export default function LoginMobile(){
       e.target.style.background = '#1877F2';
     } 
 
-    const URL = "https://linkr-db.herokuapp.com/signin"
+    const URI = process.env.REACT_APP_DATABASE_URI
+
+    const URL = `${URI}/signin`
     const signIn = login;
     const promise = axios.post(URL, signIn)
     promise
@@ -44,8 +46,10 @@ export default function LoginMobile(){
 
       setInfo(dados)
       console.log(dados)
-      localStorage.setItem("token", dados)
-      setLocal(localStorage.getItem("token"))
+      localStorage.setItem("token", dados.token);
+      localStorage.setItem("img", dados.profileImgUrl);
+      localStorage.setItem("id", dados.id);      
+
 
         if(local.length === 0){
           alert('bad request')

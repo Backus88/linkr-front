@@ -4,11 +4,10 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-export default function ModalDelete(props) {
-    const { visible, setVisible, postId, getPost, hashtagController, setHashtagController, userId } = props
+export default function ModalRepost(props) {
+    const { modal, setModal, postId, getPost, hashtagController, setHashtagController, userId } = props
 
     const [loading, setLoading]= useState(false)
-    const [deletIcon, setDeletIcon]= useState(false);
     const local = localStorage.getItem("token");
     const localId = localStorage.getItem("id");
     const URI = process.env.REACT_APP_DATABASE_URI
@@ -18,60 +17,56 @@ export default function ModalDelete(props) {
         }
     }
 
+    function confirmShare() {
 
-    function yesDelete() {
+        const repost = {
+          userId: localId,
+          postId
+        }
         setLoading(true)
-        const promise = axios.delete(`${URI}/delete/${postId}`, config)
-        promise.then(treatSucess).catch(treatError)
+        const promise = axios.post(`${URI}/repost`, repost, config)
+        promise.then(treatSucess)
+        .catch(treatError)
     }
-    function notDelet() {
-        setVisible(false)
+    function noShare() {
+        setModal(false)
         setLoading(false)
     }
     function treatSucess() {
         setHashtagController(!hashtagController)
         console.log('sucesso')
         setLoading(false)
-        setVisible(false)
+        setModal(false)
         getPost()
-        setHashtagController(hashtagController)
-        
+        setHashtagController(hashtagController)       
     }
 
     function treatError(error) {
         console.log(error)
         setLoading(false)
-        setVisible(false)
+        setModal(false)
         alert('Não foi possível excluir o post')
     }
    
     return (
         <>
-
-        <Modal
-            isOpen={visible}
-            style={customStyles}
-        >
-            {loading ? <>
+        <Modal isOpen={modal} style={customStyles}>
+          {loading ? 
+          <>
             <IconLoading />
             <MsgLoading>loading...</MsgLoading>
-            </>
-                :
-                <>
-        <ModalInfo>
-            <ModalF>
-                Are you sure you want
-                to delete this post?
-            </ModalF>
-            <Buttons>
-                <Buttom1 onClick={notDelet}><One>No, go back</One></Buttom1>
-                <Buttom2 onClick={yesDelete}><Two>Yes, delete it</Two></Buttom2>
-            </Buttons>
-        </ModalInfo>
-        </>
-            }
+          </>
+          :
+          <>
+          <ModalInfo>
+              <ModalF> Do you want to re-post this link? </ModalF>
+              <Buttons>
+                  <Buttom1 onClick={noShare}><One>No, cancel</One></Buttom1>
+                  <Buttom2 onClick={confirmShare}><Two>Yes, share!</Two></Buttom2>
+              </Buttons>
+          </ModalInfo>
+          </>}
         </Modal>
-
         </>
     )
 }

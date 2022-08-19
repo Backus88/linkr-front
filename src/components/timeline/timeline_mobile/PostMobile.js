@@ -17,6 +17,7 @@ export default function PostMobile(props) {
   const [uri, setUri] = useState('');
   const [editing, setEditing]= useState(false);
   const [visible, setVisible] = useState(false);
+  const URI = process.env.REACT_APP_DATABASE_URI
 
   let {
       username,
@@ -30,7 +31,7 @@ export default function PostMobile(props) {
   } = props
   function getMetadata() {
       const promise = axios.get(
-          `https://linkr-db.herokuapp.com/url-metadata?url=${url}`)
+          `${URI}/url-metadata?url=${url}`)
       promise.then(response => {
           setTitle(response.data.title)
           setDescrip(response.data.description)

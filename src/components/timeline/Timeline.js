@@ -10,16 +10,20 @@ import Post from "./Post";
 import TrendingBox from "./TrendingBox";
 import MediaQuery from 'react-responsive'
 import TimelineMobile from "./timeline_mobile/TimelineMobile";
+import Follow from "./Follow";
+import NewPosts from "./NewPost";
 
 
 export default function Timeline() {
+    const URI = process.env.REACT_APP_DATABASE_URI
     const [post, setPost] = useState([]);
     const [user, setUser] = useState([]);
     const [username, setUsername]= useState('');
-    const [hashtagController, setHashtagController] = useState(false)
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
+    const [hashtagController, setHashtagController] = useState(false);
     const navigate = useNavigate();
+    const [isAFollower, setIsAFollower] = useState(false);
     const [loading, setLoading] = useState(false)
     const [crash, setCrash] = useState(false)
     const { id: newId } = useParams();
@@ -60,11 +64,14 @@ export default function Timeline() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
+
+            const promise = axios.get(`${URI}/post`, config)
             promise.then(response => {
                 let data = [...response.data]
-                setPost(data)
+                setPost(data[0].posts)
+                setIsAFollower(data[0].followsAnybody)
                 setLoading(false)
+                console.log(data, data[0].posts)
             })
 
             promise.catch(()=> {
@@ -74,16 +81,17 @@ export default function Timeline() {
             setCanPublish(true)
 
         }else{
-            const promise = axios.get(`https://linkr-db.herokuapp.com/user/${id}`, config)
+            const promise = axios.get(`${URI}/user/${id}`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
 
-            const userById = axios.get(`https://linkr-db.herokuapp.com/user?id=${id}`, config);
+            const userById = axios.get(`${URI}/user?id=${id}`, config);
             userById.then(response => {
                 let data = {...response.data}
+                console.log(data)
                 setUsername(data)
                 setLoading(false)
             });
@@ -105,22 +113,26 @@ export default function Timeline() {
 
     useEffect(getPost, [id,location,newId, canPublish])
 
-    function getUser() {
-        const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
-        promise.then(response => setUser(response.data))
-    }
     return (
         <>
-        <MediaQuery minWidth={1280}>
+        <MediaQuery minWidth={700}>
             <GlobalStyle />
             <Header />
             <Container>
                 <Main>
 
-            {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
+            {canPublish?
+            <TitleBox>
+                <Title>timeline</Title>
+            </TitleBox>:
+            <TitleBox>
+            <ProfileImage src={username.profileImgUrl} alt =''/>
+            <Title>{username.username}'s posts</Title> 
+            </TitleBox>}
             {canPublish ? <PublishPost getPost={getPost} 
             hashtagController={hashtagController} 
-            setHashtagController={setHashtagController} /> : null}
+            setHashtagController={setHashtagController} /> : null} 
+            <NewPosts getPost={getPost} post = {post} loading = {loading}/>
             {loading ?
                 <>
                     <IconLoading />
@@ -144,18 +156,26 @@ export default function Timeline() {
                             imageProfile = {item.profileImgUrl}
                             key={item.url + index}
                             idPost={item.id}
+                            repostUsername= {item.repostUsername}
+                            repostCount ={item.repostCount}
                             getPost = {getPost}
                             hashtagController={hashtagController} 
                             setHashtagController={setHashtagController}
                                 />
                     )
-                        :
-                            <MsgError>There are no posts yet</MsgError>}
+                        : canPublish? 
+                            isAFollower ?
+                                <MsgError> No posts found from your friends </MsgError> : 
+                                <MsgError> You don't follow anyone yet. Search for new friends!</MsgError>:
+                                <MsgError>There are no posts yet</MsgError>}
                 </Main>
-            <TrendingBox hashtagController={hashtagController} />
+                <RightSide>
+                {canPublish?<></>:<Follow followedId={id} config={config} />}
+                <TrendingBox hashtagController={hashtagController} />
+                </RightSide>
             </Container>
         </MediaQuery>
-        <MediaQuery maxWidth={1279}>
+        <MediaQuery maxWidth={699}>
             <TimelineMobile />
         </MediaQuery>
         </>
@@ -171,20 +191,35 @@ justify-content:center;
 margin: auto;
 `
 
-const Main = styled.div`
+export const Main = styled.div`
 width: 43%;
 max-width: 560px;
 ` 
 
 const Title = styled.div`
-width: 40%;
+width: 100%;
 font-family: 'Oswald';
 font-style: normal;
 font-weight: 700;
 font-size: 43px;
 color: #FFFFFF;
-margin: 100px 0 0px 0;
+//margin: 100px 0 0px 0;
 text-align: start;
+`
+
+const TitleBox = styled.div`
+display: flex;
+flex-direction: row;
+align-items: center;
+margin: 100px 0 0 0;
+`
+
+const ProfileImage = styled.img`
+width: 50px;
+height: 50px;
+border-radius: 50%;
+margin-right: 1rem;
+object-fit: cover;
 `
 
 const Button = styled.div`
@@ -231,4 +266,10 @@ font-weight: 400;
 font-size: 30px;
 margin: 60px auto 0px auto;
 text-align: center;
+`
+
+const RightSide = styled.div`
+display: flex;
+flex-direction: column;
+align-items: flex-end;
 `
