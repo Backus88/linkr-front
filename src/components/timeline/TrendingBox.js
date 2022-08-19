@@ -15,7 +15,8 @@ export default function TrendingBox(props){
     
     function getTrending(){
         setLoading(true)
-        const promise = axios.get('https://linkr-db.herokuapp.com/trending')
+        const URI = process.env.REACT_APP_DATABASE_URI
+        const promise = axios.get(`${URI}/trending`)
         promise.then(response => {
             let data = [...response.data]
             setHashtag(data)
@@ -127,6 +128,7 @@ const Main = styled.div`
 padding-bottom: 20px;
 padding-left: 16px;
 /* margin: 22px auto 5px 16px; */
+//margin: 14px auto 5px 16px;
 `
 
 const HashtagDiv = styled.div`

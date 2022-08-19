@@ -27,7 +27,8 @@ export default function SignUpMobile(){
       return alert('Fill all the necessary fields')
     } 
 
-    const URL = "https://linkr-db.herokuapp.com/signup"
+    const URI = process.env.REACT_APP_DATABASE_URI
+    const URL = `${URI}/signup`
     const signUp = form;
     const promise = axios.post(URL, signUp)
     promise

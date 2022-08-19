@@ -9,7 +9,9 @@ import UserContext from "../../contexts/UserContext";
 
 export default function Like({idPost}){
 
-    const URL = `https://linkr-db.herokuapp.com/posts/${idPost}/likes`;
+    const URI = process.env.REACT_APP_DATABASE_URI
+
+    const URL = `${URI}/posts/${idPost}/likes`;
     // const {info} = useContext(UserContext);
     const info= localStorage.getItem("token");
 
@@ -29,7 +31,7 @@ export default function Like({idPost}){
             handleSucess(response);
 
         } catch (error) {
-            console.log(error.response.data.message);
+            console.log(error);
         }
     };
     
@@ -63,7 +65,7 @@ export default function Like({idPost}){
             fetchLikes();
 
         } catch (error) {
-            console.log(error.response.data.message);
+            console.log(error);
         }
 
     }
@@ -114,6 +116,7 @@ display: flex;
 flex-direction: column;
 align-items: center;
 margin-left: 15px;
+cursor: pointer;
 `
 
 const UnlikedIcon = styled(AiOutlineHeart)`
@@ -133,9 +136,6 @@ font-family: 'Lato';
 font-style: normal;
 font-weight: 400;
 font-size: 11px;
-line-height: 13px;
-text-align: center;
-
 color: #FFFFFF;
-padding-top: 4px;
+padding-top: 0px;
 `

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import EditPost from "../EditPost";
 
 export default function PublishPostMobile(props) {
+  const URI = process.env.REACT_APP_DATABASE_URI
   const [imgLocal, setImgLocal] = useState('')
   const [enabled, setEnabled] = useState(true)
   const [url, setUrl] = useState('')
@@ -53,12 +54,11 @@ export default function PublishPostMobile(props) {
             id: postId
         }
         console.log(body)
-        const promise = axios.put('https://linkr-db.herokuapp.com/post',body, config)
+        const promise = axios.put(`${URI}/post`,body, config)
         promise.catch(tratarError);
         promise.then(tratarSucesso);
       }else{
-        const promise = axios.post('https://linkr-db.herokuapp.com/post', {
-
+        const promise = axios.post(`${URI}/post`, {
             url: url,
             description: description
         }, config)

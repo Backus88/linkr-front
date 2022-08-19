@@ -6,6 +6,7 @@ import React from "react";
 
 
 export default function DropdownMobile ({usernameString,querieController, setSearching, searching}){
+    const URI = process.env.REACT_APP_DATABASE_URI
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
     // const { postController, setPostController } = useContext(UserContext);
@@ -15,7 +16,7 @@ export default function DropdownMobile ({usernameString,querieController, setSea
             "Authorization": `Bearer ${token}`
         }
     }
-    const route =`https://linkr-db.herokuapp.com/user?username=${usernameString}`;
+    const route =`${URI}/user?username=${usernameString}`;
     useEffect(()=>{
         const querieUsernames =async ()=>{
             try{
