@@ -29,6 +29,8 @@ export default function Timeline() {
     const { id: newId } = useParams();
     const local = localStorage.getItem("token");
     const localId = localStorage.getItem("id");
+    const [renderComments, setRenderComments]= useState(false);
+
     console.log(localStorage)
     console.log(local)
     let location = useLocation();
@@ -111,7 +113,7 @@ export default function Timeline() {
     }
 
 
-    useEffect(getPost, [id,location,newId, canPublish])
+    useEffect(getPost, [id,location,newId, canPublish, renderComments])
 
     return (
         <>
@@ -161,6 +163,8 @@ export default function Timeline() {
                             getPost = {getPost}
                             hashtagController={hashtagController} 
                             setHashtagController={setHashtagController}
+                            renderComments ={renderComments}
+                            setRenderComments ={setRenderComments}
                                 />
                     )
                         : canPublish? 

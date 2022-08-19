@@ -6,7 +6,7 @@ import { TbSend } from 'react-icons/tb';
 import {BsFillCircleFill} from 'react-icons/bs'
 
 
-export default function Comments({ userId, postId, setCommentCount, showComments, repostUsername }) {
+export default function Comments({ userId, postId, setCommentCount, showComments, repostUsername, setRenderComments, renderComments }) {
     const [renderComment, setRenderComment]= useState(false);
     const [cantComment, setCantComment]= useState(false);
     const [commentary, setCommentary]= useState('');
@@ -62,7 +62,7 @@ export default function Comments({ userId, postId, setCommentCount, showComments
     async function handleClick(e){
         e.preventDefault();
         const body = {
-            userId: userId,
+            userId: id,
             postId: postId,
             commentary: commentary
         }
@@ -71,6 +71,7 @@ export default function Comments({ userId, postId, setCommentCount, showComments
             await axios.post(`${URI}/comment`, body, config);
             setCantComment(false);
             setCommentary('');
+            setRenderComments(!renderComments);
             setRenderComment(!renderComment);
         }catch(error){
             alert('Houve um erro ao publicar seu link', error);
@@ -91,7 +92,7 @@ export default function Comments({ userId, postId, setCommentCount, showComments
                     <ColumnDiv>
                         <TitleDiv>
                             <h1>{item.username}</h1>
-                            {parseInt(item.userId)=== parseInt(userId)?
+                            {parseInt(item.userId)=== parseInt(id)?
                                 <>
                                     <CircleIcon/>
                                     <h2>{"post’s author"}</h2>
