@@ -3,6 +3,7 @@ import axios from "axios";
 import styled from "styled-components";
 import EditPost from "./EditPost";
 
+
 export default function PublishPost(props) {
   const [imgLocal, setImgLocal] = useState('')
   const [enabled, setEnabled] = useState(true)
@@ -10,7 +11,7 @@ export default function PublishPost(props) {
   const local = localStorage.getItem("token");
   const [description, setDescription] = useState('')
   const inputPublish = useRef();
-  const { hashtagController, setHashtagController, getPost, postDescription, postUrl, editing, postId, setEditing, userId } = props
+  const { hashtagController, setHashtagController, getPost, setPost, postDescription, postUrl, editing, postId, setEditing, userId } = props
   const config = {
       headers: {
           "Authorization": 'Bearer ' + local
@@ -73,6 +74,7 @@ export default function PublishPost(props) {
           setEnabled(true)
       }
       function tratarSucesso() {
+          setPost([])
           setHashtagController(!hashtagController)
           setEnabled(true)
           setUrl('')
