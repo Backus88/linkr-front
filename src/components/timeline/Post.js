@@ -85,7 +85,7 @@ export default function Post(props) {
         setHashtagController={setHashtagController}/>
       :
               <PostPage>
-                {repostCount > 0?
+                {repostUsername?
                   <RepostedByYou>
                       <Icon></Icon>
                       <h1>Re-posted by <b>{repostUsername}</b></h1>
@@ -95,7 +95,7 @@ export default function Post(props) {
                       <Publication className="post">
                           <ProfileImage>
                               <img src={imageProfile}/>
-                              <Like idPost={idPost} />
+                              <Like idPost={idPost}  repostUsername={repostUsername}/>
                               <CommentImg onClick={!setWriteComm} commentCount={commentCount} showComments={showComments} setShowComments={setShowComments} />
                               <Repost userId={userId}
                                postId={idPost} 
@@ -109,11 +109,13 @@ export default function Post(props) {
                               setHashtagController={setHashtagController}
                           />
                           <ContainerPost>
+                            {!repostUsername?
                               <DivDispl>
                                   <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
                                   <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
                                   {deleteIcon ? <IconTrash userId={userId} onClick={() => setVisible(true)} /> : null}
                               </DivDispl>
+                            :null}
                               <h2>
                                   <ReactHashtag
                                       renderHashtag={(hashtagValue) => {
@@ -139,7 +141,11 @@ export default function Post(props) {
                               </ContainerUrl>
                           </ContainerPost>
                       </Publication>
-                      <Comments userId={userId} postId={idPost} setCommentCount ={setCommentCount} showComments={showComments} />
+                      <Comments userId={userId} 
+                      postId={idPost} 
+                      setCommentCount ={setCommentCount} 
+                      showComments={showComments}
+                      repostUsername ={repostUsername} />
                   </ColumnDiv>
               </PostPage>
        }

@@ -7,7 +7,7 @@ import axios from "axios";
 import UserContext from "../../contexts/UserContext";
 
 
-export default function Like({idPost}){
+export default function Like({idPost, repostUsername}){
 
     const URI = process.env.REACT_APP_DATABASE_URI
 
@@ -71,9 +71,13 @@ export default function Like({idPost}){
     }
 
     function renderLikeIcon(){
-
-        if(userHasLiked) return <LikedIcon onClick={dislikePost}/>
-        else return <UnlikedIcon onClick={likePost}/>
+        if(!repostUsername){
+            if(userHasLiked) return <LikedIcon onClick={dislikePost}/>
+            else return <UnlikedIcon onClick={likePost}/>
+        }else{
+            if(userHasLiked) return <LikedIcon />
+        else return <UnlikedIcon />
+        }
     }
 
     const likeIcon = renderLikeIcon();
@@ -99,7 +103,7 @@ export default function Like({idPost}){
     const toRenderLikesTooltip = renderLikesTooltip();
 
     return(
-        <LikeBox> 
+        <LikeBox repostUsername ={repostUsername}> 
             {likeIcon}
             <NumberLikes>
                 {toRenderLikesTooltip} 
@@ -116,7 +120,7 @@ display: flex;
 flex-direction: column;
 align-items: center;
 margin-left: 15px;
-cursor: pointer;
+cursor: ${props => props.repostUsername? 'default': 'pointer'};
 `
 
 const UnlikedIcon = styled(AiOutlineHeart)`

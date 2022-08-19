@@ -6,7 +6,7 @@ import { TbSend } from 'react-icons/tb';
 import {BsFillCircleFill} from 'react-icons/bs'
 
 
-export default function Comments({ userId, postId, setCommentCount, showComments, writeComm, setWriteComm }) {
+export default function Comments({ userId, postId, setCommentCount, showComments, repostUsername }) {
     const [renderComment, setRenderComment]= useState(false);
     const [cantComment, setCantComment]= useState(false);
     const [commentary, setCommentary]= useState('');
@@ -80,9 +80,10 @@ export default function Comments({ userId, postId, setCommentCount, showComments
 
 
     return ( 
-    <ColumnDiv id={'comm'}>
-         {showComments?
-         <>
+    <>
+        {showComments?
+        <ColumnDiv id={'comm'}>
+             <>
             {infoComment?.map((item, index)=>{
                 return(
                 <CommentItens key={index}>
@@ -110,7 +111,7 @@ export default function Comments({ userId, postId, setCommentCount, showComments
                 </CommentItens>
             )})}
          </>
-         :null}
+            {(!repostUsername)?
             <CommentBox>
                 <img src={imgLocal} alt='' />
                 <CommentInputBox>
@@ -124,7 +125,10 @@ export default function Comments({ userId, postId, setCommentCount, showComments
                     <SendIcon role='button' type='submit' onClick={ e=> handleClick(e)} />
                 </CommentInputBox>
             </CommentBox>
+            :null}
         </ColumnDiv>
+        :null}
+    </>
         )
 
 }

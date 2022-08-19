@@ -23,7 +23,9 @@ export default function Repost(props){
 
   return(
     <RepostPage>
-      <RepostIcon onClick={() => setModal(!modal)}/>
+      {!repostUsername?
+      <RepostIcon onClick={() => setModal(!modal)} repostUsername={repostUsername} />
+      :<RepostIcon repostUsername={repostUsername} />}
       <RepostCount> {repostCount} re-post </RepostCount>
       <ModalRepost  modal={modal} setModal={setModal} postId={postId} getPost={getPost} hashtagController={hashtagController} setHashtagController={setHashtagController} userId={userId}/>
     </RepostPage>
@@ -41,7 +43,7 @@ width: 30px;
 height: 36px;
 color: white;
 margin-left: 10px;
-cursor: pointer;
+cursor: ${props=> props.repostUsername? 'default': 'pointer'};;
 `
 
 const RepostCount = styled.div`
