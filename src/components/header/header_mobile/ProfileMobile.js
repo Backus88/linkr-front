@@ -44,6 +44,7 @@ export default function ProfileMobile(){
   function HandleLogout(){
     localStorage.removeItem('token')
     setLocal({})
+    HandleClick()
     navigate('/')
   }
 
@@ -70,6 +71,7 @@ const ProfileComp = styled.div`
 display: flex;
 align-items: center;
 height: 70px;
+z-index: 10;
 `
 
 const Menu = styled.div`
