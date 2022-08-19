@@ -10,16 +10,19 @@ import Post from "./Post";
 import TrendingBox from "./TrendingBox";
 import MediaQuery from 'react-responsive'
 import TimelineMobile from "./timeline_mobile/TimelineMobile";
+import Follow from "./Follow";
+import NewPosts from "./NewPost";
 import InfiniteScroll from 'react-infinite-scroller';
 
 
 export default function Timeline() {
+    const URI = process.env.REACT_APP_DATABASE_URI
     const [post, setPost] = useState([]);
     const [user, setUser] = useState([]);
-    const [username, setUsername] = useState('');
-    const [hashtagController, setHashtagController] = useState(false)
+    const [username, setUsername]= useState('');
     const [id, setId] = useState('');
     const [canPublish, setCanPublish] = useState(true);
+    const [hashtagController, setHashtagController] = useState(false);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false)
     const [crash, setCrash] = useState(false)
@@ -46,9 +49,23 @@ export default function Timeline() {
         checkToken()
     }, [])
 
+    useEffect(() => {
+        getReposts()
+      },[])
+    
+      async function getReposts(){
+        try {
+          const promise = await axios.get(`${URI}/repost-count`)
+        
+          const count = promise.data.count
+    
+        } catch (error) {
+          console.error(error)
+        }
+      }
+
 
     function renderById(id) {
-        console.log("chamou esse ttrm aqui")
         if (parseInt(id) !== parseInt(localId)) {
             setId(parseInt(id))
             setPost([])
@@ -76,7 +93,7 @@ export default function Timeline() {
         setLoading(true)
         if (!id) {
             const offset = post.length
-            const promise = axios.get(`http://localhost:4000/post?offset=${offset}`, config)
+            const promise = axios.get(`${URI}/post?offset=${offset}`, config)
             promise.then(response => {
                 let data = [...post, ...response.data]
                 if (response.data.length === 0) {
@@ -100,7 +117,7 @@ export default function Timeline() {
 
         } else {
             const offset = post.length
-            const promise = axios.get(`http://localhost:4000/user/${id}?offset=${offset}`, config)
+            const promise = axios.get(`${URI}/user/${id}?offset=${offset}`, config)
             promise.then(response => {
                 let data = [...post, ...response.data]
                 if (response.data.length === 0) {
@@ -111,7 +128,7 @@ export default function Timeline() {
                 setLoading(false)
             })
 
-            const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
+            const userById = axios.get(`${URI}/user?id=${id}`, config);
             userById.then(response => {
                 let data = { ...response.data }
                 setUsername(data)
@@ -135,23 +152,20 @@ export default function Timeline() {
 
     //useEffect(getPost, [id, location, newId, canPublish])
 
-    function getUser() {
-        const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
-        promise.then(response => setUser(response.data))
-    }
     return (
         <>
-            <MediaQuery minWidth={1280}>
-                <GlobalStyle />
-                <Header />
-                <Container>
-                    <Main>
+        <MediaQuery minWidth={700}>
+            <GlobalStyle />
+            <Header />
+            <Container>
+                <Main>
 
                         {canPublish ? <Title>timeline</Title> : <Title>{username.username}'s posts</Title>}
                         {canPublish ? <PublishPost getPost={getPost}
                             setPost={setPost}
                             hashtagController={hashtagController}
                             setHashtagController={setHashtagController} /> : null}
+                              <NewPosts getPost={getPost} post = {post} loading = {loading}/>
                                <InfiniteScroll
                                     key={"scroll"}
                                     loadMore={handleHasMore}
@@ -185,6 +199,8 @@ export default function Timeline() {
                                                 imageProfile={item.profileImgUrl}
                                                 key={item.url + index}
                                                 idPost={item.id}
+                                                repostUsername= {item.repostUsername}
+                                                repostCount ={item.repostCount}
                                                 getPost={getPost}
                                                 hashtagController={hashtagController}
                                                 setHashtagController={setHashtagController}
@@ -194,10 +210,13 @@ export default function Timeline() {
                                         <MsgError>There are no posts yet</MsgError>
                         }</InfiniteScroll>
                     </Main>
-                    <TrendingBox hashtagController={hashtagController} />
+                    <RightSide>
+                {canPublish?<></>:<Follow followedId={id} config={config} />}
+                <TrendingBox hashtagController={hashtagController} />
+                </RightSide>
                 </Container>
             </MediaQuery>
-            <MediaQuery maxWidth={1279}>
+            <MediaQuery maxWidth={699}>
                 <TimelineMobile />
             </MediaQuery>
         </>
@@ -213,13 +232,13 @@ justify-content:center;
 margin: auto;
 `
 
-const Main = styled.div`
+export const Main = styled.div`
 width: 43%;
 max-width: 560px;
 `
 
 const Title = styled.div`
-width: 40%;
+width: 100%;
 font-family: 'Oswald';
 font-style: normal;
 font-weight: 700;
@@ -273,4 +292,10 @@ font-weight: 400;
 font-size: 30px;
 margin: 60px auto 0px auto;
 text-align: center;
+`
+
+const RightSide = styled.div`
+display: flex;
+flex-direction: column;
+align-items: flex-end;
 `

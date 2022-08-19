@@ -22,6 +22,7 @@ export default function Timeline() {
     const { id: newId } = useParams();
     const { hashtag: newHashtag} = useParams();
     const local = localStorage.getItem("token");
+    const URI = process.env.REACT_APP_DATABASE_URI
     const [hasMore, setHasMore] = useState(true)
    
     console.log(localStorage)
@@ -61,7 +62,7 @@ export default function Timeline() {
         setId(parseInt(newId))
         if (!id) {
             const offset = post.length
-            const promise = axios.get(`http://localhost:4000/hashtag/${newHashtag}?offset=${offset}`, config)
+            const promise = axios.get(`${URI}/hashtag/${newHashtag}?offset=${offset}`, config)
             promise.then(response => {
                 let data = [...post, ...new Set(response.data)]
                 if (response.data.length === 0) {
@@ -81,14 +82,14 @@ export default function Timeline() {
             
 
         }else{
-            const promise = axios.get(`http://localhost:4000/user/${id}`, config)
+            const promise = axios.get(`${URI}/user/${id}`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
 
-            const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
+            const userById = axios.get(`${URI}/user?id=${id}`, config);
             userById.then(response => {
                 let data = {...response.data}
                 setUsername(data)
@@ -112,10 +113,6 @@ export default function Timeline() {
 
     useEffect(getPost, [id,location,newId, canPublish])
 
-    function getUser() {
-        const promise = axios.get('http://localhost:4000/post', config)
-        promise.then(response => setUser(response.data))
-    }
     return (
         <>
         <GlobalStyle />
@@ -229,4 +226,5 @@ font-size: 30px;
 
 const Main = styled.div`
 width: 43%;
+max-width: 560px;
 ` 

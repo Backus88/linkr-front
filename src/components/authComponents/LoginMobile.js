@@ -35,7 +35,9 @@ export default function LoginMobile(){
       e.target.style.background = '#1877F2';
     } 
 
-    const URL = "https://linkr-db.herokuapp.com/signin"
+    const URI = process.env.REACT_APP_DATABASE_URI
+
+    const URL = `${URI}/signin`
     const signIn = login;
     const promise = axios.post(URL, signIn)
     promise
