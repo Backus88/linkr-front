@@ -205,4 +205,5 @@ font-size: 30px;
 
 const Main = styled.div`
 width: 43%;
+max-width: 560px;
 ` 

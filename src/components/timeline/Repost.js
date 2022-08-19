@@ -6,7 +6,7 @@ import axios from "axios";
 
 export default function Repost(props){
 
-  const {userId, postId, getPost, hashtagController, setHashtagController} = props
+  const {userId, postId, getPost, hashtagController, setHashtagController,repostCount} = props
 
   const [modal, setModal] = useState(false)
   const URI = process.env.REACT_APP_DATABASE_URI
@@ -22,7 +22,7 @@ export default function Repost(props){
   return(
     <RepostPage>
       <RepostIcon onClick={handleClick}/>
-      <RepostCount id={"comm"}> 0 re-posts</RepostCount>
+      <RepostCount id={"comm"}> {repostCount} re-posts</RepostCount>
       <ModalRepost  modal={modal} setModal={setModal} postId={postId} getPost={getPost} hashtagController={hashtagController} setHashtagController={setHashtagController} userId={userId}/>
     </RepostPage>
   )
@@ -39,6 +39,7 @@ width: 30px;
 height: 36px;
 color: white;
 margin-left: 10px;
+cursor: pointer;
 `
 
 const RepostCount = styled.div`

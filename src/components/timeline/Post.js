@@ -44,6 +44,8 @@ export default function Post(props) {
       imageProfile,
       idPost,
       getPost,
+      repostUsername,
+      repostCount,
       hashtagController,
       setHashtagController
   } = props
@@ -58,6 +60,8 @@ export default function Post(props) {
       })
     }
 
+    console.log(repostUsername);
+    console.log(repostCount);
     useEffect(()=>{
     if(parseInt(localId)===parseInt(userId)&& userId){
         setDeleteIcon(true);
@@ -81,17 +85,24 @@ export default function Post(props) {
         setHashtagController={setHashtagController}/>
       :
               <PostPage>
+                {repostCount > 0?
                   <RepostedByYou>
                       <Icon></Icon>
-                      <h1>Re-posted by <b>you</b></h1>
+                      <h1>Re-posted by <b>{repostUsername}</b></h1>
                   </RepostedByYou>
+                :null}
                   <ColumnDiv>
                       <Publication className="post">
                           <ProfileImage>
                               <img src={imageProfile} />
                               <Like idPost={idPost} />
                               <CommentImg commentCount={commentCount} showComments={showComments} setShowComments={setShowComments} />
-                              <Repost userId={userId} postId={idPost} getPost={getPost} hashtagController={hashtagController} setHashtagController={setHashtagController} />
+                              <Repost userId={userId}
+                               postId={idPost} 
+                               getPost={getPost} 
+                               hashtagController={hashtagController} 
+                               setHashtagController={setHashtagController}
+                               repostCount={repostCount} />
                           </ProfileImage>
                           <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} hashtagController={hashtagController}
                               setHashtagController={setHashtagController}
@@ -100,7 +111,6 @@ export default function Post(props) {
                               <DivDispl>
                                   <EditPost userId={userId} setEditing={setEditing} editing={false} top={'-10px'} />
                                   <h1 role='button' onClick={() => renderById(userId)} >{username}</h1>
-
                                   {deleteIcon ? <IconTrash userId={userId} onClick={() => setVisible(true)} /> : null}
                               </DivDispl>
                               <h2>
@@ -141,6 +151,7 @@ const PostPage = styled.div`
     position: relative;
     width: 100%;
     height: auto;
+    margin: 100px 0;
 `
 
 const RepostedByYou = styled.div`
@@ -218,9 +229,6 @@ height: 100%;
 border-radius: 16px;
 margin-top: 20px;
 margin-bottom: 20px;
-h1:nth-child(2){
-    cursor: pointer;
-}
 
 h1{
     font-size: 1.2rem;
@@ -291,6 +299,9 @@ cursor: pointer;
 const DivDispl = styled.div`
 display: flex;
 justify-content: space-between;
+h1{
+    cursor: pointer;
+}
 `
 const HashtagLink = styled(Link)`
 text-decoration: none;
