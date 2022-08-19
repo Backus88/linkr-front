@@ -110,6 +110,7 @@ export default function Timeline() {
             promise.catch(() => {
                 setLoading(false)
                 setCrash(true)
+                setHasMore(false)
             })
             setCanPublish(true)
             setLoading(false)
@@ -139,10 +140,12 @@ export default function Timeline() {
             promise.catch(() => {
                 setLoading(false)
                 setCrash(true)
+                setHasMore(false)
             })
             userById.catch(() => {
                 setLoading(false)
                 setCrash(true)
+                setHasMore(false)
             })
             setCanPublish(false);
         }
@@ -165,7 +168,11 @@ export default function Timeline() {
                             setPost={setPost}
                             hashtagController={hashtagController}
                             setHashtagController={setHashtagController} /> : null}
-                              <NewPosts getPost={getPost} post = {post} loading = {loading}/>
+                            {canPublish ?
+                              <NewPosts getPost={getPost} post = {post} loading = {loading} setPost={setPost}/>
+                              :
+                              null
+                            }
                                <InfiniteScroll
                                     key={"scroll"}
                                     loadMore={handleHasMore}

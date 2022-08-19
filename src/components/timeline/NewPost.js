@@ -8,8 +8,9 @@ export default function NewPosts(props) {
     const local = localStorage.getItem("token");
     const [visible, setVisible] = useState(false);
     const [count, setCount] = useState(0)
-    const { post, getPost, loading } = props
+    const { post, getPost, loading, setPost } = props
     function update(){
+        setPost([])
         getPost()
         setVisible(false)
     }
