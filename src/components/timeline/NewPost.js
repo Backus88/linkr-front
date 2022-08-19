@@ -4,6 +4,7 @@ import useInterval from 'use-interval'
 import React, { useState } from "react"
 import axios from "axios"
 export default function NewPosts(props) {
+    const URI = process.env.REACT_APP_DATABASE_URI
     const local = localStorage.getItem("token");
     const [visible, setVisible] = useState(false);
     const [count, setCount] = useState(0)
@@ -19,7 +20,7 @@ export default function NewPosts(props) {
             }
         }    
         if(!loading){
-            const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
+            const promise = axios.get(`${URI}/post`, config)
             promise.then(response => {
                 let data = [...response.data]
                 if(data[0].id > post[0].id){
