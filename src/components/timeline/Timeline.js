@@ -152,21 +152,7 @@ export default function Timeline() {
                             setPost={setPost}
                             hashtagController={hashtagController}
                             setHashtagController={setHashtagController} /> : null}
-                        {loading ?
-                            <>
-                                <IconLoading />
-                                <MsgLoading>loading...</MsgLoading>
-                            </>
-                            :
-                            crash ?
-                                <>
-                                    <MsgError>
-                                        An error occured while trying to fetch the posts,
-                                        please refresh the page
-                                    </MsgError>
-                                </>
-                                :
-                                <InfiniteScroll
+                               <InfiniteScroll
                                     key={"scroll"}
                                     loadMore={handleHasMore}
                                     pageStart={0}
@@ -180,8 +166,16 @@ export default function Timeline() {
                                     initialLoad={true}
 
                                 >
-                                    {post.length > 0 ?
-
+                        {
+                            crash ?
+                                <>
+                                    <MsgError>
+                                        An error occured while trying to fetch the posts,
+                                        please refresh the page
+                                    </MsgError>
+                                </>
+                                :
+                                    post.length > 0 ?
                                         post.map((item, index) =>
                                             <Post username={item.username}
                                                 description={item.description}
@@ -197,8 +191,8 @@ export default function Timeline() {
                                             />
                                         )
                                         :
-                                        <MsgError>There are no posts yet</MsgError>}
-                                </InfiniteScroll>}
+                                        <MsgError>There are no posts yet</MsgError>
+                        }</InfiniteScroll>
                     </Main>
                     <TrendingBox hashtagController={hashtagController} />
                 </Container>

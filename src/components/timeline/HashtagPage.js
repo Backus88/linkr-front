@@ -124,12 +124,7 @@ export default function Timeline() {
         <Main>
 
         {canPublish?<Title>{'# ' + newHashtag}</Title>:<Title>{username.username}'s posts</Title> }
-        {loading ?
-            <>
-                <IconLoading />
-                <MsgLoading>loading...</MsgLoading>
-            </>
-            :
+        {
             crash ?
                 <>
                     <MsgError>
