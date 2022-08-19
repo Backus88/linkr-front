@@ -81,18 +81,40 @@ export default function Like({idPost}){
     function renderLikesTooltip(){
 
         if(userHasLiked && likesQuantity == 1){
-            return <> <p data-tip= 'Você' > {`${likesQuantity} likes`}</p>        
-            <ReactTooltip place="bottom" type="light"/> </>
+            return (
+            <> 
+                <p data-tip= 'Você' > {`${likesQuantity} likes`}</p>        
+                <ReactTooltip place="bottom" type="light"/> 
+            </>
+            )
         } else if(userHasLiked && likesQuantity == 2) {
-            return <> <p data-tip= {`Você e ${likesUsers[0]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+            return (
+            <> 
+                <p data-tip= {`Você e ${likesUsers[0]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> 
+            </>)
         } else if(userHasLiked && likesQuantity >2) {
-            return <> <p data-tip= {`Você, ${likesUsers[0]} e outras ${likesUsers.length - 1} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+            return (
+            <> 
+                <p data-tip= {`Você, ${likesUsers[0]} e outras ${likesUsers.length - 1} pessoas`} > {`${likesQuantity} likes`} </p> 
+                <ReactTooltip place="bottom" type="light"/> 
+            </>)
         } else if(likesQuantity == 1){
-            return <> <p data-tip= {`${likesUsers[0]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+            return (
+            <> 
+                <p data-tip= {`${likesUsers[0]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> 
+            </>)
         } else if(likesQuantity == 2) {
-            return <> <p data-tip= {`${likesUsers[0]} e ${likesUsers[1]}`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+            return (
+            <> 
+                <p data-tip= {`${likesUsers[0]} e ${likesUsers[1]}`} > {`${likesQuantity} likes`} </p> 
+                <ReactTooltip place="bottom" type="light"/> 
+            </>)
         } else if(likesQuantity > 2) {
-            return <> <p data-tip= {`${likesUsers[0]}, ${likesUsers[1]} e outras ${likesUsers.length - 2} pessoas`} > {`${likesQuantity} likes`} </p> <ReactTooltip place="bottom" type="light"/> </>
+            return (
+            <> 
+                <p data-tip= {`${likesUsers[0]}, ${likesUsers[1]} e outras ${likesUsers.length - 2} pessoas`} > {`${likesQuantity} likes`} </p> 
+                <ReactTooltip place="bottom" type="light"/> 
+            </>)
         }         
     }
 

@@ -78,7 +78,7 @@ export default function Post(props) {
         postDescription = {description} 
         postUrl={uri} 
         editing ={editing} 
-        setEditing= {setEditing} 
+        setEditing = {setEditing} 
         postId = {idPost} 
         userId= {userId}
         hashtagController={hashtagController} 
