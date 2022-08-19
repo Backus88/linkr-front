@@ -6,7 +6,7 @@ import { TbSend } from 'react-icons/tb';
 import {BsFillCircleFill} from 'react-icons/bs'
 
 
-export default function Comments({ userId, postId, setCommentCount, showComments }) {
+export default function Comments({ userId, postId, setCommentCount, showComments, writeComm, setWriteComm }) {
     const [renderComment, setRenderComment]= useState(false);
     const [cantComment, setCantComment]= useState(false);
     const [commentary, setCommentary]= useState('');
@@ -23,6 +23,15 @@ export default function Comments({ userId, postId, setCommentCount, showComments
             "Authorization": 'Bearer ' + local
         }
     }
+
+    // useEffect( () => {
+    //     if(writeComm === true){
+    //         document.getElementById('comm').hidden = true;
+    //     }
+    //     if(writeComm === false){
+    //         document.getElementById('comm').hidden = false;
+    //     }
+    // },[])
 
     useEffect( ()=>{
         const getComments = async ()=>{
@@ -59,7 +68,7 @@ export default function Comments({ userId, postId, setCommentCount, showComments
         }
         try{
             setCantComment(true);
-            await axios.post(`${URI}/comment`,body, config);
+            await axios.post(`${URI}/comment`, body, config);
             setCantComment(false);
             setCommentary('');
             setRenderComment(!renderComment);
@@ -70,8 +79,8 @@ export default function Comments({ userId, postId, setCommentCount, showComments
     }
 
 
-    return (
-        <ColumnDiv>
+    return ( 
+    <ColumnDiv id={'comm'}>
          {showComments?
          <>
             {infoComment?.map((item, index)=>{
@@ -116,8 +125,10 @@ export default function Comments({ userId, postId, setCommentCount, showComments
                 </CommentInputBox>
             </CommentBox>
         </ColumnDiv>
-    )
+        )
+
 }
+
 
 const ColumnDiv = styled.div`
     width: 100%;

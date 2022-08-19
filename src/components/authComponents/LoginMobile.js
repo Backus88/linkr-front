@@ -46,7 +46,9 @@ export default function LoginMobile(){
 
       setInfo(dados)
       console.log(dados)
-      localStorage.setItem("token", dados)
+      localStorage.setItem("token", dados.token);
+      localStorage.setItem("img", dados.profileImgUrl);
+      localStorage.setItem("id", dados.id);
       setLocal(localStorage.getItem("token"))
 
         if(local.length === 0){

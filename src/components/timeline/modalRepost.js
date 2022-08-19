@@ -17,18 +17,18 @@ export default function ModalRepost(props) {
         }
     }
 
-    function yesDelete() {
-        console.log(postId)
-        console.log(userId)
+    function confirmShare() {
+
         const repost = {
-          postId,
-          userId
+          userId: localId,
+          postId
         }
         setLoading(true)
-        // const promise = axios.delete(`${URI}/delete/${postId}`, config)
-        // promise.then(treatSucess).catch(treatError)
+        const promise = axios.post(`${URI}/repost`, repost, config)
+        promise.then(treatSucess)
+        .catch(treatError)
     }
-    function notDelet() {
+    function noShare() {
         setModal(false)
         setLoading(false)
     }
@@ -38,8 +38,7 @@ export default function ModalRepost(props) {
         setLoading(false)
         setModal(false)
         getPost()
-        setHashtagController(hashtagController)
-        
+        setHashtagController(hashtagController)       
     }
 
     function treatError(error) {
@@ -62,8 +61,8 @@ export default function ModalRepost(props) {
           <ModalInfo>
               <ModalF> Do you want to re-post this link? </ModalF>
               <Buttons>
-                  <Buttom1 onClick={notDelet}><One>No, cancel</One></Buttom1>
-                  <Buttom2 onClick={yesDelete}><Two>Yes, share!</Two></Buttom2>
+                  <Buttom1 onClick={noShare}><One>No, cancel</One></Buttom1>
+                  <Buttom2 onClick={confirmShare}><Two>Yes, share!</Two></Buttom2>
               </Buttons>
           </ModalInfo>
           </>}

@@ -13,7 +13,6 @@ import Like from "./Like.js";
 import EditPost from "./EditPost";
 import ModalDelete from "./modalDelete";
 import PublishPost from "./PublishPost";
-
 import Comments from "./Comments";
 import Repost from "./Repost";
 import CommentImg from "./CommentImg";
@@ -34,6 +33,7 @@ export default function Post(props) {
   const [commentCount, setCommentCount] = useState(0);
   const [showComments, setShowComments] = useState(false);
   const URI = process.env.REACT_APP_DATABASE_URI
+  const [writeComm, setWriteComm] = useState(false)
 
   let {
       username,
@@ -94,15 +94,16 @@ export default function Post(props) {
                   <ColumnDiv>
                       <Publication className="post">
                           <ProfileImage>
-                              <img src={imageProfile} />
+                              <img src={imageProfile}/>
                               <Like idPost={idPost} />
-                              <CommentImg commentCount={commentCount} showComments={showComments} setShowComments={setShowComments} />
+                              <CommentImg onClick={!setWriteComm} commentCount={commentCount} showComments={showComments} setShowComments={setShowComments} />
                               <Repost userId={userId}
                                postId={idPost} 
                                getPost={getPost} 
                                hashtagController={hashtagController} 
                                setHashtagController={setHashtagController}
-                               repostCount={repostCount} />
+                               repostCount={repostCount}
+                               repostUsername={repostUsername} />
                           </ProfileImage>
                           <ModalDelete visible={visible} setVisible={setVisible} postId={idPost} getPost={getPost} hashtagController={hashtagController}
                               setHashtagController={setHashtagController}

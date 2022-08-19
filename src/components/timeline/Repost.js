@@ -6,23 +6,25 @@ import axios from "axios";
 
 export default function Repost(props){
 
-  const {userId, postId, getPost, hashtagController, setHashtagController,repostCount} = props
+  const {userId, postId, getPost, hashtagController, setHashtagController,repostCount, repostUsername} = props
 
   const [modal, setModal] = useState(false)
   const URI = process.env.REACT_APP_DATABASE_URI
 
+  console.log(repostCount)
 
-
-  // onClick={() => setModal(!modal)
-  function handleClick(){
-    setModal(!modal)
-    console.log(postId)
+  function count(){
+    if(repostCount === 0){
+      return '0'
+    } else {
+      return repostCount
+    }
   }
 
   return(
     <RepostPage>
-      <RepostIcon onClick={handleClick}/>
-      <RepostCount id={"comm"}> {repostCount} re-posts</RepostCount>
+      <RepostIcon onClick={() => setModal(!modal)}/>
+      <RepostCount> {repostCount} re-post </RepostCount>
       <ModalRepost  modal={modal} setModal={setModal} postId={postId} getPost={getPost} hashtagController={hashtagController} setHashtagController={setHashtagController} userId={userId}/>
     </RepostPage>
   )
