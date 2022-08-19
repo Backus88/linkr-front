@@ -6,7 +6,7 @@ import { TbSend } from 'react-icons/tb';
 import {BsFillCircleFill} from 'react-icons/bs'
 
 
-export default function Comments({ userId, postId, setCommentCount, showComments, repostUsername }) {
+export default function Comments({ userId, postId, setCommentCount, showComments, repostUsername, setRenderComments, renderComments }) {
     const [renderComment, setRenderComment]= useState(false);
     const [cantComment, setCantComment]= useState(false);
     const [commentary, setCommentary]= useState('');
@@ -71,6 +71,7 @@ export default function Comments({ userId, postId, setCommentCount, showComments
             await axios.post(`${URI}/comment`, body, config);
             setCantComment(false);
             setCommentary('');
+            setRenderComments(!renderComments);
             setRenderComment(!renderComment);
         }catch(error){
             alert('Houve um erro ao publicar seu link', error);

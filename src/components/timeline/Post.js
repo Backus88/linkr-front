@@ -33,7 +33,8 @@ export default function Post(props) {
   const [commentCount, setCommentCount] = useState(0);
   const [showComments, setShowComments] = useState(false);
   const URI = process.env.REACT_APP_DATABASE_URI
-  const [writeComm, setWriteComm] = useState(false)
+  const [writeComm, setWriteComm] = useState(false);
+  
 
   let {
       username,
@@ -47,7 +48,9 @@ export default function Post(props) {
       repostUsername,
       repostCount,
       hashtagController,
-      setHashtagController
+      setHashtagController,
+      renderComments,
+      setRenderComments
   } = props
   function getMetadata() {
       const promise = axios.get(
@@ -95,7 +98,7 @@ export default function Post(props) {
                       <Publication className="post">
                           <ProfileImage>
                               <img src={imageProfile}/>
-                              <Like idPost={idPost}  repostUsername={repostUsername}/>
+                              <Like idPost={idPost}  repostUsername={repostUsername} setRenderComments={setRenderComments} renderComments={renderComments}/>
                               <CommentImg onClick={!setWriteComm} commentCount={commentCount} showComments={showComments} setShowComments={setShowComments} />
                               <Repost userId={userId}
                                postId={idPost} 
@@ -145,7 +148,10 @@ export default function Post(props) {
                       postId={idPost} 
                       setCommentCount ={setCommentCount} 
                       showComments={showComments}
-                      repostUsername ={repostUsername} />
+                      repostUsername ={repostUsername}
+                      renderComments = {renderComments}
+                      setRenderComments ={setRenderComments}
+                      />
                   </ColumnDiv>
               </PostPage>
        }

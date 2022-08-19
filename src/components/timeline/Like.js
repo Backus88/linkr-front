@@ -7,7 +7,7 @@ import axios from "axios";
 import UserContext from "../../contexts/UserContext";
 
 
-export default function Like({idPost, repostUsername}){
+export default function Like({idPost, repostUsername, setRenderComments, renderComments}){
 
     const URI = process.env.REACT_APP_DATABASE_URI
 
@@ -51,6 +51,7 @@ export default function Like({idPost, repostUsername}){
             
             await axios.delete(`${URL}`, config);
             fetchLikes();
+            setRenderComments(!renderComments);
 
         } catch (error) {
             console.log(error.response.data.message);
@@ -63,6 +64,7 @@ export default function Like({idPost, repostUsername}){
             
             await axios.post(`${URL}`, "", config);
             fetchLikes();
+            setRenderComments(!renderComments);
 
         } catch (error) {
             console.log(error);
