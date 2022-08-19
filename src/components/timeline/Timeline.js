@@ -106,6 +106,7 @@ export default function Timeline() {
             const userById = axios.get(`${URI}/user?id=${id}`, config);
             userById.then(response => {
                 let data = {...response.data}
+                console.log(data)
                 setUsername(data)
                 setLoading(false)
             });
@@ -135,7 +136,14 @@ export default function Timeline() {
             <Container>
                 <Main>
 
-            {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
+            {canPublish?
+            <TitleBox>
+                <Title>timeline</Title>
+            </TitleBox>:
+            <TitleBox>
+            <ProfileImage src={username.profileImgUrl} alt =''/>
+            <Title>{username.username}'s posts</Title> 
+            </TitleBox>}
             {canPublish ? <PublishPost getPost={getPost} 
             hashtagController={hashtagController} 
             setHashtagController={setHashtagController} /> : null} 
@@ -210,8 +218,23 @@ font-style: normal;
 font-weight: 700;
 font-size: 43px;
 color: #FFFFFF;
-margin: 100px 0 0px 0;
+//margin: 100px 0 0px 0;
 text-align: start;
+`
+
+const TitleBox = styled.div`
+display: flex;
+flex-direction: row;
+align-items: center;
+margin: 100px 0 0 0;
+`
+
+const ProfileImage = styled.img`
+width: 50px;
+height: 50px;
+border-radius: 50%;
+margin-right: 1rem;
+object-fit: cover;
 `
 
 const Button = styled.div`
