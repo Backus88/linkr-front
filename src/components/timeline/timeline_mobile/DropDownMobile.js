@@ -21,7 +21,8 @@ export default function DropdownMobile ({usernameString,querieController, setSea
         const querieUsernames =async ()=>{
             try{
                 const {data:arrayUsernames} = await axios.get(route, config);
-                setQuerie([...arrayUsernames]);
+                const arrayUsernamesWithFollowStatus = [...arrayUsernames].sort((a,b) => Number(b.isFollower) - Number(a.isFollower));
+                setQuerie(arrayUsernamesWithFollowStatus);
             }catch(error){
                 console.log(error)
             }
@@ -43,8 +44,16 @@ export default function DropdownMobile ({usernameString,querieController, setSea
             {querie?.map((item, index)=> {
                 return(
                     <ItemDiv onClick={()=>renderById(item.id)} key ={index}>
+                        <Info>
                         <img src={item.profileImgUrl} alt="" />
-                        <h1>{item.username}</h1>
+                        <h1>{item.username}</h1>    
+                        </Info>
+                        {item.isFollower ? 
+                        <FollowStatus>
+                        <p> • following</p>
+                        </FollowStatus> : 
+                        <></>
+                        }
                     </ItemDiv>
                 )
             })}
@@ -80,6 +89,7 @@ const ItemDiv = styled.div`
     width: auto;
     background-color: transparent;
     display: flex;
+    flex-direction: row;
     justify-content: flex-start;
     align-items: center;
     padding-top: 14px;
@@ -102,4 +112,22 @@ const ItemDiv = styled.div`
         margin-right: 12px;
         object-fit: cover;
     }
+`;
+
+const Info = styled.div`
+display: flex;
+flex-direction: row;
+align-items: center;
+`;
+const FollowStatus = styled.div`
+display: flex;
+align-items: center;
+margin-left: 7px;
+
+font-family: 'Lato';
+font-style: normal;
+font-weight: 400;
+font-size: 19px;
+line-height: 23px;
+color: #C5C5C5;
 `;
