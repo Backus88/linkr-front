@@ -6,6 +6,8 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function Follow(props){
 
+    const URI = process.env.REACT_APP_DATABASE_URI
+
     let {
         followedId,
         config
@@ -18,7 +20,7 @@ export default function Follow(props){
         setLoading(true)
         try {
 
-            const response = await axios.get(`http://localhost:4000/follows/${followedId}`, config);
+            const response = await axios.get(`${URI}/follows/${followedId}`, config);
             handleSucess(response);
 
         } catch (error) {
@@ -45,7 +47,7 @@ export default function Follow(props){
     async function followUser(){
         
         try {
-          await axios.post(`http://localhost:4000/follows/${followedId}`,'', config);
+          await axios.post(`${URI}/follows/${followedId}`,'', config);
           getFollow();
           
         } catch (error) {
@@ -56,7 +58,7 @@ export default function Follow(props){
     async function unfollowUser(){
         
         try {
-            await axios.delete(`http://localhost:4000/follows/${followedId}`, config);
+            await axios.delete(`${URI}/follows/${followedId}`, config);
             getFollow();
             
           } catch (error) {
