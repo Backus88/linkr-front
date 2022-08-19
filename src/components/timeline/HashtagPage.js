@@ -7,6 +7,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Post from "./Post";
 import TrendingBox from "./TrendingBox";
+import InfiniteScroll from 'react-infinite-scroller';
 
 
 export default function Timeline() {
@@ -21,6 +22,8 @@ export default function Timeline() {
     const { id: newId } = useParams();
     const { hashtag: newHashtag} = useParams();
     const local = localStorage.getItem("token");
+    const [hasMore, setHasMore] = useState(true)
+   
     console.log(localStorage)
     console.log(local)
     let location = useLocation();
@@ -46,16 +49,27 @@ export default function Timeline() {
         navigate(`/user/${id}`);
     }
 
+    function handleHasMore() {
+
+        if (!loading) {
+            getPost()
+        }
+    }
+
     function getPost() {
         setLoading(true)
         setId(parseInt(newId))
         if (!id) {
-            const promise = axios.get(`https://linkr-db.herokuapp.com/hashtag/${newHashtag}`, config)
+            const offset = post.length
+            const promise = axios.get(`http://localhost:4000/hashtag/${newHashtag}?offset=${offset}`, config)
             promise.then(response => {
-                console.log(response.data);
-                let data = [...new Set(response.data)]
-                console.log(data)
-                setPost(data)
+                let data = [...post, ...new Set(response.data)]
+                if (response.data.length === 0) {
+                    setHasMore(false)
+
+                }else{
+                    setPost(data)
+                }
                 setLoading(false)
             })
 
@@ -64,16 +78,17 @@ export default function Timeline() {
                 setCrash(true)
             })
             setCanPublish(true)
+            
 
         }else{
-            const promise = axios.get(`https://linkr-db.herokuapp.com/user/${id}`, config)
+            const promise = axios.get(`http://localhost:4000/user/${id}`, config)
             promise.then(response => {
                 let data = [...response.data]
                 setPost(data)
                 setLoading(false)
             })
 
-            const userById = axios.get(`https://linkr-db.herokuapp.com/user?id=${id}`, config);
+            const userById = axios.get(`http://localhost:4000/user?id=${id}`, config);
             userById.then(response => {
                 let data = {...response.data}
                 setUsername(data)
@@ -98,7 +113,7 @@ export default function Timeline() {
     useEffect(getPost, [id,location,newId, canPublish])
 
     function getUser() {
-        const promise = axios.get('https://linkr-db.herokuapp.com/post', config)
+        const promise = axios.get('http://localhost:4000/post', config)
         promise.then(response => setUser(response.data))
     }
     return (
@@ -123,7 +138,21 @@ export default function Timeline() {
                     </MsgError>
                 </>
                 :
-                post.length > 0 ? post.map((item, index) =>
+                <InfiniteScroll
+                key={"scroll"}
+                loadMore={handleHasMore}
+                pageStart={0}
+                hasMore={hasMore}
+                loader={
+                    <div style={{ clear: "both" }}>
+                        <IconLoading />
+                        <MsgLoading>Loading more posts...</MsgLoading>
+                    </div>
+                }
+                initialLoad={true}
+
+            >
+                {post.length > 0 ? post.map((item, index) =>
                     <Post username={item.username}
                         description={item.description}
                         renderById={renderById}
@@ -136,6 +165,7 @@ export default function Timeline() {
                 )
                     :
                         <MsgError>There are no posts yet</MsgError>}
+                        </InfiniteScroll>}
         </Main>
         <TrendingBox/>
         </Container>

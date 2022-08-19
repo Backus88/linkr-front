@@ -48,6 +48,7 @@ export default function Timeline() {
 
 
     function renderById(id) {
+        console.log("chamou esse ttrm aqui")
         if (parseInt(id) !== parseInt(localId)) {
             setId(parseInt(id))
             setPost([])
@@ -58,53 +59,53 @@ export default function Timeline() {
         }
 
     }
-    
-    function handleHasMore(){
-       
+
+    function handleHasMore() {
+
         if (!loading) {
             getPost()
         }
     }
-function verifyId(){
-    if(newId){
-        setId(parseInt(newId))
+    function verifyId() {
+        if (newId) {
+            setId(parseInt(newId))
+        }
     }
-}
-useEffect(verifyId,[id, newId])
+    useEffect(verifyId, [id, newId])
     function getPost() {
         setLoading(true)
         if (!id) {
-                const offset = post.length
-                const promise = axios.get(`http://localhost:4000/post?offset=${offset}`, config)
-                promise.then(response => {
-                    let data = [...post, ...response.data]
-                    if(response.data.length === 0){
-                        setHasMore(false)
+            const offset = post.length
+            const promise = axios.get(`http://localhost:4000/post?offset=${offset}`, config)
+            promise.then(response => {
+                let data = [...post, ...response.data]
+                if (response.data.length === 0) {
+                    setHasMore(false)
 
-                    }else{
-                        setPost(data)
-                        
-                    }
-                    
-                    setLoading(false)
-                   
-                })
-                promise.catch(() => {
-                    setLoading(false)
-                    setCrash(true)
-                })
-                setCanPublish(true)
+                } else {
+                    setPost(data)
+
+                }
+
                 setLoading(false)
-           
+
+            })
+            promise.catch(() => {
+                setLoading(false)
+                setCrash(true)
+            })
+            setCanPublish(true)
+            setLoading(false)
+
 
         } else {
             const offset = post.length
             const promise = axios.get(`http://localhost:4000/user/${id}?offset=${offset}`, config)
             promise.then(response => {
                 let data = [...post, ...response.data]
-                if(response.data.length === 0){
+                if (response.data.length === 0) {
                     setHasMore(false)
-                }else{
+                } else {
                     setPost(data)
                 }
                 setLoading(false)
@@ -148,6 +149,7 @@ useEffect(verifyId,[id, newId])
 
                         {canPublish ? <Title>timeline</Title> : <Title>{username.username}'s posts</Title>}
                         {canPublish ? <PublishPost getPost={getPost}
+                            setPost={setPost}
                             hashtagController={hashtagController}
                             setHashtagController={setHashtagController} /> : null}
                         {loading ?
@@ -165,20 +167,21 @@ useEffect(verifyId,[id, newId])
                                 </>
                                 :
                                 <InfiniteScroll
-                                        loadMore={handleHasMore}
-                                        pageStart={0}
-                                        hasMore={hasMore}
-                                        loader={
-                                         <div style={{clear: "both"}}>
-                                         <IconLoading/>
-                                         <MsgLoading>Loading more posts...</MsgLoading>
-                                         </div>
-                                        } 
-                                        initialLoad={true}
-                                        
-                                    >
-                                {post.length > 0 ?
-                                    
+                                    key={"scroll"}
+                                    loadMore={handleHasMore}
+                                    pageStart={0}
+                                    hasMore={hasMore}
+                                    loader={
+                                        <div style={{ clear: "both" }}>
+                                            <IconLoading />
+                                            <MsgLoading>Loading more posts...</MsgLoading>
+                                        </div>
+                                    }
+                                    initialLoad={true}
+
+                                >
+                                    {post.length > 0 ?
+
                                         post.map((item, index) =>
                                             <Post username={item.username}
                                                 description={item.description}
@@ -193,9 +196,9 @@ useEffect(verifyId,[id, newId])
                                                 setHashtagController={setHashtagController}
                                             />
                                         )
-                                     :
-                                    <MsgError>There are no posts yet</MsgError>}
-                                    </InfiniteScroll>}
+                                        :
+                                        <MsgError>There are no posts yet</MsgError>}
+                                </InfiniteScroll>}
                     </Main>
                     <TrendingBox hashtagController={hashtagController} />
                 </Container>

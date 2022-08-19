@@ -10,7 +10,7 @@ export default function PublishPost(props) {
   const local = localStorage.getItem("token");
   const [description, setDescription] = useState('')
   const inputPublish = useRef();
-  const { hashtagController, setHashtagController, getPost, postDescription, postUrl, editing, postId, setEditing, userId } = props
+  const { hashtagController, setHashtagController, getPost, setPost, postDescription, postUrl, editing, postId, setEditing, userId } = props
   const config = {
       headers: {
           "Authorization": 'Bearer ' + local
@@ -56,11 +56,11 @@ export default function PublishPost(props) {
             id: postId
         }
         console.log(body)
-        const promise = axios.put('https://linkr-db.herokuapp.com/post',body, config)
+        const promise = axios.put('http://localhost:4000/post',body, config)
         promise.catch(tratarError);
         promise.then(tratarSucesso);
       }else{
-        const promise = axios.post('https://linkr-db.herokuapp.com/post', {
+        const promise = axios.post('http://localhost:4000/post', {
             url: url,
             description: description
         }, config)
@@ -72,6 +72,7 @@ export default function PublishPost(props) {
           setEnabled(true)
       }
       function tratarSucesso() {
+          setPost([])
           setHashtagController(!hashtagController)
           setEnabled(true)
           setUrl('')
