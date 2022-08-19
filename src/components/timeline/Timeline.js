@@ -11,6 +11,7 @@ import TrendingBox from "./TrendingBox";
 import MediaQuery from 'react-responsive'
 import TimelineMobile from "./timeline_mobile/TimelineMobile";
 import Follow from "./Follow";
+import NewPosts from "./NewPost";
 
 
 export default function Timeline() {
@@ -124,10 +125,6 @@ export default function Timeline() {
 
     useEffect(getPost, [id,location,newId, canPublish])
 
-    function getUser() {
-        const promise = axios.get(`${URI}/post`, config)
-        promise.then(response => setUser(response.data))
-    }
     return (
         <>
         <MediaQuery minWidth={700}>
@@ -139,7 +136,8 @@ export default function Timeline() {
             {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
             {canPublish ? <PublishPost getPost={getPost} 
             hashtagController={hashtagController} 
-            setHashtagController={setHashtagController} /> : null}
+            setHashtagController={setHashtagController} /> : null} 
+            <NewPosts getPost={getPost} post = {post} loading = {loading}/>
             {loading ?
                 <>
                     <IconLoading />
