@@ -12,6 +12,7 @@ import MediaQuery from 'react-responsive'
 import TimelineMobile from "./timeline_mobile/TimelineMobile";
 import Follow from "./Follow";
 import NewPosts from "./NewPost";
+import InfiniteScroll from 'react-infinite-scroller';
 
 
 export default function Timeline() {
@@ -28,8 +29,7 @@ export default function Timeline() {
     const { id: newId } = useParams();
     const local = localStorage.getItem("token");
     const localId = localStorage.getItem("id");
-    console.log(localStorage)
-    console.log(local)
+    const [hasMore, setHasMore] = useState(true)
     let location = useLocation();
     const config = {
         headers: {
@@ -37,15 +37,15 @@ export default function Timeline() {
         }
     }
 
-    function checkToken(){
+    function checkToken() {
         const token = localStorage.getItem("token")
-    
-        if(!token){
-          return navigate('/')
+
+        if (!token) {
+            return navigate('/')
         }
-      }
-    
-      useEffect(()=>{
+    }
+
+    useEffect(() => {
         checkToken()
     }, [])
 
@@ -66,56 +66,86 @@ export default function Timeline() {
 
 
     function renderById(id) {
-        if(parseInt(id) !== parseInt(localId)){
+        if (parseInt(id) !== parseInt(localId)) {
+            setId(parseInt(id))
+            setPost([])
+            setHasMore(true)
             navigate(`/user/${id}`);
-        }else{
+        } else {
             navigate('/timeline');
         }
-        
+
     }
 
+    function handleHasMore() {
+
+        if (!loading) {
+            getPost()
+        }
+    }
+    function verifyId() {
+        if (newId) {
+            setId(parseInt(newId))
+        }
+    }
+    useEffect(verifyId, [id, newId])
     function getPost() {
         setLoading(true)
-        setId(parseInt(newId))
         if (!id) {
-
-            const promise = axios.get(`${URI}/post`, config)
+            const offset = post.length
+            const promise = axios.get(`${URI}/post?offset=${offset}`, config)
             promise.then(response => {
-                let data = [...response.data]
-                setPost(data)
-                setLoading(false)
-                console.log(data)
-            })
+                let data = [...post, ...response.data]
+                if (response.data.length === 0) {
+                    setHasMore(false)
 
-            promise.catch(()=> {
+                } else {
+                    setPost(data)
+
+                }
+
+                setLoading(false)
+
+            })
+            promise.catch(() => {
                 setLoading(false)
                 setCrash(true)
+                setHasMore(false)
             })
             setCanPublish(true)
+            setLoading(false)
 
-        }else{
-            const promise = axios.get(`${URI}/user/${id}`, config)
+
+        } else {
+            const offset = post.length
+            const promise = axios.get(`${URI}/user/${id}?offset=${offset}`, config)
             promise.then(response => {
-                let data = [...response.data]
-                setPost(data)
+                let data = [...post, ...response.data]
+                if (response.data.length === 0) {
+                    setHasMore(false)
+                } else {
+                    setPost(data)
+                }
                 setLoading(false)
             })
 
             const userById = axios.get(`${URI}/user?id=${id}`, config);
             userById.then(response => {
-                let data = {...response.data}
+                let data = { ...response.data }
                 setUsername(data)
                 setLoading(false)
             });
-          
 
-            promise.catch(()=> {
+
+            promise.catch(() => {
                 setLoading(false)
                 setCrash(true)
+                setHasMore(false)
             })
-            userById.catch(()=> {
+            userById.catch(() => {
                 setLoading(false)
                 setCrash(true)
+                setHasMore(false)
             })
             setCanPublish(false);
         }
@@ -123,7 +153,7 @@ export default function Timeline() {
     }
 
 
-    useEffect(getPost, [id,location,newId, canPublish])
+    //useEffect(getPost, [id, location, newId, canPublish])
 
     return (
         <>
@@ -133,53 +163,69 @@ export default function Timeline() {
             <Container>
                 <Main>
 
-            {canPublish?<Title>timeline</Title>:<Title>{username.username}'s posts</Title> }
-            {canPublish ? <PublishPost getPost={getPost} 
-            hashtagController={hashtagController} 
-            setHashtagController={setHashtagController} /> : null} 
-            <NewPosts getPost={getPost} post = {post} loading = {loading}/>
-            {loading ?
-                <>
-                    <IconLoading />
-                    <MsgLoading>loading...</MsgLoading>
-                </>
-                :
-                crash ?
-                    <>
-                        <MsgError>
-                            An error occured while trying to fetch the posts,
-                            please refresh the page
-                        </MsgError>
-                    </>
-                    :
-                    post.length > 0 ? post.map((item, index) =>
-                        <Post username={item.username}
-                            description={item.description}
-                            renderById={renderById}
-                            userId={item.userId}
-                            url={item.url}
-                            imageProfile = {item.profileImgUrl}
-                            key={item.url + index}
-                            idPost={item.id}
-                            repostUsername= {item.repostUsername}
-                            repostCount ={item.repostCount}
-                            getPost = {getPost}
-                            hashtagController={hashtagController} 
-                            setHashtagController={setHashtagController}
-                                />
-                    )
-                        :
-                            <MsgError>There are no posts yet</MsgError>}
-                </Main>
-                <RightSide>
+                        {canPublish ? <Title>timeline</Title> : <Title>{username.username}'s posts</Title>}
+                        {canPublish ? <PublishPost getPost={getPost}
+                            setPost={setPost}
+                            hashtagController={hashtagController}
+                            setHashtagController={setHashtagController} /> : null}
+                            {canPublish ?
+                              <NewPosts getPost={getPost} post = {post} loading = {loading} setPost={setPost}/>
+                              :
+                              null
+                            }
+                               <InfiniteScroll
+                                    key={"scroll"}
+                                    loadMore={handleHasMore}
+                                    pageStart={0}
+                                    hasMore={hasMore}
+                                    loader={
+                                        <div style={{ clear: "both" }}>
+                                            <IconLoading />
+                                            <MsgLoading>Loading more posts...</MsgLoading>
+                                        </div>
+                                    }
+                                    initialLoad={true}
+
+                                >
+                        {
+                            crash ?
+                                <>
+                                    <MsgError>
+                                        An error occured while trying to fetch the posts,
+                                        please refresh the page
+                                    </MsgError>
+                                </>
+                                :
+                                    post.length > 0 ?
+                                        post.map((item, index) =>
+                                            <Post username={item.username}
+                                                description={item.description}
+                                                renderById={renderById}
+                                                userId={item.userId}
+                                                url={item.url}
+                                                imageProfile={item.profileImgUrl}
+                                                key={item.url + index}
+                                                idPost={item.id}
+                                                repostUsername= {item.repostUsername}
+                                                repostCount ={item.repostCount}
+                                                getPost={getPost}
+                                                hashtagController={hashtagController}
+                                                setHashtagController={setHashtagController}
+                                            />
+                                        )
+                                        :
+                                        <MsgError>There are no posts yet</MsgError>
+                        }</InfiniteScroll>
+                    </Main>
+                    <RightSide>
                 {canPublish?<></>:<Follow followedId={id} config={config} />}
                 <TrendingBox hashtagController={hashtagController} />
                 </RightSide>
-            </Container>
-        </MediaQuery>
-        <MediaQuery maxWidth={699}>
-            <TimelineMobile />
-        </MediaQuery>
+                </Container>
+            </MediaQuery>
+            <MediaQuery maxWidth={699}>
+                <TimelineMobile />
+            </MediaQuery>
         </>
     )
 }
@@ -196,7 +242,7 @@ margin: auto;
 export const Main = styled.div`
 width: 43%;
 max-width: 560px;
-` 
+`
 
 const Title = styled.div`
 width: 100%;
