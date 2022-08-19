@@ -12,9 +12,11 @@ export default function Comments({ userId, postId, setCommentCount, showComments
     const [commentary, setCommentary]= useState('');
     const [infoComment, setInfoComment] = useState([]);
     const [isAuthor, setIsAuthor]= useState(false);
+    const [isFollowing, setIsFollwing] =useState(false);
     const local = localStorage.getItem("token");
     const imgLocal =localStorage.getItem("img");
     const id =localStorage.getItem("id");
+    const URI = process.env.REACT_APP_DATABASE_URI
     console.log(postId);
     const config = {
         headers: {
@@ -25,7 +27,7 @@ export default function Comments({ userId, postId, setCommentCount, showComments
     useEffect( ()=>{
         const getComments = async ()=>{
             try{
-                const {data: commentsInfo} = await axios.get(`http://localhost:4000/comment/${parseInt(postId)}`, config);
+                const {data: commentsInfo} = await axios.get(`${URI}/comment/${parseInt(postId)}`, config);
                 console.log(commentsInfo);
                 setInfoComment([...commentsInfo]);
                 setCommentCount(commentsInfo.length);
@@ -58,7 +60,7 @@ export default function Comments({ userId, postId, setCommentCount, showComments
         }
         try{
             setCantComment(true);
-            await axios.post(`http://localhost:4000/comment`,body, config);
+            await axios.post(`${URI}/comment`,body, config);
             setCantComment(false);
             setCommentary('');
             setRenderComment(!renderComment);
@@ -74,17 +76,23 @@ export default function Comments({ userId, postId, setCommentCount, showComments
          {showComments?
          <>
             {infoComment?.map((item, index)=>{
+                console.log(item.isFollower);
                 return(
                 <CommentItens key={index}>
                     <img src={item.profileImgUrl} alt="" />
                     <ColumnDiv>
                         <TitleDiv>
                             <h1>{item.username}</h1>
-                            {isAuthor?
+                            {parseInt(item.userId)=== parseInt(userId)?
                                 <>
                                     <CircleIcon/>
                                     <h2>{"post’s author"}</h2>
                                 </>
+                            :null}{item.isFollower ? 
+                                <>
+                                    <CircleIcon/>
+                                    <h2>{"following"}</h2>
+                                </>        
                             :null}
                         </TitleDiv>
                         <TextDiv>
@@ -172,6 +180,7 @@ const TitleDiv = styled.div`
         font-weight: 400;
         line-height: 17px;
         color: #565656;
+        margin-right: 5px;
     }
 `
 
